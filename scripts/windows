@@ -1,0 +1,30 @@
+#!/bin/bash
+# This script allows agents to execute commands on the Windows host from WSL2
+
+# Function to execute commands on Windows host
+win_exec() {
+    if [ $# -eq 0 ]; then
+        echo "Usage: windows <command> [args...]"
+        echo "Example: windows npm install"
+        echo "Example: windows mvn clean compile"
+        echo "Example: windows Get-Process"
+        return 1
+    fi
+
+    # Convert current directory to Windows path
+    local win_path
+    win_path=$(wslpath -w "$PWD" 2>/dev/null)
+    
+    # If wslpath returns UNC path (starts with \\), use C:\ instead
+    if [[ "$win_path" == \\\\* ]]; then
+        win_path="C:\\"
+    fi
+
+    # Execute all commands via PowerShell
+    powershell.exe -NoProfile -Command "Set-Location -Path '$win_path'; $*"
+}
+
+# If script is called directly (not sourced), execute the command
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    win_exec "$@"
+fi

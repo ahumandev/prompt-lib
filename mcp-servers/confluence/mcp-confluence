@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VENV="$SCRIPT_DIR/.venv"
+
+if [ -x "$VENV/bin/mcp-atlassian" ]; then
+  exec "$VENV/bin/mcp-atlassian" "$@"
+fi
+
+# Fallback to module execution
+exec "$VENV/bin/python" -m mcp_atlassian "$@"

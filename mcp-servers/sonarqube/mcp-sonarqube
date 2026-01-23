@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Wrapper to run the SonarQube MCP server via npx in stdio mode.
+# Using npx since Docker is not available.
+npx -y @sonarsource/sonarqube-mcp-server "$@"
