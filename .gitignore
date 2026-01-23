@@ -27,3 +27,4 @@ package.json
 /oh-my-opencode.json
 /opencode-skillful.jsonc
 **/.env
+.gitignore
