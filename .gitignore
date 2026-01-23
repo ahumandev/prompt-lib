@@ -4,6 +4,7 @@ antigravity-accounts.json
 antigravity-signature-cache.json
 antigravity-logs/
 bun.lock
+opencode.json?
 node_modules
 package.json
 /.idea
