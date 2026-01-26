@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Wrapper to run the SonarQube MCP server via npx in stdio mode.
+# Using npx since Docker is not available.
+export HTTP_PROXY=http://localhost:1234
+export HTTPS_PROXY=http://localhost:1234
+npx -y sonarqube-mcp-server "$@"
