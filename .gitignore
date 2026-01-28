@@ -28,3 +28,4 @@ package.json
 /opencode-skillful.jsonc
 **/.env
 .gitignore
+antigravity-accounts.json.*.tmp
