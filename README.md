@@ -1,3 +1,12 @@
+# Opencode Locations
+
+- Opencode configuration file location: `~/.config/opencode/opencode.jsonc` or `{current dir}/.opencode/opencode.jsonc`
+- agents: `~/.config/opencode/agents` or `{current dir}/.opencode/agents`
+- commands: `~/.config/opencode/commands` or `{current dir}/.opencode/commands`
+- mcp: `~/.config/opencode/mcp-servers` or `{current dir}/.opencode/mcp-servers`
+- skills: `~/.config/opencode/skills` or `{current dir}/.opencode/skills`
+- Global agent instructions: `~/.config/opencode/AGENTS.md` or `{current dir}/AGENTS.md`
+
 ## Tool access
 
 ### Supported Permissions
@@ -19,6 +28,7 @@ Permissions control what an agent is allowed to do. They can be set to "allow", 
 | webfetch           | Fetching content from a URL. Matches the URL.                                                          |
 | websearch          | Performing web searches (e.g., via DuckDuckGo or Exa).                                                 |
 | codesearch         | Searching for code patterns across the web or large repositories.                                      |
+| google_search      | (Plugin) Performing web searches using Google Search (via opencode-antigravity-auth).                  |
 | question           | Asking the user for clarification or input via the UI.                                                 |
 | plan_enter         | Entering the structured planning mode.                                                                 |
 | plan_exit          | Exiting the planning mode and submitting a plan.                                                       |
@@ -79,6 +89,15 @@ The underscore (`_`) acts as the namespace separator between the server identifi
 
 ### Namespace Consistency
 In OpenCode, standard native tools (like `read`, `write`, `edit`) don't have a prefix because they are built directly into the core agent logic. MCP tools, however, are external "plugins." To prevent name collisions (e.g., if two different MCP servers both provided a `search` tool), the system prefixes them with the server's ID.
+
+### Plugin-provided Tools
+Plugins can also add tools to the environment. Unlike MCP tools, these are often integrated more closely with the provider or the shell.
+
+| Tool            | Plugin                        | Description                                                                 |
+|:----------------|:------------------------------|:----------------------------------------------------------------------------|
+| `google_search` | `opencode-antigravity-auth`   | Search the web using Google Search with citations.                          |
+| `pty_*`         | `opencode-pty`                | Interactive PTY management (`spawn`, `read`, `write`, `list`, `kill`).      |
+| `skill_*`       | `@zenobius/opencode-skillful` | Skill management and discovery (`use`, `find`, `resource`).                 |
 
 ### If the `tools` section is omitted entirely:
 The agent defaults to **"All Tools"**. 

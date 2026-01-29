@@ -1,12 +1,11 @@
 ---
 description: Manage OpenCode configuration.
-agent: build
 ---
 
 # Opencode locations
 - Opencode configuration file location: ~/.config/opencode/opencode.jsonc or {current dir}/.opencode/opencode.jsonc
-- agents: ~/.config/opencode/agent or {current dir}/.opencode/agent
-- commands: ~/.config/opencode/command or {current dir}/.opencode/command
+- agents: ~/.config/opencode/agents or {current dir}/.opencode/agents
+- commands: ~/.config/opencode/commands or {current dir}/.opencode/commands
 - mcp: ~/.config/opencode/mcp-servers or {current dir}/.opencode/mcp-servers
 - skills: ~/.config/opencode/skills or {current dir}/.opencode/skills
 
