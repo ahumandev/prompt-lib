@@ -99,6 +99,24 @@ Plugins can also add tools to the environment. Unlike MCP tools, these are often
 | `pty_*`         | `opencode-pty`                | Interactive PTY management (`spawn`, `read`, `write`, `list`, `kill`).      |
 | `skill_*`       | `@zenobius/opencode-skillful` | Skill management and discovery (`use`, `find`, `resource`).                 |
 
+### Git MCP Server Tools
+The `git` MCP server provides tools for interacting with local repositories. Per the standard naming convention, these are prefixed with `git_`.
+
+| Tool | Description |
+|:---|:---|
+| `git_git_status` | Shows the working tree status. |
+| `git_git_add` | Stages files for commit. |
+| `git_git_commit` | Creates a new commit with a message. |
+| `git_git_diff_unstaged` | Shows unstaged changes. |
+| `git_git_diff_staged` | Shows staged changes. |
+| `git_git_diff` | Compares branches or commits. |
+| `git_git_log` | Shows commit history/logs. |
+| `git_git_create_branch` | Creates a new branch. |
+| `git_git_checkout` | Switches branches. |
+| `git_git_branch` | Lists branches (local/remote/all). |
+| `git_git_reset` | Unstages all changes. |
+| `git_git_show` | Shows contents of a specific revision. |
+
 ### If the `tools` section is omitted entirely:
 The agent defaults to **"All Tools"**. 
 It inherits the full toolset of the parent assistant (Sisyphus), including all native tools (read, write, edit, etc.) and all connected MCP servers.
