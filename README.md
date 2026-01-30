@@ -7,6 +7,51 @@
 - skills: `~/.config/opencode/skills` or `{current dir}/.opencode/skills`
 - Global agent instructions: `~/.config/opencode/AGENTS.md` or `{current dir}/AGENTS.md`
 
+## Agent Properties
+
+The YAML frontmatter of an agent's `.md` file (stored in `~/.config/opencode/agents/` or `.opencode/agents/`) supports the following properties:
+
+| Property      | Type    | Description                                                                 |
+|:--------------|:--------|:----------------------------------------------------------------------------|
+| `color`       | String  | Hex color code for the agent (e.g., `"#E01010"`).                            |
+| `description` | String  | A brief description of the agent's purpose and usage.                       |
+| `hidden`      | Boolean | If `true`, the agent is hidden from the UI and agent lists.                 |
+| `mode`        | String  | The operational mode of the agent. See [Operational Modes](#operational-modes) for details. |
+| `permission`  | Object  | Granular tool permissions (`allow`, `ask`, `deny`) mapped to command/path patterns. |
+| `tools`       | Object  | A whitelist/blacklist of tools available to the agent (e.g., `"*": false`). |
+| `temperature` | Number  | LLM sampling temperature for the agent's responses (typically `0.0` to `1.0`). |
+
+## Operational Modes
+
+| Mode       | Description                                                                                                                                                                 |
+|:-----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `primary`  | A standalone agent capable of initiating and managing a full conversation thread. Used for top-level tasks and build-in system agents.                                      |
+| `subagent` | A specialized agent intended to be called by another agent (e.g., via the `task` tool). These are optimized for specific sub-tasks like exploration, web searching, or git. |
+
+## Agent Discovery
+
+Opencode automatically discovers agents defined in the standard locations:
+- `~/.config/opencode/agents/*.md`
+- `{project root}/.opencode/agents/*.md`
+
+### Automatic Mapping
+If an agent is used (e.g., via a subagent call) and is not explicitly configured in `opencode.jsonc`, Opencode will look for a markdown file with the same name in the `agents/` directory.
+
+### When to use `prompt` in `opencode.jsonc`
+The `prompt` property in `opencode.jsonc` is **optional** if the file follows the `{name}.md` convention in the `agents/` folder. It is required only if:
+1. The markdown file name does not match the agent name.
+2. The file is located outside the standard `agents/` directory.
+3. You are explicitly configuring a built-in agent to use a custom prompt file.
+
+## Configuration Precedence
+
+In Opencode, agent properties can be defined in both the agent's `.md` file (YAML frontmatter) and the `opencode.jsonc` configuration file. The precedence rules are:
+
+1.  **`opencode.jsonc` overrides `.md` files**: Properties defined in `opencode.jsonc` under the `agent` key take precedence over properties defined in the agent's markdown frontmatter.
+2.  **Merging**: If a property is an object (like `tools` or `permission`), the keys from `opencode.jsonc` are merged with the keys from the `.md` file, with `opencode.jsonc` keys taking priority in case of conflicts.
+
+This allows you to define base agent behavior in the markdown file while overriding specific settings (like the model or tool access) globally or per-environment in the main configuration file.
+
 ## Tool access
 
 ### Supported Permissions
@@ -86,6 +131,19 @@ For example:
 *   **Server**: `chrome-devtools` → **Tools**: `chrome-devtools_click`, `chrome-devtools_navigate_page`.
 
 The underscore (`_`) acts as the namespace separator between the server identifier and the specific function it provides.
+
+### Search Tools and Providers
+
+Opencode distinguishes between generic web fetching and systematic web searching. Search capabilities are typically provided by MCP servers or plugins.
+
+| Tool Category | Prefix / Name | Source | Description |
+|:--------------|:--------------|:-------|:------------|
+| **MCP Search** | `websearch_*` | `open-websearch` MCP | Multi-engine search (Bing, DuckDuckGo, etc.) and specialized scrapers (GitHub, CSDN). |
+| **Plugin Search**| `google_search`| `opencode-antigravity-auth` | High-quality web search using Google Search with citations. |
+| **Built-in Fetch**| `webfetch` | Native Opencode | Retrieves the content of a specific URL in markdown or text format. |
+
+> [!NOTE]
+> The `websearch` permission in an agent's configuration governs access to these external search capabilities. The `websearch` agent itself is a specialized subagent that orchestrates these tools to perform deep research.
 
 ### Namespace Consistency
 In OpenCode, standard native tools (like `read`, `write`, `edit`) don't have a prefix because they are built directly into the core agent logic. MCP tools, however, are external "plugins." To prevent name collisions (e.g., if two different MCP servers both provided a `search` tool), the system prefixes them with the server's ID.

@@ -1,13 +1,14 @@
 ---
-name: git
-description: Comprehensive guide for using Git MCP tools to manage local repositories, including status checking, staging, committing, branching, and comparing changes
+color: "#6cd5d2"
+description: Manage Git repositories with staging, commits, and branching
+temperature: 0.1
 ---
 
-# Git MCP Server Skill
+# Git Agent
 
-Use this skill when working with local Git repositories through the MCP server. All Git operations are accessed via tools prefixed with `git_git_` (e.g., `git_git_status`, `git_git_add`).
+Manage local Git repositories through comprehensive version control operations. All Git operations are accessed via tools prefixed with `git_` (e.g., `git_git_status`, `git_git_add`).
 
-## When to Use This Skill
+## When to use this agent
 
 - Checking repository status and viewing uncommitted changes
 - Staging files and creating commits
@@ -16,16 +17,20 @@ Use this skill when working with local Git repositories through the MCP server. 
 - Viewing commit history and inspecting specific commits
 - Unstaging changes or resetting the staging area
 
-## Core Workflows
+---
 
-### Standard Commit Workflow
+## Workflows
+
+### Standard commit workflow
+
 1. `git_git_status` - Check current state
 2. `git_git_diff_unstaged` - Review changes
 3. `git_git_add` - Stage desired files
 4. `git_git_diff_staged` - Verify what will be committed
 5. `git_git_commit` - Create the commit
 
-### Feature Branch Workflow
+### Feature branch workflow
+
 1. `git_git_status` - Ensure clean working directory
 2. `git_git_create_branch` - Create feature branch from main
 3. `git_git_checkout` - Switch to the new branch
@@ -33,9 +38,12 @@ Use this skill when working with local Git repositories through the MCP server. 
 5. `git_git_add` + `git_git_commit` - Commit changes
 6. `git_git_diff` - Compare with main before merging
 
-## Tool Reference
+---
+
+## Tools reference
 
 ### `git_git_status`
+
 **Purpose**: Check the current state of the repository (modified, staged, untracked files).
 
 **When to use**: ALWAYS run this FIRST before performing any Git operations.
@@ -59,6 +67,7 @@ Use this skill when working with local Git repositories through the MCP server. 
 ---
 
 ### `git_git_add`
+
 **Purpose**: Stage specific files for the next commit.
 
 **When to use**: After you've modified files and want to prepare them for committing.
@@ -86,6 +95,7 @@ Confirmation message listing which files were staged.
 ---
 
 ### `git_git_commit`
+
 **Purpose**: Create a new commit with staged changes.
 
 **When to use**: After staging files with `git_git_add` and verifying changes with `git_git_diff_staged`.
@@ -114,6 +124,7 @@ Confirmation with the new commit hash and summary of changes.
 ---
 
 ### `git_git_diff_unstaged`
+
 **Purpose**: View changes in the working directory that haven't been staged yet.
 
 **When to use**: To review modifications before deciding what to stage.
@@ -136,6 +147,7 @@ Unified diff format showing file paths, line numbers, additions (prefixed with `
 ---
 
 ### `git_git_diff_staged`
+
 **Purpose**: View changes that are currently staged for commit.
 
 **When to use**: ALWAYS run this before `git_git_commit` to verify exactly what will be committed.
@@ -157,6 +169,7 @@ Unified diff format of staged changes only.
 ---
 
 ### `git_git_diff`
+
 **Purpose**: Compare the current state with a specific branch or commit.
 
 **When to use**: 
@@ -183,6 +196,7 @@ Unified diff showing all differences between current HEAD and the target.
 ---
 
 ### `git_git_log`
+
 **Purpose**: View commit history with filtering options.
 
 **When to use**: 
@@ -220,6 +234,7 @@ Array of commit entries containing commit hash, author name/email, commit date, 
 ---
 
 ### `git_git_create_branch`
+
 **Purpose**: Create a new branch for feature development or bug fixes.
 
 **When to use**: 
@@ -252,6 +267,7 @@ Confirmation message that the branch was created.
 ---
 
 ### `git_git_checkout`
+
 **Purpose**: Switch to a different branch.
 
 **When to use**: 
@@ -282,6 +298,7 @@ Confirmation that the branch was switched successfully.
 ---
 
 ### `git_git_branch`
+
 **Purpose**: List available branches in the repository.
 
 **When to use**: 
@@ -316,6 +333,7 @@ List of branch names. Current branch is typically marked with an asterisk (*).
 ---
 
 ### `git_git_reset`
+
 **Purpose**: Unstage all currently staged changes (does NOT discard changes).
 
 **When to use**: 
@@ -345,6 +363,7 @@ Confirmation that changes were unstaged.
 ---
 
 ### `git_git_show`
+
 **Purpose**: Display the contents and metadata of a specific commit, branch, or tag.
 
 **When to use**: 
@@ -369,36 +388,41 @@ Detailed information including commit metadata (author, date, message) and full 
 
 ---
 
-## Best Practices
+## Best practices
 
-### Always Use Absolute Paths
+### Always use absolute paths
+
 - ✅ Correct: `/home/user/project`
 - ❌ Wrong: `~/project` or `./project`
 
-### Stage Files Carefully
+### Stage files carefully
+
 - Review with `git_git_diff_unstaged` before staging
 - Use specific file paths rather than `["."]` when possible
 - Always verify with `git_git_diff_staged` before committing
 
-### Write Meaningful Commit Messages
+### Write meaningful commit messages
+
 - Explain WHAT and WHY, not HOW
 - Use imperative mood: "Add feature" not "Added feature"
 - Reference issue numbers if applicable: "Fix #123: Resolve login bug"
 
-### Check Status Frequently
+### Check status frequently
+
 - Run `git_git_status` before and after Git operations
 - It's your most important tool for understanding state
 
-### Branch Naming
+### Branch naming
+
 - Use descriptive names: `feature/user-authentication`
 - Include ticket numbers: `bugfix/GH-456-memory-leak`
 - Avoid generic names: `fix`, `update`, `changes`
 
 ---
 
-## Error Handling
+## Error handling
 
-### Common Errors and Solutions
+### Common errors and solutions
 
 **"Not a git repository"**
 - Verify `repo_path` points to a directory containing a `.git` folder
@@ -422,7 +446,7 @@ Detailed information including commit metadata (author, date, message) and full 
 
 ---
 
-## Quick Reference
+## Quick reference
 
 | Operation | First Tool | Verification Tool |
 |:----------|:-----------|:------------------|

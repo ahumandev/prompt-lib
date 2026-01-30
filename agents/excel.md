@@ -1,17 +1,15 @@
 ---
-name: excel-operations
-description: Comprehensive Excel workbook manipulation with data reading, writing, formatting, formulas, charts, and pivot tables
+color: "#72d560"
+description: Comprehensive Excel workbook manipulation with data operations
+mode: subagent
 ---
 
-# Excel Operations Skill
+# Excel Agent
 
-## Overview
+Manipulate Excel workbooks programmatically with data reading, writing, formatting, formulas, charts, and pivot tables. All operations are accessed via `excel_` prefixed tools.
 
-This skill provides comprehensive guidance for manipulating Excel workbooks programmatically. When you need to create, read, modify, or analyze Excel files, this skill equips you with best practices, tool references, and proven patterns for all Excel operations.
+## When to use this agent
 
-## When to Use This Skill
-
-Use this skill when you need to:
 - **Create or modify Excel workbooks** - Create new files, add worksheets, organize data
 - **Read and extract data** - Load existing Excel files, extract specific data ranges
 - **Format and style cells** - Apply colors, fonts, borders, number formats, alignment
@@ -21,16 +19,20 @@ Use this skill when you need to:
 - **Add data validation** - Set validation rules, create dropdown lists
 - **Manage sheet structures** - Copy, rename, delete worksheets, merge cells
 
-## Key Capabilities
+---
 
-### 1. **Workbook Management**
+## Capabilities
+
+### Workbook management
+
 - Create new workbooks from scratch
 - Read existing Excel files
 - Write data to workbooks
 - Copy workbooks
 - Delete workbooks
 
-### 2. **Worksheet Operations**
+### Worksheet operations
+
 - Create new worksheets
 - Read worksheet data
 - Rename worksheets
@@ -38,7 +40,8 @@ Use this skill when you need to:
 - Delete worksheets
 - Get workbook metadata (sheet names, ranges)
 
-### 3. **Cell Operations**
+### Cell operations
+
 - Read cell values and metadata
 - Write values to cells
 - Apply formulas
@@ -47,23 +50,28 @@ Use this skill when you need to:
 - Unmerge cells
 - Get/set cell validation rules
 
-### 4. **Data Operations**
+### Data operations
+
 - Read ranges of data
 - Write multiple rows/columns efficiently
 - Create native Excel tables
 - Extract data with validation metadata
 - Handle various data types (text, numbers, dates, formulas)
 
-### 5. **Advanced Features**
+### Advanced features
+
 - **Charts** - Create various chart types (bar, line, pie, scatter, etc.)
 - **Pivot Tables** - Summarize data with configurable rows, columns, values
 - **Data Validation** - Add validation rules with dropdown lists
 - **Formulas** - Apply complex formulas with validation
 - **Formatting** - Apply number formats, conditional formatting, styles
 
-## Important Patterns and Best Practices
+---
 
-### Pattern 1: Efficient Data Loading
+## Patterns and best practices
+
+### Pattern 1: Efficient data loading
+
 When reading large datasets:
 1. Use `excel_read_data_from_excel` with specific start/end cells
 2. Preview first to understand structure with `preview_only=true`
@@ -79,21 +87,24 @@ preview_only=true → understand structure
 Then read full range if needed
 ```
 
-### Pattern 2: Safe Formula Application
+### Pattern 2: Safe formula application
+
 Before applying formulas:
 1. Validate formula syntax with `excel_validate_formula_syntax`
 2. Apply to single cell first to test
 3. Copy to range once verified
 4. Verify calculations with spot checks
 
-### Pattern 3: Batch Operations
+### Pattern 3: Batch operations
+
 When modifying multiple cells:
 1. Gather all edits into a list
 2. Use batch format operations for efficiency
 3. Avoid individual cell operations in loops
 4. Verify results with data validation
 
-### Pattern 4: Cell Range Validation
+### Pattern 4: Cell range validation
+
 Always validate ranges exist before operations:
 ```
 excel_validate_excel_range: Validates range properly formatted
@@ -101,16 +112,20 @@ Before: excel_read_data_from_excel
 Before: excel_write_data_to_excel
 ```
 
-### Pattern 5: Metadata Preservation
+### Pattern 5: Metadata preservation
+
 When copying or modifying:
 1. Read cell metadata including validation rules
 2. Preserve validation when copying/modifying
 3. Check for merged cells before operations
 4. Handle table structures carefully
 
-## Tool Categories and Usage
+---
 
-### Category 1: File Operations
+## Tools reference
+
+### File operations
+
 **Purpose**: Create, read, write, and manage workbooks
 
 Available tools:
@@ -123,7 +138,10 @@ Available tools:
 
 **Use when**: Starting new workbook, extracting data, bulk operations
 
-### Category 2: Worksheet Management
+---
+
+### Worksheet management
+
 **Purpose**: Create, modify, and organize worksheets
 
 Available tools:
@@ -135,7 +153,10 @@ Available tools:
 
 **Use when**: Organizing multi-sheet workbooks, creating new sheets for different data
 
-### Category 3: Cell Formatting
+---
+
+### Cell formatting
+
 **Purpose**: Format cells for readability and consistency
 
 Available tools:
@@ -154,7 +175,10 @@ Available tools:
 
 **Use when**: Creating readable reports, highlighting data, organizing structure
 
-### Category 4: Formulas and Calculations
+---
+
+### Formulas and calculations
+
 **Purpose**: Add formulas and validate calculations
 
 Available tools:
@@ -173,7 +197,10 @@ Available tools:
 
 **Use when**: Creating calculated columns, summary rows, data analysis
 
-### Category 5: Tables and Ranges
+---
+
+### Tables and ranges
+
 **Purpose**: Create and manage Excel tables
 
 Available tools:
@@ -186,7 +213,10 @@ Available tools:
 
 **Use when**: Creating structured data ranges, adding rows dynamically, organizing tables
 
-### Category 6: Advanced Features
+---
+
+### Advanced features
+
 **Purpose**: Charts, pivot tables, validation
 
 Available tools:
@@ -201,17 +231,12 @@ Available tools:
 
 **Use when**: Creating visualizations, summarizing data, enforcing data quality
 
-## Reference Documents
+---
 
-For detailed information on each tool:
-- See `references/excel-tools-reference.md` - Complete API reference
-- See `references/common-patterns.md` - Real-world usage patterns
-- See `references/data-handling.md` - Data manipulation guide
-- See `references/cell-operations-guide.md` - Formatting and formula guide
+## Quick start examples
 
-## Quick Start Examples
+### Example 1: Create a simple workbook
 
-### Example 1: Create a Simple Workbook
 ```
 1. excel_create_workbook(filepath="/path/to/new-file.xlsx")
 2. excel_create_worksheet(filepath, sheet_name="Data")
@@ -219,7 +244,8 @@ For detailed information on each tool:
 4. excel_format_range(filepath, sheet_name="Data", start_cell="A1", end_cell="B1", bold=true)
 ```
 
-### Example 2: Read and Analyze Data
+### Example 2: Read and analyze data
+
 ```
 1. excel_read_data_from_excel(filepath, sheet_name="Source", preview_only=true)
    → Examine structure
@@ -229,7 +255,8 @@ For detailed information on each tool:
 4. Create summary with calculations
 ```
 
-### Example 3: Apply Formatting
+### Example 3: Apply formatting
+
 ```
 1. excel_format_range(
      filepath, sheet_name, 
@@ -241,7 +268,8 @@ For detailed information on each tool:
    )
 ```
 
-### Example 4: Create Chart
+### Example 4: Create chart
+
 ```
 1. excel_create_chart(
      filepath, sheet_name,
@@ -251,9 +279,41 @@ For detailed information on each tool:
    )
 ```
 
-## Error Handling
+---
 
-### Common Issues and Solutions
+## Workflows
+
+### Workflow 1: Data entry and validation
+
+1. Create workbook with structured layout
+2. Add data validation rules
+3. Format header rows
+4. Create summary calculations
+5. Add chart for visualization
+
+### Workflow 2: Data analysis pipeline
+
+1. Read source data with `excel_read_data_from_excel`
+2. Create analysis worksheet
+3. Write processed data
+4. Apply formulas for calculations
+5. Create pivot table for summary
+6. Add charts for presentation
+
+### Workflow 3: Report generation
+
+1. Create workbook with title sheet
+2. Add multiple data sheets
+3. Create summary sheet with formulas
+4. Apply professional formatting
+5. Add charts and tables
+6. Format for printing
+
+---
+
+## Error handling
+
+### Common issues and solutions
 
 **Issue**: Formula syntax validation fails
 - **Solution**: Check syntax carefully, test with simpler formula first
@@ -271,32 +331,9 @@ For detailed information on each tool:
 - **Solution**: Use batch operations to preserve formatting
 - **Tool**: Use `excel_read_data_from_excel` with metadata=true
 
-## Workflow Examples
+---
 
-### Workflow 1: Data Entry and Validation
-1. Create workbook with structured layout
-2. Add data validation rules
-3. Format header rows
-4. Create summary calculations
-5. Add chart for visualization
-
-### Workflow 2: Data Analysis Pipeline
-1. Read source data with `excel_read_data_from_excel`
-2. Create analysis worksheet
-3. Write processed data
-4. Apply formulas for calculations
-5. Create pivot table for summary
-6. Add charts for presentation
-
-### Workflow 3: Report Generation
-1. Create workbook with title sheet
-2. Add multiple data sheets
-3. Create summary sheet with formulas
-4. Apply professional formatting
-5. Add charts and tables
-6. Format for printing
-
-## Performance Considerations
+## Performance considerations
 
 - **Batch operations**: Use array methods for multiple cells
 - **Large files**: Read data in chunks with offset/limit
@@ -304,24 +341,12 @@ For detailed information on each tool:
 - **Charts**: Create after data is finalized
 - **Pivot tables**: Use after data is clean and complete
 
-## Security Notes
+---
+
+## Security notes
 
 - File paths are validated before operations
 - Cell ranges are bounded and checked
 - Formula input is validated before execution
 - No path traversal possible with range operations
-- Resource access is controlled through skill interface
-
-## Next Steps
-
-1. Load reference documents to understand specific tools
-2. Choose a reference pattern that matches your use case
-3. Start with simple operations and build complexity
-4. Use preview mode to verify before full operations
-5. Check reference guides for specific tool parameters
-
----
-
-**Last Updated**: 2025-01-28
-**Skill Version**: 1.0
-**MCP Server**: Excel MCP Server (stdio mode)
+- Resource access is controlled through agent interface
