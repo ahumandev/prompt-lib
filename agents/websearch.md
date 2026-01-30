@@ -102,7 +102,7 @@ Many cached files use a timestamp prefix and a condensed search-phrase suffix, s
    - Split into tokens and drop very common stopwords when helpful (e.g., "how", "to", "the").
    - Keep version numbers and proper nouns as-is.
 3. **Find candidate files by filename token overlap**:
-   - Strip the leading timestamp from each filename (format: `YYYY-MM-DD_HH-...`) and compare the remaining text.
+   - Strip the leading timestamp from each filename (format: `YYYY-MM-DD_HH`) and compare the remaining text.
    - Consider a file a candidate if it shares at least 1–2 important tokens (or a unique token like a version number) with the normalized search phrase.
    - Practical tooling:
      - Use `filesystem_search_files` with composed patterns like `*{token1}*{token2}*.md` for the strongest token pairs.
