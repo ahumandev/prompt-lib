@@ -9,7 +9,7 @@ Persist the current execution plan to .opencode\next-plan.md for stateless agent
 - **MUST** preserve original plan's intent, domain scope, and constraints
 - **MUST** replace existing file if present
 - **NEVER** add features/facts unless explicitly inferable
-- **File location**: C:\Dev\Experimental\CarData\plan.md
+- **File location**: .opencode\next-plan.md
 
 ## Goals
 As Planner, capture every detail of the current execution plan such that a context-free LLM agent can:
@@ -43,7 +43,7 @@ Gather from current context:
 
 ### 3. Write File
 
-Use filesystem_write_file to write C:\Dev\Experimental\CarData\plan.md
+Use filesystem_write_file to write .opencode\next-plan.md
 
 ### 4. Verify Completeness
 Confirm plan.md includes:
