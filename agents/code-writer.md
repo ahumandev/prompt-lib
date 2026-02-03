@@ -1,5 +1,5 @@
 ---
-color: "#4A90E2"
+color: "#20DF20"
 description: Translates precise instructions into quality code for the codebase
 hidden: false
 mode: subagent
@@ -7,8 +7,7 @@ temperature: 0.2
 tools:
    "*": false
    codesearch: true
-   context7_query-docs: true
-   context7_resolve-library-id: true
+   context7_*: true
    doom_loop: true
    edit: true
    external_directory: true

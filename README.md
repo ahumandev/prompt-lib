@@ -11,34 +11,38 @@
 
 The YAML frontmatter of an agent's `.md` file (stored in `~/.config/opencode/agents/` or `.opencode/agents/`) supports the following properties:
 
-| Property      | Type    | Description                                                                 |
-|:--------------|:--------|:----------------------------------------------------------------------------|
-| `color`       | String  | Hex color code for the agent (e.g., `"#E01010"`).                            |
-| `description` | String  | A brief description of the agent's purpose and usage.                       |
-| `hidden`      | Boolean | If `true`, the agent is hidden from the UI and agent lists.                 |
+| Property      | Type    | Description                                                                                 |
+| :------------ | :------ | :------------------------------------------------------------------------------------------ |
+| `color`       | String  | Hex color code for the agent (e.g., `"#E01010"`).                                           |
+| `description` | String  | A brief description of the agent's purpose and usage.                                       |
+| `hidden`      | Boolean | If `true`, the agent is hidden from the UI and agent lists.                                 |
 | `mode`        | String  | The operational mode of the agent. See [Operational Modes](#operational-modes) for details. |
-| `permission`  | Object  | Granular tool permissions (`allow`, `ask`, `deny`) mapped to command/path patterns. |
-| `tools`       | Object  | A whitelist/blacklist of tools available to the agent (e.g., `"*": false`). |
-| `temperature` | Number  | LLM sampling temperature for the agent's responses (typically `0.0` to `1.0`). |
+| `permission`  | Object  | Granular tool permissions (`allow`, `ask`, `deny`) mapped to command/path patterns.         |
+| `tools`       | Object  | A whitelist/blacklist of tools available to the agent (e.g., `"*": false`).                 |
+| `temperature` | Number  | LLM sampling temperature for the agent's responses (typically `0.0` to `1.0`).              |
 
 ## Operational Modes
 
 | Mode       | Description                                                                                                                                                                 |
-|:-----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :--------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `primary`  | A standalone agent capable of initiating and managing a full conversation thread. Used for top-level tasks and build-in system agents.                                      |
 | `subagent` | A specialized agent intended to be called by another agent (e.g., via the `task` tool). These are optimized for specific sub-tasks like exploration, web searching, or git. |
 
 ## Agent Discovery
 
 Opencode automatically discovers agents defined in the standard locations:
+
 - `~/.config/opencode/agents/*.md`
 - `{project root}/.opencode/agents/*.md`
 
 ### Automatic Mapping
+
 If an agent is used (e.g., via a subagent call) and is not explicitly configured in `opencode.jsonc`, Opencode will look for a markdown file with the same name in the `agents/` directory.
 
 ### When to use `prompt` in `opencode.jsonc`
+
 The `prompt` property in `opencode.jsonc` is **optional** if the file follows the `{name}.md` convention in the `agents/` folder. It is required only if:
+
 1. The markdown file name does not match the agent name.
 2. The file is located outside the standard `agents/` directory.
 3. You are explicitly configuring a built-in agent to use a custom prompt file.
@@ -55,30 +59,49 @@ This allows you to define base agent behavior in the markdown file while overrid
 ## Tool access
 
 ### Supported Permissions
+
 Permissions control what an agent is allowed to do. They can be set to "allow", "ask", or "deny".
 
-| Permission         | Description                                                                                            |
-|:-------------------|:-------------------------------------------------------------------------------------------------------|
-| read               | Reading file contents. Matches against the file path.                                                  |
-| edit               | All file modifications. Covers edit, write, patch, and multiedit tools. Matches against the file path. |
-| glob               | Finding files using glob patterns. Matches the pattern.                                                |
-| grep               | Searching file contents with regex. Matches the regex pattern.                                         |
-| bash               | Running shell commands. Matches the command string.                                                    |
-| list               | Listing directory contents. Matches the directory path.                                                |
-| task               | Launching subagents. Matches the subagent name/type.                                                   |
-| skill              | Loading specialized instructions/patterns. Matches the skill name.                                     |
-| lsp                | Running Language Server Protocol queries.                                                              |
-| todoread           | Reading the project's todo list.                                                                       |
-| todowrite          | Adding or updating items in the todo list.                                                             |
-| webfetch           | Fetching content from a URL. Matches the URL.                                                          |
-| websearch          | Performing web searches (e.g., via DuckDuckGo or Exa).                                                 |
-| codesearch         | Searching for code patterns across the web or large repositories.                                      |
-| google_search      | (Plugin) Performing web searches using Google Search (via opencode-antigravity-auth).                  |
-| question           | Asking the user for clarification or input via the UI.                                                 |
-| plan_enter         | Entering the structured planning mode.                                                                 |
-| plan_exit          | Exiting the planning mode and submitting a plan.                                                       |
-| external_directory | Safety guard triggered when a tool accesses paths outside the project root.                            |
-| doom_loop          | Safety guard triggered when the same tool call repeats 3+ times with identical input.                  |
+| Permission            | Description                                                                                            | Plugin / MCP                | 
+|-----------------------|:-------------------------------------------------------------------------------------------------------|:----------------------------|
+| bash                  | Running shell commands. Matches the command string.                                                    | build-in                    |
+| chrome_*              | Chrome MCP server.                                                                                     | chrome-devtools-mcp         |                                                                                
+| codesearch            | Searching for code patterns across the web or large repositories.                                      | build-in                    |
+| context7_*            | Context7 MCP server.                                                                                   | context7-mcp                |
+| doom_loop             | Safety guard triggered when the same tool call repeats 3+ times with identical input.                  | build-in                    |
+| edit                  | All file modifications. Covers edit, write, patch, and multiedit tools. Matches against the file path. | build-in                    |
+| excel_*               | Excel MCP server.                                                                                      | excel-mcp-server            |
+| external_directory    | Safety guard triggered when a tool accesses paths outside the project root.                            | build-in                    |
+| filesystem_*          | Filesystem MCP server.                                                                                 | mcp-filesystem              |
+| git_git_add           | Stages files for commit.                                                                               | mcp-server-git              |
+| git_git_branch        | Lists branches (local/remote/all).                                                                     | mcp-server-git              |
+| git_git_checkout      | Switches branches.                                                                                     | mcp-server-git              |
+| git_git_commit        | Creates a new commit with a message.                                                                   | mcp-server-git              |
+| git_git_create_branch | Creates a new branch.                                                                                  | mcp-server-git              |
+| git_git_diff          | Compares branches or commits.                                                                          | mcp-server-git              |
+| git_git_diff_staged   | Shows staged changes.                                                                                  | mcp-server-git              |
+| git_git_diff_unstaged | Shows unstaged changes.                                                                                | mcp-server-git              |
+| git_git_log           | Shows commit history/logs.                                                                             | mcp-server-git              |
+| git_git_reset         | Unstages all changes.                                                                                  | mcp-server-git              |
+| git_git_show          | Shows contents of a specific revision.                                                                 | mcp-server-git              |
+| git_git_status        | Shows the working tree status.                                                                         | mcp-server-git              |
+| glob                  | Finding files using glob patterns. Matches the pattern.                                                | build-in                    |
+| google_search         | Performing web searches using Google Search (via opencode-antigravity-auth).                           | `opencode-antigravity-auth` |
+| grep                  | Searching file contents with regex. Matches the regex pattern.                                         | build-in                    |
+| list                  | Listing directory contents. Matches the directory path.                                                | build-in                    |
+| lsp                   | Running Language Server Protocol queries.                                                              | build-in                    |
+| plan_enter            | Entering the structured planning mode.                                                                 | build-in                    |
+| plan_exit             | Exiting the planning mode and submitting a plan.                                                       | build-in                    |
+| pty_*                 | Interactive PTY management (`spawn`, `read`, `write`, `list`, `kill`).                                 | opencode-pty                |
+| question              | Asking the user for clarification or input via the UI.                                                 | build-in                    |
+| read                  | Reading file contents. Matches against the file path.                                                  | build-in                    |
+| skill                 | Loading specialized instructions/patterns. Matches the skill name.                                     | build-in                    |
+| skill_*               | Skill management and discovery (`use`, `find`, `resource`).                                            | @zenobius/opencode-skillful |
+| task                  | Launching subagents. Matches the subagent name/type.                                                   | build-in                    |
+| todoread              | Reading the project's todo list.                                                                       | build-in                    |
+| todowrite             | Adding or updating items in the todo list.                                                             | build-in                    |
+| webfetch              | Fetching content from a URL. Matches the URL.                                                          | build-in                    |
+| websearch             | Performing web searches (e.g., via DuckDuckGo or Exa).                                                 | open-websearch              
 
 ### Example Agent
 
@@ -107,28 +130,30 @@ tools:
   read: true
   todoread: true
   todowrite: true
-  mcp-filesystem_read*: true
-  mcp-filesystem_list*: true
+  filesystem_read*: true
+  filesystem_list*: true
 ```
 
 Using `"*": false` followed by an explicit "allow list" (Principle of Least Privilege) is highly recommended for specialized agents. It ensures:
-*   **Security**: The agent cannot perform unauthorized actions (like searching the web or modifying cloud resources if those tools were available).
-*   **Focus**: The agent is less likely to "hallucinate" using a tool that isn't relevant to its task.
-*   **Efficiency**: It reduces the tool definitions the agent has to keep in context.
+
+- **Security**: The agent cannot perform unauthorized actions (like searching the web or modifying cloud resources if those tools were available).
+- **Focus**: The agent is less likely to "hallucinate" using a tool that isn't relevant to its task.
+- **Efficiency**: It reduces the tool definitions the agent has to keep in context.
 
 In this specific example, restricting `mcp-filesystem` to `read*` and `list*` while allowing the native `edit` tool (line 14) is a sound approach: it can see the conflicts and modify them using the native editor integration, but it can't use MCP to move or delete files.
 
 ### The syntax `{mcp server name}_{tool name of mcp server}`
- 
-In OpenCode, MCP tools are identified by the pattern `[mcp-server-id]_[tool-name]`. 
-*   **Separator**: The `_` (underscore) is the standard delimiter.
-*   **Wildcards**: The use of `*` (as in `mcp-filesystem_read*`) is supported in these configuration files to enable a group of related tools (e.g., `read_file`, `read_multiple_files`, etc.).
+
+In OpenCode, MCP tools are identified by the pattern `[mcp-server-id]_[tool-name]`.
+
+- **Separator**: The `_` (underscore) is the standard delimiter.
+- **Wildcards**: The use of `*` (as in `mcp-filesystem_read*`) is supported in these configuration files to enable a group of related tools (e.g., `read_file`, `read_multiple_files`, etc.).
 
 For example:
 
-*   **Server**: `mcp-filesystem` → **Tools**: `mcp-filesystem_read_file`, `mcp-filesystem_write_file`, `mcp-filesystem_list_directory`.
-*   **Server**: `excel-mcp-server` → **Tools**: `excel-mcp-server_apply_formula`, `excel-mcp-server_read_data_from_excel`.
-*   **Server**: `chrome-devtools` → **Tools**: `chrome-devtools_click`, `chrome-devtools_navigate_page`.
+- **Server**: `filesystem` → **Tools**: `filesystem_read_file`, `filesystem_write_file`, `filesystem_list_directory`.
+- **Server**: `excel` → **Tools**: `excel_apply_formula`, `excel_read_data_from_excel`.
+- **Server**: `chrome` → **Tools**: `chrome_click`, `chrome_navigate_page`.
 
 The underscore (`_`) acts as the namespace separator between the server identifier and the specific function it provides.
 
@@ -136,76 +161,59 @@ The underscore (`_`) acts as the namespace separator between the server identifi
 
 Opencode distinguishes between generic web fetching and systematic web searching. Search capabilities are typically provided by MCP servers or plugins.
 
-| Tool Category | Prefix / Name | Source | Description |
-|:--------------|:--------------|:-------|:------------|
-| **MCP Search** | `websearch_*` | `open-websearch` MCP | Multi-engine search (Bing, DuckDuckGo, etc.) and specialized scrapers (GitHub, CSDN). |
-| **Plugin Search**| `google_search`| `opencode-antigravity-auth` | High-quality web search using Google Search with citations. |
-| **Built-in Fetch**| `webfetch` | Native Opencode | Retrieves the content of a specific URL in markdown or text format. |
+| Tool Category      | Prefix / Name   | Source                      | Description                                                                           |
+| :----------------- | :-------------- | :-------------------------- | :------------------------------------------------------------------------------------ |
+| **MCP Search**     | `websearch_*`   | `open-websearch` MCP        | Multi-engine search (Bing, DuckDuckGo, etc.) and specialized scrapers (GitHub, CSDN). |
+| **Plugin Search**  | `google_search` | `opencode-antigravity-auth` | High-quality web search using Google Search with citations.                           |
+| **Built-in Fetch** | `webfetch`      | Native Opencode             | Retrieves the content of a specific URL in markdown or text format.                   |
 
 > [!NOTE]
 > The `websearch` permission in an agent's configuration governs access to these external search capabilities. The `websearch` agent itself is a specialized subagent that orchestrates these tools to perform deep research.
 
 ### Namespace Consistency
+
 In OpenCode, standard native tools (like `read`, `write`, `edit`) don't have a prefix because they are built directly into the core agent logic. MCP tools, however, are external "plugins." To prevent name collisions (e.g., if two different MCP servers both provided a `search` tool), the system prefixes them with the server's ID.
 
-### Plugin-provided Tools
-Plugins can also add tools to the environment. Unlike MCP tools, these are often integrated more closely with the provider or the shell.
-
-| Tool            | Plugin                        | Description                                                                 |
-|:----------------|:------------------------------|:----------------------------------------------------------------------------|
-| `google_search` | `opencode-antigravity-auth`   | Search the web using Google Search with citations.                          |
-| `pty_*`         | `opencode-pty`                | Interactive PTY management (`spawn`, `read`, `write`, `list`, `kill`).      |
-| `skill_*`       | `@zenobius/opencode-skillful` | Skill management and discovery (`use`, `find`, `resource`).                 |
-
-### Git MCP Server Tools
-The `git` MCP server provides tools for interacting with local repositories. Per the standard naming convention, these are prefixed with `git_`.
-
-| Tool | Description |
-|:---|:---|
-| `git_git_status` | Shows the working tree status. |
-| `git_git_add` | Stages files for commit. |
-| `git_git_commit` | Creates a new commit with a message. |
-| `git_git_diff_unstaged` | Shows unstaged changes. |
-| `git_git_diff_staged` | Shows staged changes. |
-| `git_git_diff` | Compares branches or commits. |
-| `git_git_log` | Shows commit history/logs. |
-| `git_git_create_branch` | Creates a new branch. |
-| `git_git_checkout` | Switches branches. |
-| `git_git_branch` | Lists branches (local/remote/all). |
-| `git_git_reset` | Unstages all changes. |
-| `git_git_show` | Shows contents of a specific revision. |
-
 ### If the `tools` section is omitted entirely:
-The agent defaults to **"All Tools"**. 
-It inherits the full toolset of the parent assistant (Sisyphus), including all native tools (read, write, edit, etc.) and all connected MCP servers.
+
+The agent defaults to **"All Tools"**.
+It inherits the full toolset of the parent assistant, including all native tools (read, write, edit, etc.) and all connected MCP servers.
 
 ### If the `tools` section exists but is empty:
+
 If you define the key but provide no values:
+
 ```yaml
 tools:
 ```
+
 This typically defaults to **"No Tools"** (or a very minimal set of system tools like `question`). The system interprets the presence of the `tools` key as an intent to define a specific whitelist.
 
 ### Using the `"*"` wildcard (The Safe Way):
+
 To avoid ambiguity, OpenCode agents use the `"*"` key to set the baseline:
 
-*   **Restrictive (Recommended)**:
-    ```yaml
-    tools:
-      "*": false
-      read: true
-    ```
-    *Result: Only `read` is available.*
+- **Restrictive (Recommended)**:
 
-*   **Permissive (Default if omitted)**:
-    ```yaml
-    tools:
-      "*": true
-      mcp-filesystem*: false
-    ```
-    *Result: All tools are available EXCEPT those from `mcp-filesystem`.*
+  ```yaml
+  tools:
+    "*": false
+    read: true
+  ```
 
-*   **No `tools` section** = All tools.
+  _Result: Only `read` is available._
+
+- **Permissive (Default if omitted)**:
+
+  ```yaml
+  tools:
+    "*": true
+    mcp-filesystem*: false
+  ```
+
+  _Result: All tools are available EXCEPT those from `mcp-filesystem`._
+
+- **No `tools` section** = All tools.
 
 ### Context management
 
@@ -403,5 +411,91 @@ Your output must be:
 "@utils/parser.ts this is broken" → Parser bug fix
 "look at @config.json" → Config review
 "@App.tsx add dark mode toggle" → Dark mode toggle in App
-</examples>
 ```
+
+## Writing Efficient Skills
+
+Good skills are concise, discoverable, and easy for the agent to evaluate. The `description` field in a skill's YAML frontmatter is the primary signal used at discovery time. Keep it short and focused.
+
+1. Importance of `description`
+
+- The `description` field is used for discovery and listing. It must briefly explain the skill's intent so the agent can match it to a user request or context.
+
+- Example frontmatter:
+
+```yaml
+---
+description: Convert a natural-language testing instruction into Jest test skeletons.
+---
+```
+
+2. How the agent uses `description` to decide when to load a skill
+
+- At runtime the agent evaluates a skill's `description` against the current prompt/context. If the description matches relevance signals, the agent will load the full skill (the larger `SKILL.md` content) into context.
+
+- A precise description reduces false positives and avoids loading unnecessary skill content.
+
+3. Tips for concise descriptions to save context tokens
+
+- Keep descriptions to one short sentence (10–20 words).
+- Use concrete action verbs and domain nouns (e.g., "format", "lint", "convert", "migrate").
+- Avoid long examples, lists, or implementation details in the description — those belong in `SKILL.md`.
+- Prefer clarity over cleverness; shorter, exact phrasing preserves tokens and improves matching.
+
+4. Directory structure
+
+- Place each skill in its own named folder under the `skills` directory.
+- The skill's content file must be `SKILL.md` inside that folder.
+
+Example layout:
+
+```
+~/.config/opencode/skills/
+├─ jest-tests/
+│  └─ SKILL.md
+├─ spellcheck/
+│  └─ SKILL.md
+```
+
+- Each `SKILL.md` should include YAML frontmatter with `description` and any other metadata, followed by the full instructions and examples.
+
+
+
+## Disabling or Overriding Built-in Subagents
+
+You can disable or override built-in subagents like `explore` and `general` by modifying your `opencode.jsonc` configuration.
+
+### Disabling Subagents
+
+To completely disable a built-in agent, set `disable: true` in `opencode.jsonc`:
+
+```json
+{
+  "agent": {
+    "explore": {
+      "disable": true
+    },
+    "general": {
+      "disable": true
+    }
+  }
+}
+```
+
+### Overriding Subagents
+
+To override specific properties of a built-in agent (e.g., prompt, model, or description), specify them in `opencode.jsonc`. This is useful for influencing when the primary agent decides to use a subagent by changing its `description`.
+
+```json
+{
+  "agent": {
+    "explore": {
+      "description": "Custom description to influence subagent selection",
+      "prompt": "Your custom system prompt here",
+      "model": "anthropic/claude-3-5-sonnet"
+    }
+  }
+}
+```
+
+Alternatively, create a markdown file at `~/.config/opencode/agents/explore.md` to override the built-in explore agent's prompt and properties via frontmatter.

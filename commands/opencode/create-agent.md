@@ -92,7 +92,7 @@ XML tags provide superior structural anchors compared to Markdown alone. Use the
 ```
 
 **For GPT/OpenAI Models:**
-GPT performs better with Markdown structure, but can benefit from XML tags as supplementary anchors for critical sections. Use selectively for emphasis.
+GPT performs better with Markdown structure, but can benefit from XML tags as supplementary anchors for critical sections. Use them selectively for emphasis.
 
 **When to Use:**
 - Claude models: Use XML tags throughout for maximum effectiveness
@@ -175,7 +175,19 @@ Instruct agents to "think step-by-step" explicitly. Research shows this dramatic
 **Never skip steps** - the planning phase prevents errors.
 ```
 
----
+#### 4. Writing High-Performance Agent Descriptions (for Routing)
+
+The `description` field in your agent's frontmatter is the primary "Sales Pitch" that the main agent uses to decide whether to call this subagent. 
+
+**Key Principles:**
+- **Trigger-Action Pattern**: Start with a "When" or "Use for" clause. 
+    - *Good*: "Use this when the task requires analyzing AWS CloudWatch logs for error patterns."
+- **Action-Oriented Verbs**: Use high-precision verbs (e.g., *Reconcile, Audit, Refactor*) rather than vague ones (e.g., *Handle, Process*).
+- **Ideal Length**: Aim for **20-50 words** (1-2 concise sentences). Too short lacks context; too long dilutes the signal.
+- **Include Boundaries**: State the specific domain, expertise, and unique tooling (e.g., "Expert in Kubernetes manifest optimization using websearch").
+- **Exclude "Polite Filler"**: Avoid phrases like "This agent is designed to..." or "I am here to help you...".
+- **Differential Descriptions**: If two agents have similar domains, use contrastive language to separate them.
+    - *Example*: "Exclusively for Git operations; do not use for general code generation or refactoring."
 
 ### Step 2: Create the Agent Markdown File
 
@@ -200,7 +212,7 @@ Create a new markdown file at one of these locations:
 ```yaml
 ---
 color: "#RRGGBB"                    # Hex color for UI
-description: Brief description      # 5-10 words, what does it do
+description: Agent "Sales Pitch"    # 20-50 words; see "High-Performance Descriptions" below
 hidden: false                        # true to hide from agent list
 mode: subagent                       # "subagent" if called by main agent
 model: google/gemini-3-flash        # Which model to use (affects prompt format)
@@ -357,7 +369,6 @@ mkdir -p {project-dir}/.opencode
 ```
 
 **Configuration Resolution Order** (what OpenCode looks for):
-
 When you invoke an agent, OpenCode searches in this order:
 1. **Project agents** - `{current-dir}/.opencode/agents/{agent-name}.md`
 2. **Project config** - `{current-dir}/.opencode/opencode.jsonc` (agent config)
@@ -501,7 +512,7 @@ Prevent hallucination and prompt injection by requiring structured outputs:
 
 Return results ONLY in this exact format:
 
-\`\`\`json
+```json
 {
   "status": "success|error",
   "findings": [
@@ -512,7 +523,7 @@ Return results ONLY in this exact format:
     }
   ]
 }
-\`\`\`
+```
 
 Use the format above **EXACTLY**. Do not deviate or create custom fields.
 ```
@@ -740,7 +751,7 @@ tools:
 
 **Instruction Template:**
 
-```markdown
+```yaml
 ---
 model: google/gemini-3-flash
 temperature: 0.5
@@ -772,13 +783,13 @@ Think step-by-step:
 
 Always return data as structured tables:
 
-\`\`\`json
+```json
 {
   "status": "success",
   "rows_processed": 1000,
   "data": [/* structured records */]
 }
-\`\`\`
+```
 ```
 
 ---
@@ -1265,4 +1276,3 @@ Creating an OpenCode agent with modern LLM best practices requires:
 ✅ **Measurable Criteria**: Specific metrics reduce compliance issues  
 
 Follow the structure of existing agents, use the deny-by-default tool access pattern, apply modern prompt engineering research, and provide detailed, well-structured instructions for your agent to function optimally across different models.
-

@@ -1,7 +1,18 @@
 ---
-color: "#6cd5d2"
+color: "#DF8020"
 description: Manage Git repositories with staging, commits, and branching
 temperature: 0.1
+tools:
+  "*": false
+  codesearch: true
+  doom_loop: true
+  edit: true
+  external_directory: true
+  glob: true
+  git_*: true
+  grep: true
+  list: true
+  read: true
 ---
 
 # Git Agent

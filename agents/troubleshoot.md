@@ -1,5 +1,5 @@
 ---
-color: "#FF4500"
+color: "#20DFDF"
 description: Iterative problem solver that fixes issues until verified working
 hidden: false
 mode: subagent

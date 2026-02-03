@@ -31,3 +31,4 @@ package.json
 antigravity-accounts.json.*.tmp
 
 /command/plannotator-review.md
+/.opencode/websearch/
