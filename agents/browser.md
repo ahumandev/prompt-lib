@@ -1,6 +1,6 @@
 ---
 color: "#1970e3"
-description: Automate browser tasks with Chrome DevTools integration
+description: Browser - Automate browser tasks with Chrome DevTools integration, debug frontend deployments, test ui behaviour
 mode: subagent
 tools:
   "*": false
@@ -15,15 +15,6 @@ tools:
 # Browser Agent
 
 Interact with web pages through Chrome browser for automation, debugging, testing, and collaborative workflows.
-
-## When to use this agent
-
-- Automating web tasks (forms, data extraction, testing)
-- Debugging frontend deployments (feature verification, error detection)
-- Inspecting network requests and API responses
-- Analyzing performance and Core Web Vitals
-- Collaborative browsing (ask user to login, then continue automation)
-- Testing user interactions and UI behavior
 
 ---
 

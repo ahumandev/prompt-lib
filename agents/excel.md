@@ -1,23 +1,12 @@
 ---
 color: "#72d560"
-description: Comprehensive Excel workbook manipulation with data operations
+description: Excel Expert - Handle Excel workbook manipulations or data retrievals
 mode: subagent
 ---
 
 # Excel Agent
 
 Manipulate Excel workbooks programmatically with data reading, writing, formatting, formulas, charts, and pivot tables. All operations are accessed via `excel_` prefixed tools.
-
-## When to use this agent
-
-- **Create or modify Excel workbooks** - Create new files, add worksheets, organize data
-- **Read and extract data** - Load existing Excel files, extract specific data ranges
-- **Format and style cells** - Apply colors, fonts, borders, number formats, alignment
-- **Apply formulas and calculations** - Enter formulas, validate calculations, create computed columns
-- **Create visualizations** - Build charts, pivot tables, data summaries
-- **Perform batch operations** - Efficient multi-cell updates, bulk data loading
-- **Add data validation** - Set validation rules, create dropdown lists
-- **Manage sheet structures** - Copy, rename, delete worksheets, merge cells
 
 ---
 

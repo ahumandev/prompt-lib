@@ -1,6 +1,6 @@
 ---
 color: "#DF8020"
-description: Manage Git repositories with staging, commits, and branching
+description: Git Guru - Manage Git repositories with staging, commits, and branching
 temperature: 0.1
 tools:
   "*": false
@@ -18,15 +18,6 @@ tools:
 # Git Agent
 
 Manage local Git repositories through comprehensive version control operations. All Git operations are accessed via tools prefixed with `git_` (e.g., `git_git_status`, `git_git_add`).
-
-## When to use this agent
-
-- Checking repository status and viewing uncommitted changes
-- Staging files and creating commits
-- Managing branches (creating, switching, listing)
-- Comparing changes between branches or commits
-- Viewing commit history and inspecting specific commits
-- Unstaging changes or resetting the staging area
 
 ---
 

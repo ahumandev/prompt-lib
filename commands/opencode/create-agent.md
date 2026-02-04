@@ -60,6 +60,101 @@ When you're in a project directory that has `.opencode/opencode.jsonc`, project-
 
 ---
 
+## CRITICAL: Agent Selection via Description Property
+
+The `description` field in your agent's YAML frontmatter is **THE PRIMARY mechanism** for agent selection. This is the "sales pitch" that the main agent uses to decide whether to invoke your subagent.
+
+**Why This Matters:**
+- The description appears in the agent routing logic
+- It's the FIRST thing evaluated when deciding which agent to use
+- A poorly written description means your agent won't be selected, even if it's perfect for the task
+- This is MORE important than the detailed instructions inside the agent file
+
+**Key Principles for High-Performance Descriptions:**
+
+1. **Trigger-Action Pattern**: Start with "Use this when..." or "Invoke for..." to make triggering conditions explicit
+2. **Action-Oriented Verbs**: Use precise verbs (Analyze, Refactor, Reconcile, Audit) instead of vague ones (Handle, Process, Manage)
+3. **Optimal Length**: 20-50 words (1-2 sentences). Too short lacks context; too long dilutes signal
+4. **Include Boundaries**: State the specific domain and what makes this agent unique
+5. **No Polite Filler**: Avoid "This agent is designed to..." or "I am here to help you..."
+6. **Differential Descriptions**: If similar agents exist, use contrastive language to separate them
+
+**Examples of Good vs Bad Descriptions:**
+
+❌ **BAD** (vague, no trigger pattern):
+```yaml
+description: Helps with code tasks and refactoring
+```
+
+✅ **GOOD** (specific, trigger-focused):
+```yaml
+description: Use when refactoring TypeScript code to modern ES6+ patterns while preserving type safety and test coverage
+```
+
+---
+
+❌ **BAD** (polite filler, too generic):
+```yaml
+description: This agent is designed to help you work with Git repositories and version control
+```
+
+✅ **GOOD** (action-oriented, boundary-defined):
+```yaml
+description: Invoke for Git operations including staging, commits, branching, and merge conflict resolution. Does not handle code generation
+```
+
+---
+
+❌ **BAD** (too short, ambiguous):
+```yaml
+description: Web searches
+```
+
+✅ **GOOD** (detailed, process-focused):
+```yaml
+description: Conducts systematic web research with query decomposition, source validation, and synthesis. Use for multi-source research requiring credibility analysis
+```
+
+---
+
+❌ **BAD** (too long, unfocused):
+```yaml
+description: This comprehensive agent assists with analyzing AWS CloudWatch logs by downloading them from S3, parsing JSON structures, identifying error patterns using regex, correlating timestamps across services, and generating detailed reports with recommendations for infrastructure improvements and cost optimization strategies
+```
+
+✅ **GOOD** (concise, focused):
+```yaml
+description: Use for AWS CloudWatch log analysis including error pattern detection, timestamp correlation, and actionable infrastructure recommendations
+```
+
+---
+
+❌ **BAD** (no differentiation):
+```yaml
+description: Handles data processing tasks
+```
+
+✅ **GOOD** (clear boundaries):
+```yaml
+description: Excel workbook manipulation exclusively - data transformation, formula insertion, sheet operations. Use read/write tools for CSV; use this for .xlsx/.xls only
+```
+
+---
+
+❌ **BAD** (passive, no triggers):
+```yaml
+description: Can explore codebases and find patterns
+```
+
+✅ **GOOD** (active, trigger-explicit):
+```yaml
+description: Fast codebase exploration using glob/grep for pattern discovery. Invoke when task needs "find all", "locate", or "discover" without modification
+```
+
+**Remember:** The description is evaluated BEFORE your agent is invoked. Make it count!
+
+---
+
 ### Format & Structure Best Practices
 
 This section covers modern prompt engineering techniques that significantly improve LLM agent performance.
@@ -175,19 +270,9 @@ Instruct agents to "think step-by-step" explicitly. Research shows this dramatic
 **Never skip steps** - the planning phase prevents errors.
 ```
 
-#### 4. Writing High-Performance Agent Descriptions (for Routing)
+#### 4. Positive Framing & Measurable Criteria
 
-The `description` field in your agent's frontmatter is the primary "Sales Pitch" that the main agent uses to decide whether to call this subagent. 
-
-**Key Principles:**
-- **Trigger-Action Pattern**: Start with a "When" or "Use for" clause. 
-    - *Good*: "Use this when the task requires analyzing AWS CloudWatch logs for error patterns."
-- **Action-Oriented Verbs**: Use high-precision verbs (e.g., *Reconcile, Audit, Refactor*) rather than vague ones (e.g., *Handle, Process*).
-- **Ideal Length**: Aim for **20-50 words** (1-2 concise sentences). Too short lacks context; too long dilutes the signal.
-- **Include Boundaries**: State the specific domain, expertise, and unique tooling (e.g., "Expert in Kubernetes manifest optimization using websearch").
-- **Exclude "Polite Filler"**: Avoid phrases like "This agent is designed to..." or "I am here to help you...".
-- **Differential Descriptions**: If two agents have similar domains, use contrastive language to separate them.
-    - *Example*: "Exclusively for Git operations; do not use for general code generation or refactoring."
+These principles apply throughout your agent instructions to improve clarity and compliance.
 
 ### Step 2: Create the Agent Markdown File
 
@@ -211,8 +296,13 @@ Create a new markdown file at one of these locations:
 
 ```yaml
 ---
+# CRITICAL: Description is THE PRIMARY mechanism for agent selection
+# This appears in routing logic and determines if your agent gets invoked
+# Make it: 20-50 words, trigger-focused, action-oriented
+# Example: "Use for Git operations including staging, commits, branching. Does not handle code generation"
+description: "Use when [specific trigger]. Handles [specific actions]. Does not [boundaries]"
+
 color: "#RRGGBB"                    # Hex color for UI
-description: Agent "Sales Pitch"    # 20-50 words; see "High-Performance Descriptions" below
 hidden: false                        # true to hide from agent list
 mode: subagent                       # "subagent" if called by main agent
 model: google/gemini-3-flash        # Which model to use (affects prompt format)
@@ -233,18 +323,7 @@ standard Markdown for other models. Include all core behavioral instructions.
 
 ## Agent Name
 
-Brief intro paragraph explaining what this agent does.
-
-## When to use this agent
-
-**Trigger this agent when:**
-- Specific keywords or phrases
-- Types of requests that match this agent's specialty
-- Conditions under which it should be invoked
-
-**Do NOT use for:**
-- Tasks this agent is not designed for
-- When the main agent can handle it better
+Brief intro paragraph explaining what this agent does and how it operates.
 
 ---
 
@@ -414,7 +493,7 @@ This means **project-level agents override global agents with the same name**.
 Your markdown file should provide:
 
 1. **Clear Purpose** - What does this agent do?
-2. **When to Trigger** - Keywords, phrases, conditions
+2. **Trigger-Focused Description** - In YAML frontmatter (see "CRITICAL: Agent Selection via Description Property" above)
 3. **Few-Shot Examples** - 2-3 quality examples showing expected behavior (see Format & Structure Best Practices)
 4. **Detailed Steps** - Break down with Chain-of-Thought guidance (think step-by-step)
 5. **Tool Reference** - Table of tools and when to use them
@@ -615,6 +694,8 @@ Key patterns to follow:
 ### Pattern 1: Research/Analysis Agent
 
 ```yaml
+---
+description: "Conducts systematic web research with query decomposition, source validation, and synthesis. Use for multi-source research requiring credibility analysis"
 mode: subagent
 model: anthropic/claude-3-sonnet  # Recommended for complex reasoning
 temperature: 0.7
@@ -626,6 +707,7 @@ tools:
   glob: true
   grep: true
   read: true
+---
 ```
 
 **Use case:** Web research, codebase analysis, documentation review
@@ -634,6 +716,7 @@ tools:
 
 ```markdown
 ---
+description: "Conducts systematic web research with query decomposition, source validation, and synthesis. Use for multi-source research requiring credibility analysis"
 model: anthropic/claude-3-sonnet
 ---
 
@@ -641,11 +724,6 @@ model: anthropic/claude-3-sonnet
 # Research Agent
 
 This agent conducts systematic research by gathering, analyzing, and synthesizing information.
-
-## When to Use
-- Complex research questions requiring multiple sources
-- Deep analysis of codebase or documentation
-- Comparative analysis of approaches/tools
 
 ## Your Approach
 
@@ -676,6 +754,8 @@ Think step-by-step through research:
 ### Pattern 2: Code/Git Agent
 
 ```yaml
+---
+description: "Invoke for Git operations including staging, commits, branching, and merge conflict resolution. Does not handle code generation or architecture decisions"
 mode: subagent
 model: anthropic/claude-3-sonnet  # Superior code reasoning
 temperature: 0.3  # Lower = more deterministic
@@ -688,6 +768,7 @@ tools:
   read: true
   git_*: true
   bash: true
+---
 ```
 
 **Use case:** Code modification, Git operations, repository management
@@ -696,6 +777,7 @@ tools:
 
 ```markdown
 ---
+description: "Invoke for Git operations including staging, commits, branching, and merge conflict resolution. Does not handle code generation or architecture decisions"
 model: anthropic/claude-3-sonnet
 temperature: 0.3
 ---
@@ -734,6 +816,8 @@ Think step-by-step:
 ### Pattern 3: Data Processing Agent
 
 ```yaml
+---
+description: "Excel workbook manipulation exclusively - data transformation, formula insertion, sheet operations. Use read/write tools for CSV; invoke this only for .xlsx/.xls files"
 mode: subagent
 model: google/gemini-3-flash  # Good for data tasks
 temperature: 0.5
@@ -745,6 +829,7 @@ tools:
   grep: true
   read: true
   write: true
+---
 ```
 
 **Use case:** Excel workbooks, data transformation, report generation
@@ -753,6 +838,7 @@ tools:
 
 ```yaml
 ---
+description: "Excel workbook manipulation exclusively - data transformation, formula insertion, sheet operations. Use read/write tools for CSV; invoke this only for .xlsx/.xls files"
 model: google/gemini-3-flash
 temperature: 0.5
 ---
@@ -827,7 +913,7 @@ Before deploying your agent, verify:
 
 ### Instructions Quality
 - [ ] Clear title explaining agent purpose
-- [ ] "When to use" section with trigger conditions
+- [ ] **Description in frontmatter is trigger-focused and 20-50 words** (THE PRIMARY routing mechanism)
 - [ ] **Few-shot examples included** (2-3 quality input/output pairs showing expected behavior)
 - [ ] Examples demonstrate edge cases or challenging scenarios
 - [ ] Numbered workflow/steps (not free-form prose)

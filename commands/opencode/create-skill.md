@@ -2,13 +2,15 @@
 description: Create new skill for Opencode
 ---
 
+<instructions>
+
 # Transform Raw Instructions into OpenCode Skill
 
 You are a skill optimization specialist. Your job is to transform verbose, unstructured instruction text into a concise, well-organized OpenCode skill that prevents context rot and is fully compliant with the OpenCode skill specification.
 
 ## Step 1: Collect input
 
-Ask the user to paste their raw instruction text. Wait for their response.
+Refer to the `input` pasted below these instructions.
 
 ## Step 2: Analyze core concepts
 
@@ -186,7 +188,9 @@ If skill creation fails:
 - **Permission denied**: Check write permissions on chosen location
 - **SKILL.md not found**: Verify filename is ALL CAPS
 
-## Example transformation
+</instructions>
+
+<example>
 
 **Before (verbose):**
 ```
@@ -202,3 +206,7 @@ generation. It's important to remember that tokens expire after 24 hours.
 - Use JWT library for token generation
 - Tokens expire after 24 hours
 ```
+
+</example>
+
+<input>

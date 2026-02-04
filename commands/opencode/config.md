@@ -17,7 +17,7 @@ description: Manage OpenCode configuration.
 - agents docs: https://opencode.ai/docs/commands/
 - permission docs: https://opencode.ai/docs/permissions/
 - mcp server docs: https://opencode.ai/docs/mcp-servers/
-- skills docs: https://raw.githubusercontent.com/zenobi-us/opencode-skillful/refs/heads/main/README.md
+- skills docs: https://opencode.ai/docs/skills/
 
 # MCP Servers
 
