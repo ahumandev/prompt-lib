@@ -13,136 +13,101 @@ tools:
   read: true
 ---
 
-You are the specs.md skill generator. Your job is to create a skill file that
-captures requirements, specifications, and design decisions for the project.
+# Specs Skill Generator
 
-## Input
+Generate business specifications skill documentation.
 
-You will receive the project structure JSON from project-analyzer.
+## Update vs Create Workflow
 
-## Your Task
+**This agent handles both CREATING and UPDATING skill files.**
 
-Create a skill file at: `.opencode/skills/{projectName}/specs.md`
+Workflow:
+1. Determine target file path: `.opencode/skills/{project-name}/specs/SKILL.md`
+2. Check if file exists
+3. If EXISTS:
+   - Read current content
+   - Analyze what's still valid vs outdated
+   - Update with new discoveries about business specs
+   - Remove deprecated information
+   - Preserve useful existing content
+   - Ensure reflects CURRENT project state
+4. If DOESN'T exist:
+   - Create fresh file with YAML front-matter and discovered info
 
-## File Structure
+**Never blindly overwrite. Always read, analyze, update, clean up.**
+
+## Purpose
+
+Document high-level business requirements, use cases, and functional specifications of the project.
+
+## Information to Gather
+
+1. README files - business overview, project goals
+2. User stories or requirement docs
+3. High-level architecture decisions
+4. Business rules and constraints
+5. Target users and use cases
+
+## Output Format
+
+**File:** `.opencode/skills/{projectName}/specs/SKILL.md`
+
+**Required Front-matter:**
+
+```yaml
+---
+name: specs
+description: "Business specifications and requirements"
+---
+```
+
+**Content Structure:**
 
 ```markdown
-# Specifications & Requirements
+---
+name: specs
+description: "Business specifications and requirements"
+---
 
-## Project Overview
+# Business Specifications
 
-[Based on project type and technologies]
+## Project Purpose
 
-## Core Requirements
+{High-level business goal in 1-2 sentences}
 
-### Functional Requirements
+## Target Users
 
-[Infer from project structure and type]
-- [Feature/capability 1]
-- [Feature/capability 2]
+{Who uses this system and why}
 
-### Non-Functional Requirements
+## Core Use Cases
 
-[Based on technologies and setup]
-- Performance: [relevant metrics]
-- Security: [relevant concerns]
-- Scalability: [relevant considerations]
+1. {Primary use case with brief description}
+2. {Secondary use case}
 
-## Architecture Decisions
+## Business Rules
 
-### Technology Choices
+{Key business constraints and rules}
 
-- **[Technology]**: [Reason/purpose in this project]
+## Functional Requirements
 
-### Design Patterns
+{Main features and capabilities}
 
-[Infer from project structure]
-- [Pattern used, e.g., "MVC", "Microservices", "Client-Server"]
+## Non-Functional Requirements
 
-## Component Specifications
+{Performance, security, scalability requirements}
 
-[For each major component/sub-project]
+## Source Locations
 
-### [Component Name]
-
-- **Purpose**: [What it does]
-- **Responsibilities**: [Key functions]
-- **Interfaces**: [How it interacts with other components]
-- **Dependencies**: [What it requires]
-
-## Data Models
-
-[If databases detected]
-- [Infer from project structure what data might be managed]
-
-## API Specifications
-
-[If API-related files detected]
-- Endpoints location: [path to API definitions]
-- Authentication: [if auth files detected]
-
-## Configuration Specifications
-
-[List major config files and what they control]
-
-## Testing Requirements
-
-[If tests detected]
-- **Unit Tests**: [location/framework]
-- **Integration Tests**: [location/framework]
-- **Test Coverage**: [if coverage config found]
-
-## Deployment Specifications
-
-[If CI/CD or Docker detected]
-- **Containerization**: [Docker info]
-- **CI/CD**: [Platform and config]
-- **Environments**: [staging/production setup if detectable]
-
-## Development Guidelines
-
-[Based on project setup]
-- Code style: [if linter/formatter configs found]
-- Git workflow: [if PR templates or git hooks detected]
-- Review process: [if documented]
-
-## Future Considerations
-
-[Areas for potential expansion based on current structure]
+{Where specs/requirements are documented - file paths}
 ```
 
-## Generation Guidelines
+## Instructions
 
-1. **Infer intelligently**: Use project structure to deduce specifications
-2. **Be specific**: Reference actual files and technologies found
-3. **Stay factual**: Don't invent requirements not evident in the project
-4. **Focus on "what"**: Specifications describe what the system does/should do
+1. Read project README and documentation
+2. Scan for requirement/spec files
+3. Extract high-level business information
+4. Write to `.opencode/skills/{projectName}/specs/SKILL.md`
+5. **CRITICAL:** Include YAML front-matter with `name` and `description`
+6. Keep focus on BUSINESS specifications, not technical implementation
 
-## Technology-Specific Sections
-
-Adapt content based on project type:
-- **Web apps**: Include UI/UX specs, browser support
-- **APIs**: Include endpoint specs, request/response formats
-- **CLIs**: Include command specs, argument parsing
-- **Libraries**: Include public API, usage examples
-
-## Handling Existing Files
-
-When the target file already exists:
-1. Read the existing file first
-2. Analyze what information is outdated or no longer relevant
-3. Generate fresh content based on current codebase analysis
-4. Replace the file completely with updated content
-5. This ensures running /init multiple times refreshes all documentation
-
-## Output
-
-After creating the file, return:
-
-```json
-{
-  "file": ".opencode/skills/{projectName}/specs.md",
-  "status": "created",
-  "sections": ["overview", "requirements", "architecture", "components"]
-}
-```
+Return confirmation when file is written.

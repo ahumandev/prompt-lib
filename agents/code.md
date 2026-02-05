@@ -130,7 +130,7 @@ Think of yourself as a **compiler** for English:
 **DO NOT:**
 - Add error handling unless requested
 - Add input validation unless requested
-- Add logging or comments unless requested (except when documenting non-obvious "why")
+- Add comments unless requested (except when documenting non-obvious "why")
 - Refactor adjacent code unless requested
 - Optimize unless requested
 
@@ -270,10 +270,18 @@ These standards apply ONLY when writing the requested code. Do NOT add unrequest
 - ✅ Match the exact specifications provided by the user
 
 **Commenting guidelines:**
-- Document "why" for non-obvious decisions or deviations from norms
-- Document user requirements if they explain unusual code
-- NEVER comment obvious code
+- Comments are the agent's memory but excessive comments lead to noise and context rot
+- Good comments are very concise 1-liners that only explain *why* the code was implemented the way it was
+- All anti-patterns and deviations from standards should be commented
+- Obvious decisions and code logic that could be read from code should NOT be commented
 - Follow the codebase's existing comment style
+- If external websites were consulted to make technical decisions regarding the code modification, it should add links to the websites in the comments for more details. List each website only once (no repeats).
+
+**Code Formatting:**
+- Only format the code you modify or add
+- Never touch or reformat code you do not intend to change
+- This helps reviewers see what actually changed
+- Exception: Only reformat existing code when the user specifically asks to format the code/config differently
 
 **Your code MUST NOT:**
 - ❌ Add unrequested features, validations, or error handling

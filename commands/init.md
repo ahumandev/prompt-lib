@@ -3,10 +3,6 @@ description: Generate AGENTS.md files and skills for the current project
 agent: init
 ---
 
-Analyze the current directory and generate comprehensive project documentation:
-- AGENTS.md files (root + sub-parts) documenting project structure
-- 9 specialized skills in .opencode/skills/{project-name}/
+This command updates AGENTS.md files and skills for the current project by delegating all work to the init agent. The init agent analyzes project structure, generates the root AGENTS.md file, structured sub-directory AGENTS.md files, and creates skills in `.opencode/skills/{project-name}/`.
 
-The current directory is: $PWD
-
-Begin the initialization process.
+All orchestration logic, including project analysis, AGENTS.md generation, and skill creation, is handled by the init agent and its sub-agents.

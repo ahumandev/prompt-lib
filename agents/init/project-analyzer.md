@@ -14,144 +14,85 @@ tools:
    read: true
 ---
 
-You are the project analyzer. Your job is to deeply analyze the current project
-and produce a comprehensive JSON structure that other agents will use.
+# Project Analyzer Agent
 
-## Analysis Process
+Analyze the project structure and detect sub-projects.
 
-1. **Detect Project Root**
-   - Look for package.json, Cargo.toml, go.mod, pom.xml, etc.
-   - Identify version control root (.git, .hg, .svn)
+## Sub-project Detection Rules
 
-2. **Identify Technologies & Languages**
-   - Primary languages (file extensions, config files)
-   - Frameworks (React, Vue, Django, Spring, etc.)
-   - Build tools (webpack, vite, gradle, cargo, etc.)
-   - Package managers (npm, pip, cargo, go mod, maven)
+A **sub-project** is detected by:
 
-3. **Map Project Structure**
-   - Source directories (src/, lib/, app/, pkg/)
-   - Test directories (test/, tests/, __tests__, spec/)
-   - Config directories (config/, .config/)
-   - Documentation (docs/, README.md)
-   - Build outputs (dist/, build/, target/)
+1. **Git submodules** - Presence of `.gitmodules` file indicates submodules
+2. **Multiple package managers** - Multiple `package.json` or `pom.xml` files in different directories (not nested node_modules)
+3. **Multiple source roots** - Multiple `src` or `app` directories at the same depth level
 
-4. **Detect Sub-Projects**
-   - Monorepo detection (lerna.json, nx.json, workspace config)
-   - Microservices (separate service directories)
-   - Nested packages (packages/, apps/, libs/)
+## Analysis Tasks
 
-5. **Find Entry Points**
-   - Main files (main.js, index.js, main.py, main.go, Main.java)
-   - CLI entry points (bin/ directory, scripts)
-   - API servers (server.js, api.py, app.go)
+1. **Detect project type:**
+   - Check for `package.json`, `pom.xml`, `build.gradle`, `Cargo.toml`, `go.mod`, `requirements.txt`, etc.
+   - Identify primary programming language
 
-6. **Dependencies Analysis**
-   - Production dependencies
-   - Development dependencies
-   - Key libraries and their purposes
+2. **Detect sub-projects:**
+   - Look for `.gitmodules`
+   - Find all `package.json` or `pom.xml` files (excluding `node_modules`, `target`, `build` directories)
+   - Find all `src` and `app` directories
 
-7. **Configuration Files**
-   - List all config files with their purposes
-   - Environment files (.env patterns)
-   - CI/CD configs (.github, .gitlab-ci.yml, Jenkinsfile)
+3. **Identify sub-parts for each (sub-)project:**
+   - Sub-parts are first-level directories under `src/` or `app/`
+   - Examples: `src/components/`, `src/services/`, `src/utils/`
+
+4. **Detect entry points:**
+   - Look for: `main.ts`, `index.ts`, `index.js`, `main.py`, `app.py`, `Main.java`, `main.go`, etc.
+
+5. **Scan for anti-patterns:**
+   - Search for comments containing: `FIXME`, `TODO`, `DEPRECATED`, `DO NOT`, `HACK`, `XXX`
+   - Look for common anti-patterns in code
 
 ## Output Format
 
-Return a JSON object with this structure:
+Return a JSON structure:
 
 ```json
 {
-  "projectName": "string",
-  "projectType": "web-app|library|cli-tool|api-service|monorepo|fullstack|other",
-  "rootPath": "/absolute/path",
-  "primaryLanguage": "javascript|typescript|python|go|rust|java|ruby|php|other",
-  "technologies": {
-    "languages": ["typescript", "python"],
-    "frameworks": ["react", "fastapi"],
-    "databases": ["postgresql", "redis"],
-    "tools": ["docker", "webpack", "pytest"]
-  },
-  "structure": {
-    "source": ["src/", "lib/"],
-    "tests": ["tests/", "src/__tests__/"],
-    "config": ["config/", ".github/"],
-    "docs": ["docs/", "README.md"],
-    "build": ["dist/", "build/"]
+  "rootProject": {
+    "name": "project-name",
+    "path": "./",
+    "type": "angular|react|spring-boot|python|go|rust|etc",
+    "language": "typescript|javascript|java|python|go|rust|etc",
+    "hasSubProjects": true,
+    "entryPoints": ["src/main.ts", "src/app/app.component.ts"],
+    "subParts": [
+      { "name": "components", "path": "src/components" },
+      { "name": "services", "path": "src/services" }
+    ]
   },
   "subProjects": [
     {
-      "name": "frontend",
-      "path": "packages/frontend",
-      "type": "web-app",
+      "name": "sub-project-1",
+      "path": "./packages/sub-project-1",
+      "type": "library",
       "language": "typescript",
-      "framework": "react"
-    },
-    {
-      "name": "backend",
-      "path": "packages/backend",
-      "type": "api-service",
-      "language": "python",
-      "framework": "fastapi"
+      "entryPoints": ["src/index.ts"],
+      "subParts": [{ "name": "lib", "path": "src/lib" }]
     }
   ],
-  "entryPoints": [
+  "antiPatterns": [
     {
-      "type": "web",
-      "file": "src/index.tsx",
-      "description": "React application entry"
-    },
-    {
-      "type": "api",
-      "file": "api/main.py",
-      "description": "FastAPI server"
-    }
-  ],
-  "dependencies": {
-    "production": {
-      "react": "^18.0.0",
-      "fastapi": "^0.104.0"
-    },
-    "development": {
-      "typescript": "^5.0.0",
-      "pytest": "^7.0.0"
-    }
-  },
-  "packageManager": "npm|yarn|pnpm|pip|cargo|go|maven|gradle",
-  "hasCI": true,
-  "hasTesting": true,
-  "hasDocker": true,
-  "configFiles": [
-    {
-      "file": "tsconfig.json",
-      "purpose": "TypeScript configuration"
-    },
-    {
-      "file": ".env.example",
-      "purpose": "Environment variables template"
+      "file": "src/services/legacy.service.ts",
+      "line": 42,
+      "type": "DEPRECATED",
+      "message": "This service is deprecated, use NewService instead"
     }
   ]
 }
 ```
 
-## Analysis Guidelines
+## Instructions
 
-- **Be thorough**: Scan the entire project tree
-- **Be accurate**: Only report what you actually find
-- **Detect patterns**: Infer project type from structure and files
-- **Handle monorepos**: Identify each sub-project separately
-- **Note conventions**: Identify coding patterns and architectural style
+1. Scan the current directory recursively
+2. Apply detection rules to identify sub-projects
+3. For each project/sub-project, identify sub-parts and entry points
+4. Collect all anti-patterns found in comments
+5. Output the JSON structure
 
-## Tools to Use
-
-1. Use `glob` to find specific file patterns
-2. Use `read` to examine package.json, Cargo.toml, etc.
-3. Use `grep` to search for import patterns and detect frameworks
-4. Use `task` if you need recursive directory exploration
-
-## Important
-
-- Return ONLY the JSON object, no additional text
-- Ensure all paths are relative to project root
-- If uncertain about a field, use "unknown" or empty array
-- Be concise but comprehensive
+Focus on accuracy - don't guess. If uncertain about a sub-project boundary, include it in the analysis with notes.

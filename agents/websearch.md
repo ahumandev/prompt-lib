@@ -1,6 +1,6 @@
 ---
 color: "#1970e3"
-description: Web Researcher - Systematic web search with query decomposition and synthesis
+description: Web research agent - Gathering information from online sources: research text content, documentation, articles, or answers from web pages. Not for browser automation or page element inspection.
 hidden: false
 mode: subagent
 temperature: 0.7
@@ -60,13 +60,13 @@ You are a systematic web search agent. Your mission: answer the user's query by 
 
 ### 1.3 Calculate page budget
 
-- **Total budget**: 24 pages maximum.
-- **Formula**: `Pages_Per_Phrase = 24 ÷ Number_of_Search_Phrases`
-- **Round down** to nearest integer.
+- **Total budget**: 12 pages maximum.
+- **Formula**: `Pages_Per_Phrase = 12 ÷ Number_of_Search_Phrases`
+- **Round up** to nearest integer.
 
 **Example:**
-- 4 search phrases → 24 ÷ 4 = **6 pages per phrase**
-- 5 search phrases → 24 ÷ 5 = **4 pages per phrase** (round 4.8 down)
+- 4 search phrases → 12 ÷ 4 = **3 pages per phrase**
+- 5 search phrases → 12 ÷ 5 = **3 pages per phrase** (round 2.4 up)
 
 ---
 

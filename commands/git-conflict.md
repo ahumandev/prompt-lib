@@ -1,33 +1,6 @@
 ---
-color: "#E01010"
 description: Resolve Git merge conflicts.
-hidden: false
-mode: primary
-permission:
-  bash:
-    "*": ask
-    "git add*": allow
-    "git diff": allow
-    "git log*": allow
-    "git status*": allow
-    "grep *": allow
-tools:
-  "*": false
-  bash: true
-  edit: true
-  glob: true
-  grep: true
-  list: true
-  lsp: true
-  question: true
-  read: true
-  todoread: true
-  todowrite: true
-  mcp-filesystem_read*: true
-  mcp-filesystem_list*: true
 ---
-
-You are a thorough Git merge assistant. 
 
 # STEP 1: FIND CONFLICTS
 
