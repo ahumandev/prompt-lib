@@ -1,22 +1,80 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "agent": {
+    //    "brainstorm": {
+    //      "model": "alias/smart"
+    //    },
     "browser": {
-      "model": "google/antigravity-gemini-3-flash"
+      "model": "google/gemini-3-flash-preview"
+    },
+    //    "code": {
+    //      "model": "alias/balanced"
+    //    },
+    "excel": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "explore": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "general": {
+      "disable": true // Too general
     },
     "git": {
-      "model": "github_copilot/gpt-5-mini",
+      "model": "litellm/gpt-5-mini"
     },
-    "code-reader": {
-      "model": "google/antigravity-gemini-3-flash",
+    "human": {
+      "model": "litellm/gpt-5-mini"
     },
-    "os": {
-      "model": "github_copilot/gpt-5-mini",
+    "init": {
+      "model": "litellm/gpt-5-mini"
     },
+    "init/project-analyzer": {
+      "model": "litellm/gpt-5-mini"
+    },
+    //    "init/agentsmd": {
+    //      "model": "litellm/claude-sonnet-4.5"
+    //    },
+    "init/skill-specs": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "init/skill-api": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "init/skill-cli": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "init/skill-data": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "init/skill-dependencies": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "init/skill-integrations": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "init/skill-security": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "init/skill-tech": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "init/skill-tests": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    //    "os": {
+    //      "model": "litellm/claude-sonnet-4.5"
+    //    },
     "websearch": {
-      "model": "google/antigravity-gemini-3-flash",
+      "model": "google/gemini-3-flash-preview"
     },
+    "title": {
+      "model": "litellm/gpt-5-mini"
+    }
+    //    "troubleshoot": {
+    //      "model": "litellm/claude-sonnet-4.5"
+    //    }
   },
+  "enabled_providers": ["anthropic","litellm", "google", "ollama"],
   "instructions": ["AGENTS.md", "CLAUDE.md"],
   "keybinds": {
     "app_exit": "ctrl+d,<<leader>>q"
@@ -32,7 +90,10 @@
     },
     "excel": {
       "type": "local",
-      "command": ["/home/me/excel-mcp-server/.venv/bin/excel-mcp-server", "stdio"]
+      "command": [
+        "/home/me/excel-mcp-server/.venv/bin/excel-mcp-server",
+        "stdio"
+      ]
     },
     "filesystem": {
       "type": "local",
@@ -44,9 +105,7 @@
     },
     "git": {
       "type": "local",
-      "command": [
-        "/home/me/mcp-git/.venv/bin/mcp-server-git"
-      ]
+      "command": ["/home/me/mcp-git/.venv/bin/mcp-server-git"]
     },
     "websearch": {
       "type": "local",
@@ -63,8 +122,14 @@
       ]
     }
   },
-  "model": "github-copilot/claude-sonnet-4.5",
-  "plugin": ["opencode-pty", "@plannotator/opencode", "@zenobius/opencode-skillful", "opencode-antigravity-auth@latest"],
+  "model": "google/antigravity-gemini-3-pro",
+  "small_model": "litellm/gpt-5-mini",
+  "plugin": [
+    "opencode-pty",
+    "@plannotator/opencode",
+    //    "@zenobius/opencode-skillful",
+    "opencode-antigravity-auth@beta"
+  ],
   "provider": {
     "litellm": {
       "npm": "@ai-sdk/openai-compatible",
@@ -157,6 +222,88 @@
             "context": 1000000,
             "output": 1000000
           }
+        },
+        "gemini-3-flash-preview": {
+          "name": "Gemini 3 Flash Preview (Gemini CLI)",
+          "limit": { "context": 1048576, "output": 65536 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+        },
+        "gemini-3-pro-preview": {
+          "name": "Gemini 3 Pro Preview (Gemini CLI)",
+          "limit": { "context": 1048576, "output": 65535 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+        }
+      }
+    },
+    "google": {
+      "models": {
+        "antigravity-gemini-3-pro": {
+          "name": "Gemini 3 Pro (Antigravity)",
+          "limit": { "context": 1048576, "output": 65535 },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          },
+          "variants": {
+            "low": { "thinkingLevel": "low" },
+            "high": { "thinkingLevel": "high" }
+          }
+        },
+        "antigravity-gemini-3-flash": {
+          "name": "Gemini 3 Flash (Antigravity)",
+          "limit": { "context": 1048576, "output": 65536 },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          },
+          "variants": {
+            "minimal": { "thinkingLevel": "minimal" },
+            "low": { "thinkingLevel": "low" },
+            "medium": { "thinkingLevel": "medium" },
+            "high": { "thinkingLevel": "high" }
+          }
+        },
+        "antigravity-claude-sonnet-4.5": {
+          "name": "Claude Sonnet 4.5 (Antigravity)",
+          "limit": { "context": 200000, "output": 64000 },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          }
+        },
+        "antigravity-claude-sonnet-4.5-thinking": {
+          "name": "Claude Sonnet 4.5 Thinking (Antigravity)",
+          "limit": { "context": 200000, "output": 64000 },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          },
+          "variants": {
+            "low": { "thinkingConfig": { "thinkingBudget": 8192 } },
+            "max": { "thinkingConfig": { "thinkingBudget": 32768 } }
+          }
+        },
+        "antigravity-claude-opus-4.5-thinking": {
+          "name": "Claude Opus 4.5 Thinking (Antigravity)",
+          "limit": { "context": 200000, "output": 64000 },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          },
+          "variants": {
+            "low": { "thinkingConfig": { "thinkingBudget": 8192 } },
+            "max": { "thinkingConfig": { "thinkingBudget": 32768 } }
+          }
+        },
+        "gemini-3-flash-preview": {
+          "name": "Gemini 3 Flash Preview (Gemini CLI)",
+          "limit": { "context": 1048576, "output": 65536 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+        },
+        "gemini-3-pro-preview": {
+          "name": "Gemini 3 Pro Preview (Gemini CLI)",
+          "limit": { "context": 1048576, "output": 65535 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
         }
       }
     },
@@ -204,76 +351,11 @@
           "tool_call": true
         }
       }
-    },
-    "google": {
-      "models": {
-        "antigravity-gemini-3-pro": {
-          "name": "Gemini 3 Pro (Antigravity)",
-          "limit": { "context": 1048576, "output": 65535 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] },
-          "variants": {
-            "low": { "thinkingLevel": "low" },
-            "high": { "thinkingLevel": "high" }
-          }
-        },
-        "antigravity-gemini-3-flash": {
-          "name": "Gemini 3 Flash (Antigravity)",
-          "limit": { "context": 1048576, "output": 65536 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] },
-          "variants": {
-            "minimal": { "thinkingLevel": "minimal" },
-            "low": { "thinkingLevel": "low" },
-            "medium": { "thinkingLevel": "medium" },
-            "high": { "thinkingLevel": "high" }
-          }
-        },
-        "antigravity-claude-sonnet-4.5": {
-          "name": "Claude Sonnet 4.5 (Antigravity)",
-          "limit": { "context": 200000, "output": 64000 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
-        },
-        "antigravity-claude-sonnet-4.5-thinking": {
-          "name": "Claude Sonnet 4.5 Thinking (Antigravity)",
-          "limit": { "context": 200000, "output": 64000 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] },
-          "variants": {
-            "low": { "thinkingConfig": { "thinkingBudget": 8192 } },
-            "max": { "thinkingConfig": { "thinkingBudget": 32768 } }
-          }
-        },
-        "antigravity-claude-opus-4.5-thinking": {
-          "name": "Claude Opus 4.5 Thinking (Antigravity)",
-          "limit": { "context": 200000, "output": 64000 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] },
-          "variants": {
-            "low": { "thinkingConfig": { "thinkingBudget": 8192 } },
-            "max": { "thinkingConfig": { "thinkingBudget": 32768 } }
-          }
-        },
-        "gemini-2.5-flash": {
-          "name": "Gemini 2.5 Flash (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65536 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
-        },
-        "gemini-2.5-pro": {
-          "name": "Gemini 2.5 Pro (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65536 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
-        },
-        "gemini-3-flash-preview": {
-          "name": "Gemini 3 Flash Preview (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65536 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
-        },
-        "gemini-3-pro-preview": {
-          "name": "Gemini 3 Pro Preview (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65535 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
-        }
-      }
     }
   },
+  "share": "disabled",
   "tools": {
+    "bash": false,
     "chrome_*": false,
     "codesearch": false,
     "context7_*": false,
@@ -283,17 +365,14 @@
     "filesystem_*": false,
     "git_*": false,
     "glob": false,
-    "google_search": false,
+    "google_search": false, // Seems to be broken
     "grep": false,
     "list": false,
     "lsp": false,
     "pty_*": false,
     "read": false,
-    "skill": false,
-    "websearch_*": false,
-
-    // Build agent breaks if this tool is not enabled
-    "bash": true,
-    "webfetch": true
+    "skill": true,
+    "webfetch": false,
+    "websearch_*": false
   }
 }

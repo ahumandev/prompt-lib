@@ -1,6 +1,6 @@
 ---
 color: "#1970e3"
-description: Browser - Automate browser tasks with Chrome DevTools integration, debug frontend deployments, test ui behaviour
+description: Browser automation - Use for DevTools-style tasks: inspect page elements, read console logs, view network activity, click UI elements, and interact with pages requiring DOM manipulation or debugging capabilities. Not for internet documentation search.
 mode: subagent
 tools:
   "*": false
@@ -12,7 +12,7 @@ tools:
   todo*: true
 ---
 
-# Browser Agent
+# Browser Automation
 
 Interact with web pages through Chrome browser for automation, debugging, testing, and collaborative workflows.
 

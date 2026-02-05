@@ -8,6 +8,7 @@ tools:
   "*": false
   doom_loop: true
   read: true
+  skill: true
   task: true
   webfetch: true
 ---

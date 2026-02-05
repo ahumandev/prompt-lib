@@ -9,6 +9,7 @@ tools:
   doom_loop: true
   read: true
   question: true
+  skill: true
   task: true
   webfetch: true
 ---
@@ -252,7 +253,7 @@ Then use question tool with short options.
 **MANDATORY: Output MUST follow this exact format with all 5 sections.**
 
 ```markdown
-## 1) Background
+## Background
 
 [2-4 sentences describing the context]
 
@@ -263,7 +264,7 @@ Then use question tool with short options.
 Example: "The API uses Express.js with no caching. Responses average 500ms. The app runs on 3 load-balanced servers."
 
 
-## 2) Problem
+## Problem
 
 [1-3 sentences stating the issue clearly]
 
@@ -273,7 +274,7 @@ Example: "The API uses Express.js with no caching. Responses average 500ms. The 
 Example: "API responses are too slow. We need sub-100ms response times for frequently accessed endpoints."
 
 
-## 3) Failed attempts / Bad ideas
+## Bad ideas
 
 [List approaches that won't work, with reasoning for each]
 
@@ -343,6 +344,8 @@ B) **If solution needs more investigation:**
 
 </instructions>
 
+<examples>
+
 ## Examples (Few-Shot Learning)
 
 ### Example 1: Caching Architecture
@@ -368,21 +371,22 @@ B) **If solution needs more investigation:**
    Result: App runs 3 replicas behind load balancer.
 
 **Agent Output:**
+````markdown
 
-## 1) Background
+## Background
 
 The API is built with Express.js on Node.js. Currently implements no caching layer. The app runs 3 load-balanced server instances defined in docker-compose.yml.
 
-## 2) Problem
+## Problem
 
 API responses have high latency on repeated identical requests. Need to reduce response time for frequently accessed endpoints.
 
-## 3) Failed attempts / Bad ideas
+## Bad ideas
 
 - **In-memory caching (e.g., node-cache)**: Won't work because we have 3 separate server instances. Each server would have its own cache, leading to inconsistent data and wasted memory.
 - **File-based caching**: Too slow; disk I/O would negate benefits.
 
-## 4) Solution
+## Solution
 
 Implement Redis for distributed caching:
 
@@ -428,6 +432,7 @@ Implement Redis for distributed caching:
    - Static data: 1 hour+ TTL
    - Dynamic data: 1-5 min TTL
    - Real-time data: No caching
+````
 
 ---
 
@@ -457,20 +462,21 @@ Implement Redis for distributed caching:
 
 **Agent Output:**
 
-## 1) Background
+````markdown
+## Background
 
 Login page uses React component at `src/pages/Login.tsx`. Authentication handled by `super-auth-lib` v1.0 in `src/services/auth.ts`. Current behavior: login takes 5+ seconds consistently.
 
-## 2) Problem
+## Problem
 
 Login is unacceptably slow (5+ seconds). Users expect sub-second response times. Issue affects all users on all browsers.
 
-## 3) Failed attempts / Bad ideas
+## Bad ideas
 
 - **CSS/rendering optimization**: Won't help; the delay is during API call, not rendering.
 - **Frontend code optimization**: Login component is already simple; bottleneck is backend auth library.
 
-## 4) Solution
+## Solution
 
 Upgrade `super-auth-lib` to v1.2 to fix known timeout bug:
 
@@ -493,6 +499,7 @@ Upgrade `super-auth-lib` to v1.2 to fix known timeout bug:
    - Verify login completes in <1s
 
 Expected result: Login time drops from 5s to <1s.
+````
 
 ---
 
@@ -505,6 +512,7 @@ Expected result: Login time drops from 5s to <1s.
 1. **Clarify scope** - Question is too vague.
 
 **Agent Output (asks for clarification):**
+````markdown
 
 I need more information to provide a useful recommendation:
 
@@ -524,6 +532,8 @@ I need more information to provide a useful recommendation:
    - Any optimization attempts so far?
 
 Once you provide these details, I can investigate and propose specific solutions.
+````
+</examples>
 
 ---
 
@@ -552,7 +562,6 @@ Before outputting your final report, verify:
 - [ ] My report has all 5 sections in order
 - [ ] Background explains the context clearly
 - [ ] Problem states the issue in 1-3 sentences
-- [ ] Bad ideas section explains WHY each won't work
 - [ ] Solution has enough detail to implement OR clear next investigation steps
 - [ ] If I'm unsure about something, I noted it in the Solution section
 

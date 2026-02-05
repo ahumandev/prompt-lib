@@ -16,6 +16,7 @@ tools:
    list: true
    lsp: true
    read: true
+   skill: true
    write: true
 ---
 
