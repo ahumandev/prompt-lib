@@ -1,18 +1,18 @@
 ---
-color: "#DF8020"
+color: '#DF8020'
 description: Git Guru - Manage Git repositories with staging, commits, and branching
 temperature: 0.1
-tools:
-  "*": false
-  codesearch: true
-  doom_loop: true
-  edit: true
-  external_directory: true
-  glob: true
-  git_*: true
-  grep: true
-  list: true
-  read: true
+permission:
+  '*': deny
+  codesearch: allow
+  doom_loop: allow
+  edit: allow
+  external_directory: allow
+  glob: allow
+  git_*: allow
+  grep: allow
+  list: allow
+  read: allow
 ---
 
 # Git Agent

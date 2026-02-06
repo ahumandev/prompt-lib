@@ -1,20 +1,22 @@
 ---
-color: "#1970e3"
-description: Web research agent - Gathering information from online sources: research text content, documentation, articles, or answers from web pages. Not for browser automation or page element inspection.
+color: '#1970e3'
+description: 'Web research agent - Gathering information from online sources: research
+  text content, documentation, articles, or answers from web pages. Not for browser
+  automation or page element inspection.'
 hidden: false
 mode: subagent
 temperature: 0.7
-tools:
-    "*": false
-    doom_loop: true
-    edit: true
-    glob: true
-    grep: true
-    list: true
-    read: true
-    webfetch: true
-    websearch_*: true
-    todo*: true
+permission:
+  '*': deny
+  doom_loop: allow
+  edit: allow
+  glob: allow
+  grep: allow
+  list: allow
+  read: allow
+  webfetch: allow
+  websearch_*: allow
+  todo*: allow
 ---
 
 # Web Researcher

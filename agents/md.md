@@ -1,19 +1,20 @@
 ---
-color: "#20DF9F"
-description: MD Writer - Creates and updates documentation, articles, and technical content according to precise instructions; DO NOT used to edit source code or system config
+color: '#20DF9F'
+description: MD Writer - Creates and updates documentation, articles, and technical
+  content according to precise instructions; DO NOT used to edit source code or system
+  config
 hidden: false
 mode: subagent
 temperature: 0.2
-tools:
-   "*": false
-   doom_loop: true
-   edit: true
-   external_directory: true
-   glob: true
-   grep: true
-   list: true
-   read: true
-   write: true
+permission:
+  '*': deny
+  doom_loop: allow
+  edit: allow
+  external_directory: allow
+  glob: allow
+  grep: allow
+  list: allow
+  read: allow
 ---
 
 # Markdown Document Writer

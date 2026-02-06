@@ -1,23 +1,23 @@
 ---
-color: "#20DF20"
-description: Code Writer - Updates the codebase with quality code or config according to plain precise instructions; NEVER write md files with this agent 
+color: '#20DF20'
+description: Code Writer - Updates the codebase with quality code or config according
+  to plain precise instructions; NEVER write md files with this agent
 hidden: false
 mode: subagent
 temperature: 0.2
-tools:
-   "*": false
-   codesearch: true
-   context7_*: true
-   doom_loop: true
-   edit: true
-   external_directory: true
-   glob: true
-   grep: true
-   list: true
-   lsp: true
-   read: true
-   skill: true
-   write: true
+permission:
+  '*': deny
+  codesearch: allow
+  context7_*: allow
+  doom_loop: allow
+  edit: allow
+  external_directory: allow
+  glob: allow
+  grep: allow
+  list: allow
+  lsp: allow
+  read: allow
+  skill: allow
 ---
 
 # Code Writer

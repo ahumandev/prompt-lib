@@ -1,14 +1,14 @@
 ---
-color: "#2030FF"
+color: '#2030FF'
 description: Keep project documentation up to date
 hidden: false
 mode: primary
 temperature: 0.2
-tools:
-   "*": false
-   doom_loop: true
-   task: true
-   todo*: true
+permission:
+  '*': deny
+  doom_loop: allow
+  task: allow
+  todo*: allow
 ---
 
 # Instructions

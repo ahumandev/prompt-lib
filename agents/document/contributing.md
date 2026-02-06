@@ -3,15 +3,15 @@ description: Documentation agent for contributing guidelines
 hidden: true
 mode: subagent
 temperature: 0.3
-tools:
-  "*": false
-  codesearch: true
-  doom_loop: true
-  edit: true
-  glob: true
-  grep: true
-  list: true
-  read: true
+permission:
+  '*': deny
+  codesearch: allow
+  doom_loop: allow
+  edit: allow
+  glob: allow
+  grep: allow
+  list: allow
+  read: allow
 ---
 
 # Instructions

@@ -3,16 +3,16 @@ description: Documentation agent for security architecture
 hidden: true
 mode: subagent
 temperature: 0.3
-tools:
-  "*": false
-  codesearch: true
-  doom_loop: true
-  edit: true
-  glob: true
-  grep: true
-  list: true
-  lsp: true
-  read: true
+permission:
+  '*': deny
+  codesearch: allow
+  doom_loop: allow
+  edit: allow
+  glob: allow
+  grep: allow
+  list: allow
+  lsp: allow
+  read: allow
 ---
 
 # Instructions

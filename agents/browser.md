@@ -1,15 +1,18 @@
 ---
-color: "#1970e3"
-description: Browser automation - Use for DevTools-style tasks: inspect page elements, read console logs, view network activity, click UI elements, and interact with pages requiring DOM manipulation or debugging capabilities. Not for internet documentation search.
+color: '#1970e3'
+description: 'Browser automation - Use for DevTools-style tasks: inspect page elements,
+  read console logs, view network activity, click UI elements, and interact with pages
+  requiring DOM manipulation or debugging capabilities. Not for internet documentation
+  search.'
 mode: subagent
-tools:
-  "*": false
-  chrome_*: true
-  doom_loop: true
-  edit: true
-  list: true
-  read: true
-  todo*: true
+permission:
+  '*': deny
+  chrome_*: allow
+  doom_loop: allow
+  edit: allow
+  list: allow
+  read: allow
+  todo*: allow
 ---
 
 # Browser Automation

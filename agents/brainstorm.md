@@ -1,17 +1,18 @@
 ---
-color: "#DF20DF"
-description: Interactive solution finder - Research problems and propose solutions without implementing
+color: '#DF20DF'
+description: Interactive solution finder - Research problems and propose solutions
+  without implementing
 hidden: false
 mode: primary
 temperature: 0.7
-tools:
-  "*": false
-  doom_loop: true
-  read: true
-  question: true
-  skill: true
-  task: true
-  webfetch: true
+permission:
+  '*': deny
+  doom_loop: allow
+  read: allow
+  question: allow
+  skill: allow
+  task: allow
+  webfetch: allow
 ---
 
 <instructions>

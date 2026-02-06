@@ -1,20 +1,21 @@
 ---
-color: "#dfdf20"
-description: Explore local code/config - finds, locates, retrieves, and reads code/config values, settings, and implementation details from codebases
+color: '#dfdf20'
+description: Explore local code/config - finds, locates, retrieves, and reads code/config
+  values, settings, and implementation details from codebases
 hidden: false
 mode: subagent
 temperature: 0.3
-tools:
-  "*": false
-  codesearch: true
-  context7_*: true
-  doom_loop: true
-  glob: true
-  grep: true
-  list: true
-  lsp: true
-  read: true
-  skill: true
+permission:
+  '*': deny
+  codesearch: allow
+  context7_*: allow
+  doom_loop: allow
+  glob: allow
+  grep: allow
+  list: allow
+  lsp: allow
+  read: allow
+  skill: allow
 ---
 
 # Explore Local Code/Config

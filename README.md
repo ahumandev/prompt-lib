@@ -18,7 +18,7 @@ The YAML frontmatter of an agent's `.md` file (stored in `~/.config/opencode/age
 | `hidden`      | Boolean | If `true`, the agent is hidden from the UI and agent lists.                                 |
 | `mode`        | String  | The operational mode of the agent. See [Operational Modes](#operational-modes) for details. |
 | `permission`  | Object  | Granular tool permissions (`allow`, `ask`, `deny`) mapped to command/path patterns.         |
-| `tools`       | Object  | A whitelist/blacklist of tools available to the agent (e.g., `"*": false`).                 |
+| `tools`       | Object  | @deprecated Use `permission` instead. A legacy whitelist/blacklist for tool access.         |
 | `temperature` | Number  | LLM sampling temperature for the agent's responses (typically `0.0` to `1.0`).              |
 
 ### Best Practices for Agent Descriptions
@@ -129,6 +129,16 @@ Permissions control what an agent is allowed to do. They can be set to "allow", 
 
 ### Visibility and Filtering
 
+> [!WARNING]
+> The `tools` property is **deprecated**. Use the `permission` property instead. The system automatically migrates `tools` to `permission` at runtime, but defining them directly in `permission` is preferred.
+
+
+
+> [!WARNING]
+> The `tools` property is **deprecated**. Use the `permission` property instead. The system automatically migrates `tools` to `permission` at runtime, but defining them directly in `permission` is preferred.
+
+
+
 The visibility of tools in the LLM context depends on how they are restricted:
 
 1.  **Context Omission**: Tools disabled via `tools: false` or global `permission: "deny"` (e.g., `"*": "deny"`) are completely omitted from the LLM context window. The agent will not be aware these tools exist.
@@ -149,20 +159,18 @@ permission:
     "git log*": allow
     "git status*": allow
     "grep *": allow
-tools:
-  "*": false
-  bash: true
-  edit: true
-  glob: true
-  grep: true
-  list: true
-  lsp: true
-  question: true
-  read: true
-  todoread: true
-  todowrite: true
-  filesystem_read*: true
-  filesystem_list*: true
+  "*": deny
+  edit: allow
+  glob: allow
+  grep: allow
+  list: allow
+  lsp: allow
+  question: allow
+  read: allow
+  todoread: allow
+  todowrite: allow
+  filesystem_read*: allow
+  filesystem_list*: allow
 ```
 
 Using `"*": false` followed by an explicit "allow list" (Principle of Least Privilege) is highly recommended for specialized agents. It ensures:

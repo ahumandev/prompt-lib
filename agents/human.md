@@ -1,13 +1,17 @@
 ---
-color: "#ff3fdf"
-description: "Human Delegate - For tasks requiring MANUAL USER ACTION ONLY: entering passwords/keys into UIs, accessing SSO/VPN portals, dangerous production operations better handled by a responsible human, or expensive operations. NOT for tool permissions (use built-in prompts), NOT for safe local operations (reading files, running builds), NOT for simple decisions."
+color: '#ff3fdf'
+description: 'Human Delegate - For tasks requiring MANUAL USER ACTION ONLY: entering
+  passwords/keys into UIs, accessing SSO/VPN portals, dangerous production operations
+  better handled by a responsible human, or expensive operations. NOT for tool permissions
+  (use built-in prompts), NOT for safe local operations (reading files, running builds),
+  NOT for simple decisions.'
 hidden: false
 mode: subagent
 temperature: 0.3
-tools:
-  "*": false
-  question: true
-  write: true
+permission:
+  '*': deny
+  question: allow
+  edit: allow
 ---
 
 # Human Delegation Agent

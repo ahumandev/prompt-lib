@@ -1,19 +1,19 @@
 ---
-color: "#ff0000"
+color: '#ff0000'
 description: OS Operator - Execute OS commands and system administration tasks
 mode: subagent
 temperature: 0.1
-tools:
-  "*": false
-  bash: true
-  doom_loop: true
-  edit: true
-  filesystem_*: true
-  glob: true
-  grep: true
-  list: true
-  pty_*: true
-  read: true
+permission:
+  '*': deny
+  bash: allow
+  doom_loop: allow
+  edit: allow
+  filesystem_*: allow
+  glob: allow
+  grep: allow
+  list: allow
+  pty_*: allow
+  read: allow
 ---
 
 # Operating System Operator

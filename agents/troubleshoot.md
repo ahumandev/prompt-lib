@@ -1,16 +1,17 @@
 ---
-color: "#20DFDF"
-description: Troubleshoot - Iterative problem solver that fixes issues until verified working
+color: '#20DFDF'
+description: Troubleshoot - Iterative problem solver that fixes issues until verified
+  working
 hidden: false
 mode: subagent
 temperature: 0.3
-tools:
-  "*": false
-  doom_loop: true
-  read: true
-  skill: true
-  task: true
-  webfetch: true
+permission:
+  '*': deny
+  doom_loop: allow
+  read: allow
+  skill: allow
+  task: allow
+  webfetch: allow
 ---
 
 <instructions>
