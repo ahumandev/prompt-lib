@@ -83,16 +83,16 @@ This allows you to define base agent behavior in the markdown file while overrid
 Permissions control what an agent is allowed to do. They can be set to "allow", "ask", or "deny".
 
 | Permission            | Description                                                                                            | Plugin / MCP                |
-| --------------------- | :----------------------------------------------------------------------------------------------------- | :-------------------------- |
+|-----------------------|:-------------------------------------------------------------------------------------------------------|:----------------------------|
 | bash                  | Running shell commands. Matches the command string.                                                    | build-in                    |
-| chrome\_\*            | Chrome MCP server.                                                                                     | chrome-devtools-mcp         |
+| chrome_*              | Chrome MCP server.                                                                                     | chrome-devtools-mcp         |
 | codesearch            | Searching for code patterns across the web or large repositories.                                      | build-in                    |
-| context7\_\*          | Context7 MCP server.                                                                                   | context7-mcp                |
+| context7_*            | Context7 MCP server.                                                                                   | context7-mcp                |
 | doom_loop             | Safety guard triggered when the same tool call repeats 3+ times with identical input.                  | build-in                    |
 | edit                  | All file modifications. Covers edit, write, patch, and multiedit tools. Matches against the file path. | build-in                    |
-| excel\_\*             | Excel MCP server.                                                                                      | excel-mcp-server            |
+| excel_*               | Excel MCP server.                                                                                      | excel-mcp-server            |
 | external_directory    | Safety guard triggered when a tool accesses paths outside the project root.                            | build-in                    |
-| filesystem\_\*        | Filesystem MCP server.                                                                                 | mcp-filesystem              |
+| filesystem_*          | Filesystem MCP server.                                                                                 | mcp-filesystem              |
 | git_git_add           | Stages files for commit.                                                                               | mcp-server-git              |
 | git_git_branch        | Lists branches (local/remote/all).                                                                     | mcp-server-git              |
 | git_git_checkout      | Switches branches.                                                                                     | mcp-server-git              |
@@ -112,11 +112,15 @@ Permissions control what an agent is allowed to do. They can be set to "allow", 
 | lsp                   | Running Language Server Protocol queries.                                                              | build-in                    |
 | plan_enter            | Entering the structured planning mode.                                                                 | build-in                    |
 | plan_exit             | Exiting the planning mode and submitting a plan.                                                       | build-in                    |
-| pty\_\*               | Interactive PTY management (`spawn`, `read`, `write`, `list`, `kill`).                                 | opencode-pty                |
+| pty_spawn             | Start a new interactive terminal process.                                                              | opencode-pty                |
+| pty_read              | Read output from a running terminal.                                                                   | opencode-pty                |
+| pty_write             | Send input/commands to a running terminal.                                                             | opencode-pty                |
+| pty_list              | List active PTY sessions.                                                                              | opencode-pty                |
+| pty_kill              | Terminate a PTY session.                                                                               | opencode-pty                |
 | question              | Asking the user for clarification or input via the UI.                                                 | build-in                    |
 | read                  | Reading file contents. Matches against the file path.                                                  | build-in                    |
 | skill                 | Loading specialized instructions/patterns. Matches the skill name.                                     | build-in                    |
-| skill\_\*             | Skill management and discovery (`use`, `find`, `resource`).                                            | @zenobius/opencode-skillful |
+| skill_*               | Skill management and discovery (`use`, `find`, `resource`).                                            | @zenobius/opencode-skillful |
 | task                  | Launching subagents. Matches the subagent name/type.                                                   | build-in                    |
 | todoread              | Reading the project's todo list.                                                                       | build-in                    |
 | todowrite             | Adding or updating items in the todo list.                                                             | build-in                    |

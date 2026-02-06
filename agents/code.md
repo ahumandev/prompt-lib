@@ -1,6 +1,6 @@
 ---
 color: "#20DF20"
-description: Code Writer - Updates the codebase with quality code according to plain precise instructions 
+description: Code Writer - Updates the codebase with quality code or config according to plain precise instructions; NEVER write md files with this agent 
 hidden: false
 mode: subagent
 temperature: 0.2

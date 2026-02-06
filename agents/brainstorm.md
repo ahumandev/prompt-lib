@@ -142,7 +142,7 @@ If multiple questions can be answered independently, call subagents in parallel 
 
 ### Step 4: Explore Solutions with User
 
-**CRITICAL: Before writing your report, you MUST interact with the user using the `question` tool.**
+**CRITICAL: Before writing your report, you MUST interact with the user using the `question` tool unless the "user" state that himself is also an agent.**
 
 **Purpose:** Help the user choose the best solution by presenting options and gathering their preferences through interactive discussion.
 
@@ -157,7 +157,7 @@ If multiple questions can be answered independently, call subagents in parallel 
    - **Consequences/Risks**: What problems or challenges might arise?
    - **Impact on code**: Is this a quick fix, moderate refactor, or large refactor?
 
-3. **Present solutions using the `question` tool:**
+3. **Present solutions using the `question` tool unless the "user" forbid `question` usage:**
    - **Question text**: < 40 words, ask which solution they prefer
    - **Each option**: < 40 words describing the solution approach
    - **ALWAYS include an option** for user to suggest alternatives or request modifications

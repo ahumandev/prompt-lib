@@ -1,15 +1,36 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "agent": {
-    //    "brainstorm": {
-    //      "model": "alias/smart"
-    //    },
+    "brainstorm": {
+    },
     "browser": {
       "model": "google/gemini-3-flash-preview"
     },
-    //    "code": {
-    //      "model": "alias/balanced"
-    //    },
+    "document": {
+    },
+    "document/api": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "document/contributing": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "document/data": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "document/install": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "document/integrations": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "document/readme": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "document/security": {
+      "model": "google/gemini-3-flash-preview"
+    },
+    "code": {
+    },
     "excel": {
       "model": "google/gemini-3-flash-preview"
     },
@@ -20,59 +41,23 @@
       "disable": true // Too general
     },
     "git": {
-      "model": "litellm/gpt-5-mini"
+      "model": "google/gemini-3-flash-preview"
     },
     "human": {
-      "model": "litellm/gpt-5-mini"
     },
-    "init": {
-      "model": "litellm/gpt-5-mini"
-    },
-    "init/project-analyzer": {
-      "model": "litellm/gpt-5-mini"
-    },
-    //    "init/agentsmd": {
-    //      "model": "litellm/claude-sonnet-4.5"
-    //    },
-    "init/skill-specs": {
+    "md": {
       "model": "google/gemini-3-flash-preview"
     },
-    "init/skill-api": {
-      "model": "google/gemini-3-flash-preview"
+    "os": {
     },
-    "init/skill-cli": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    "init/skill-data": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    "init/skill-dependencies": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    "init/skill-integrations": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    "init/skill-security": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    "init/skill-tech": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    "init/skill-tests": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    //    "os": {
-    //      "model": "litellm/claude-sonnet-4.5"
-    //    },
     "websearch": {
       "model": "google/gemini-3-flash-preview"
     },
     "title": {
       "model": "litellm/gpt-5-mini"
+    },
+    "troubleshoot": {
     }
-    //    "troubleshoot": {
-    //      "model": "litellm/claude-sonnet-4.5"
-    //    }
   },
   "enabled_providers": ["anthropic","litellm", "google", "ollama"],
   "instructions": ["AGENTS.md", "CLAUDE.md"],
