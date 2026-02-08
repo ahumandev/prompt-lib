@@ -428,7 +428,7 @@ Your output must be:
 - A single line
 - ≤50 characters
 - No explanations
-  </task>
+</task>
 
 <rules>
 - you MUST use the same language as the user message you are summarizing
