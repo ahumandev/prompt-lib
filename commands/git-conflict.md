@@ -28,7 +28,7 @@ For each merge conflict, strictly adhere to these rules:
 - Never include Git Conflict Markers in the output.
 
 Any other merge conflict should be noted with the questions tool:
-- Briefly in <300 characters explain the difference between each version including the benefit and consequence of each version.
+- Briefly in < 40 words explain the difference between each version including the benefit and consequence of each version.
 - In the question provide a short 1-4 word name for each version to make it clear which name is which version
 - Prompt user using the questions tool which version to keep
 - Add answer option to allow user to describe how the merge should be resolved if no version is acceptable
@@ -49,3 +49,4 @@ For every test that fails:
 
 - Stage the changed files.
 - Create a git commit message noting how and why detected git conflicts were resolved.
+  - The commit message should exclude obvious notes like "staged resolved files"

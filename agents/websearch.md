@@ -1,10 +1,10 @@
 ---
-color: '#1970e3'
+color: '#20dfdf'
 description: 'Web research agent - Gathering information from online sources: research
   text content, documentation, articles, or answers from web pages. Not for browser
   automation or page element inspection.'
 hidden: false
-mode: subagent
+mode: primary
 temperature: 0.7
 permission:
   '*': deny
@@ -15,7 +15,7 @@ permission:
   list: allow
   read: allow
   webfetch: allow
-  websearch_*: allow
+  websearch*: allow
   todo*: allow
 ---
 

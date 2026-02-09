@@ -1,65 +1,72 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "agent": {
-    "brainstorm": {
+    "analyze": {
     },
-    "browser": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    "document": {
-    },
-    "document/api": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    "document/contributing": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    "document/data": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    "document/install": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    "document/integrations": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    "document/readme": {
-      "model": "google/gemini-3-flash-preview"
-    },
-    "document/security": {
-      "model": "google/gemini-3-flash-preview"
+    "build": {
     },
     "code": {
     },
-    "excel": {
-      "model": "google/gemini-3-flash-preview"
+    "deliberate": {
     },
-    "explore": {
-      "model": "google/gemini-3-flash-preview"
+    "document": {
     },
     "general": {
       "disable": true // Too general
     },
-    "git": {
-      "model": "google/gemini-3-flash-preview"
-    },
     "human": {
-    },
-    "md": {
-      "model": "google/gemini-3-flash-preview"
     },
     "os": {
     },
-    "websearch": {
-      "model": "google/gemini-3-flash-preview"
+    "plan": {
     },
     "title": {
       "model": "litellm/gpt-5-mini"
     },
     "troubleshoot": {
-    }
+    },
+   
+    "browser": {
+      "model": "litellm/gpt-5-mini"
+    },
+    "document/api": {
+      "model": "litellm/gpt-5-mini"
+    },
+    "document/contributing": {
+      "model": "litellm/gpt-5-mini"
+    },
+    "document/data": {
+      "model": "litellm/gpt-5-mini"
+    },
+    "document/install": {
+      "model": "litellm/gpt-5-mini"
+    },
+    "document/integrations": {
+      "model": "litellm/gpt-5-mini"
+    },
+    "document/readme": {
+      "model": "litellm/gpt-5-mini"
+    },
+    "document/security": {
+      "model": "litellm/gpt-5-mini"
+    },
+    "excel": {
+      "model": "litellm/gpt-5-mini"
+    },
+    "explore": {
+      "model": "litellm/gpt-5-mini"
+    },
+    "git": {
+      "model": "litellm/gpt-5-mini"
+    },
+    "md": {
+      "model": "litellm/gpt-5-mini"
+    },
+    "websearch": {
+      "model": "litellm/gpt-5-mini"
+    },
   },
-  "enabled_providers": ["anthropic","litellm", "google", "ollama"],
+  "enabled_providers": ["anthropic", "litellm", "google", "ollama"],
   "instructions": ["AGENTS.md", "CLAUDE.md"],
   "keybinds": {
     "app_exit": "ctrl+d,<<leader>>q"
@@ -67,7 +74,19 @@
   "mcp": {
     "chrome": {
       "type": "local",
-      "command": ["npx", "-y", "chrome-devtools-mcp@latest"]
+      "command": [
+        "env",
+        "USE_PROXY=true",
+        "PROXY_URL=http://localhost:1234",
+        "HTTP_PROXY=http://localhost:1234",
+        "HTTPS_PROXY=http://localhost:1234",
+        "MODE=stdio",
+        "npm_config_registry=https://registry.npmjs.org",
+        "npx",
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--viewport=800x600"
+      ]
     },
     "context7": {
       "type": "local",
@@ -101,6 +120,7 @@
         "HTTP_PROXY=http://localhost:1234",
         "HTTPS_PROXY=http://localhost:1234",
         "MODE=stdio",
+        "npm_config_registry=https://registry.npmjs.org",
         "npx",
         "-y",
         "open-websearch"
@@ -109,10 +129,20 @@
   },
   "model": "google/antigravity-gemini-3-pro",
   "small_model": "litellm/gpt-5-mini",
+  "permission": {
+    // Only deny non-standard tools
+    "chrome_*": "deny",
+    "context7_*": "deny",
+    "filesystem_*": "deny",
+    "git_*": "deny",
+    "google_search": "deny", // Seems to be broken
+    "pty_*": "deny",
+    "websearch_*": "deny"
+  },
   "plugin": [
     "opencode-pty",
     "@plannotator/opencode",
-    //    "@zenobius/opencode-skillful",
+//    "@zenobius/opencode-skillful",
     "opencode-antigravity-auth@beta"
   ],
   "provider": {
@@ -339,25 +369,4 @@
     }
   },
   "share": "disabled",
-  "tools": {
-    "bash": false,
-    "chrome_*": false,
-    "codesearch": false,
-    "context7_*": false,
-    "edit": false,
-    "excel_*": false,
-    "external_directory": false,
-    "filesystem_*": false,
-    "git_*": false,
-    "glob": false,
-    "google_search": false, // Seems to be broken
-    "grep": false,
-    "list": false,
-    "lsp": false,
-    "pty_*": false,
-    "read": false,
-    "skill": true,
-    "webfetch": false,
-    "websearch_*": false
-  }
 }

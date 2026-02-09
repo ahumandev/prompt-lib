@@ -1,6 +1,6 @@
 ---
 color: '#ff0000'
-description: OS Operator - Execute OS commands and system administration tasks
+description: OS Operator - Execute operating system commands and administration tasks; Not intended for local codebase explorarion, not intended for browser automation
 mode: subagent
 temperature: 0.1
 permission:
@@ -8,11 +8,12 @@ permission:
   bash: allow
   doom_loop: allow
   edit: allow
-  filesystem_*: allow
+  external_directory: allow
+  filesystem*: allow
   glob: allow
   grep: allow
   list: allow
-  pty_*: allow
+  pty*: allow
   read: allow
   todo*: allow
 ---

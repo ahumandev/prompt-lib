@@ -6,6 +6,7 @@ permission:
   '*': deny
   doom_loop: allow
   excel: allow
+  external_directory: allow
   glob: allow
   list: allow
   todo*: allow

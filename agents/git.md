@@ -10,7 +10,7 @@ permission:
   edit: allow
   external_directory: allow
   glob: allow
-  git_*: allow
+  git*: allow
   grep: allow
   list: allow
   read: allow

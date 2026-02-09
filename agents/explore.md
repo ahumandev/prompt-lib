@@ -8,8 +8,9 @@ temperature: 0.3
 permission:
   '*': deny
   codesearch: allow
-  context7_*: allow
+  context7*: allow
   doom_loop: allow
+  external_directory: allow
   glob: allow
   grep: allow
   list: allow

@@ -8,7 +8,7 @@ temperature: 0.2
 permission:
   '*': deny
   codesearch: allow
-  context7_*: allow
+  context7*: allow
   doom_loop: allow
   edit: allow
   external_directory: allow

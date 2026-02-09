@@ -3,7 +3,6 @@ color: '#8020DF'
 description: Analyst - Research problems, analyze data and propose solutions without implementing
 hidden: false
 mode: subagent
-temperature: 0.3
 permission:
   '*': deny
   doom_loop: allow

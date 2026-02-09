@@ -7,7 +7,7 @@ description: 'Browser automation - Use for DevTools-style tasks: inspect page el
 mode: subagent
 permission:
   '*': deny
-  chrome_*: allow
+  chrome*: allow
   doom_loop: allow
   edit: allow
   list: allow
