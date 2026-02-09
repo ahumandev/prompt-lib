@@ -2,6 +2,13 @@
 color: "#72d560"
 description: Excel Expert - Handle Excel workbook manipulations or data retrievals
 mode: subagent
+permission:
+  '*': deny
+  doom_loop: allow
+  excel: allow
+  glob: allow
+  list: allow
+  todo*: allow
 ---
 
 # Excel Agent

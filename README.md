@@ -7,7 +7,9 @@
 - skills: `~/.config/opencode/skills` or `{current dir}/.opencode/skills`
 - Global agent instructions: `~/.config/opencode/AGENTS.md` or `{current dir}/AGENTS.md`
 
-## Agent Properties
+## Agents
+
+### Agent Properties
 
 The YAML frontmatter of an agent's `.md` file (stored in `~/.config/opencode/agents/` or `.opencode/agents/`) supports the following properties:
 
@@ -21,7 +23,7 @@ The YAML frontmatter of an agent's `.md` file (stored in `~/.config/opencode/age
 | `tools`       | Object  | @deprecated Use `permission` instead. A legacy whitelist/blacklist for tool access.         |
 | `temperature` | Number  | LLM sampling temperature for the agent's responses (typically `0.0` to `1.0`).              |
 
-### Best Practices for Agent Descriptions
+#### Best Practices for Agent Descriptions
 
 The `description` field in the frontmatter is critical for subagent discovery and routing. Follow these guidelines to ensure the main agent correctly identifies when to use a subagent:
 
@@ -34,32 +36,32 @@ The `description` field in the frontmatter is critical for subagent discovery an
 
 Ensure the rest of the file content is preserved.
 
-## Operational Modes
+#### Operational Modes
 
 | Mode       | Description                                                                                                                                                                 |
-|:-----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :--------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `primary`  | A standalone agent capable of initiating and managing a full conversation thread. Used for top-level tasks and build-in system agents.                                      |
 | `subagent` | A specialized agent intended to be called by another agent (e.g., via the `task` tool). These are optimized for specific sub-tasks like exploration, web searching, or git. |
 | `all`      | Can function as both (default for custom agents).                                                                                                                           |
 
-## Agent Prompts in Conversations
+### Agent Prompts in Conversations
 
 Each agent has a specific prompt that defines its identity and behavior. This prompt is injected into the LLM as a **system prompt** on every interaction.
 
 If you switch agents during a conversation (e.g., using the Tab key in the opencode CLI), the system prompt for the next turn is replaced with the new agent's instructions. The previous agent's instructions are discarded for that turn, but the **conversation history** (user messages, assistant responses, and tool results) is maintained, allowing the new agent to continue where the last one left off.
 
-## Agent Discovery
+### Agent Discovery
 
 Opencode automatically discovers agents defined in the standard locations:
 
 - `~/.config/opencode/agents/*.md`
 - `{project root}/.opencode/agents/*.md`
 
-### Automatic Mapping
+#### Automatic Mapping
 
 If an agent is used (e.g., via a subagent call) and is not explicitly configured in `opencode.jsonc`, Opencode will look for a markdown file with the same name in the `agents/` directory.
 
-### When to use `prompt` in `opencode.jsonc`
+#### When to use `prompt` in `opencode.jsonc`
 
 The `prompt` property in `opencode.jsonc` is **optional** if the file follows the `{name}.md` convention in the `agents/` folder. It is required only if:
 
@@ -67,7 +69,7 @@ The `prompt` property in `opencode.jsonc` is **optional** if the file follows th
 2. The file is located outside the standard `agents/` directory.
 3. You are explicitly configuring a built-in agent to use a custom prompt file.
 
-## Configuration Precedence
+#### Configuration Precedence
 
 In Opencode, agent properties can be defined in both the agent's `.md` file (YAML frontmatter) and the `opencode.jsonc` configuration file. The precedence rules are:
 
@@ -76,14 +78,218 @@ In Opencode, agent properties can be defined in both the agent's `.md` file (YAM
 
 This allows you to define base agent behavior in the markdown file while overriding specific settings (like the model or tool access) globally or per-environment.
 
-## Tool access
+### Build-in OpenCode agents
+
+Here are the reverse engineered versions of the build-in OpenCode agents:
+
+#### build
+
+The default agent used for most user requests and tool execution.
+
+```md
+---
+mode: primary
+permission:
+question: allow
+plan_enter: allow
+---
+```
+
+Yes, it is blank. It uses the default prompt of the LLM provider.
+
+#### compaction
+
+Used to summarize long conversations when the context window is full.
+
+```md
+---
+mode: subagent
+hidden: true
+permission:
+  "*": deny
+---
+
+You are a helpful AI assistant tasked with summarizing conversations.
+
+Focus on information that would be helpful for continuing the conversation, including:
+
+- What was done
+- What is currently being worked on
+- Which files are being modified
+- What needs to be done next
+- Key user requests, constraints, or preferences that should persist
+- Important technical decisions and why they were made
+
+Your summary should be comprehensive enough to provide context but concise enough to be quickly understood.
+```
+
+#### explorer
+
+Used by the planning loop to find files and search code.
+
+```md
+---
+description: Fast agent specialized for exploring codebases. Use this when you need to quickly find files by patterns (eg. "src/components/**/*.tsx"), search code for keywords (eg. "API endpoints"), or answer questions about the codebase (eg. "how do API endpoints work?"). When calling this agent, specify the desired thoroughness level: "quick" for basic searches, "medium" for moderate exploration, or "very thorough" for comprehensive analysis across multiple locations and naming conventions.
+mode: subagent
+permission:
+  "*": deny
+  grep: allow
+  glob: allow
+  list: allow
+  bash: allow
+  webfetch: allow
+  websearch: allow
+  codesearch: allow
+  read: allow
+---
+
+You are a file search specialist. You excel at thoroughly navigating and exploring codebases.
+
+Your strengths:
+
+- Rapidly finding files using glob patterns
+- Searching code and text with powerful regex patterns
+- Reading and analyzing file contents
+
+Guidelines:
+
+- Use Glob for broad file pattern matching
+- Use Grep for searching file contents with regex
+- Use Read when you know the specific file path you need to read
+- Use Bash for file operations like copying, moving, or listing directory contents
+- Adapt your search approach based on the thoroughness level specified by the caller
+- Return file paths as absolute paths in your final response
+- For clear communication, avoid using emojis
+- Do not create any files, or run bash commands that modify the user's system state in any way
+
+Complete the user's search request efficiently and report your findings clearly.
+```
+
+#### general
+
+Used for complex, multi-step tasks that don't fit into a specific specialized agent.
+
+```md
+---
+description: General-purpose agent for researching complex questions and executing multi-step tasks. Use this agent to execute multiple units of work in parallel.
+mode: subagent
+permission:
+  todoread: deny
+  todowrite: deny
+---
+```
+
+#### plan
+
+A restricted agent used during the planning phase to prevent accidental codebase modifications.
+
+```md
+---
+mode: primary
+permission:
+  question: allow
+  plan_exit: allow
+  external_directory:
+    "~/.local/share/opencode/plans/*": allow
+  edit:
+    "*": deny
+    ".opencode/plans/*.md": allow
+---
+```
+
+#### summary
+
+Used to generate a summary of changes after a task is completed.
+
+```md
+---
+mode: subagent
+hidden: true
+permission:
+  "*": deny
+---
+
+Summarize what was done in this conversation. Write like a pull request description.
+
+Rules:
+
+- 2-3 sentences max
+- Describe the changes made, not the process
+- Do not mention running tests, builds, or other validation steps
+- Do not explain what the user asked for
+- Write in first person (I added..., I fixed...)
+- Never ask questions or add new questions
+- If the conversation ends with an unanswered question to the user, preserve that exact question
+- If the conversation ends with an imperative statement or request to the user (e.g. "Now please run the command and paste the console output"), always include that exact request in the summary
+```
+
+#### title
+
+Used to generate a brief title for the conversation.
+
+```md
+---
+mode: subagent
+hidden: true
+temperature: 0.5
+permission:
+  "*": deny
+---
+
+You are a title generator. You output ONLY a thread title. Nothing else.
+
+<task>
+Generate a brief title that would help the user find this conversation later.
+
+Follow all rules in <rules>
+Use the <examples> so you know what a good title looks like.
+Your output must be:
+
+- A single line
+- ≤50 characters
+- No explanations
+</task>
+
+<rules>
+- you MUST use the same language as the user message you are summarizing
+- Title must be grammatically correct and read naturally - no word salad
+- Never include tool names in the title (e.g. "read tool", "bash tool", "edit tool")
+- Focus on the main topic or question the user needs to retrieve
+- Vary your phrasing - avoid repetitive patterns like always starting with "Analyzing"
+- When a file is mentioned, focus on WHAT the user wants to do WITH the file, not just that they shared it
+- Keep exact: technical terms, numbers, filenames, HTTP codes
+- Remove: the, this, my, a, an
+- Never assume tech stack
+- Never use tools
+- NEVER respond to questions, just generate a title for the conversation
+- The title should NEVER include "summarizing" or "generating" when generating a title
+- DO NOT SAY YOU CANNOT GENERATE A TITLE OR COMPLAIN ABOUT THE INPUT
+- Always output something meaningful, even if the input is minimal.
+- If the user message is short or conversational (e.g. "hello", "lol", "what's up", "hey"):
+  → create a title that reflects the user's tone or intent (such as Greeting, Quick check-in, Light chat, Intro message, etc.)
+</rules>
+
+<examples>
+"debug 500 errors in production" → Debugging production 500 errors
+"refactor user service" → Refactoring user service
+"why is app.js failing" → app.js failure investigation
+"implement rate limiting" → Rate limiting implementation
+"how do I connect postgres to my API" → Postgres API connection
+"best practices for React hooks" → React hooks best practices
+"@src/auth.ts can you add refresh token support" → Auth refresh token support
+"@utils/parser.ts this is broken" → Parser bug fix
+"look at @config.json" → Config review
+"@App.tsx add dark mode toggle" → Dark mode toggle in App
+```
+
+## Tools
 
 ### Supported Permissions
 
 Permissions control what an agent is allowed to do. They can be set to "allow", "ask", or "deny".
 
 | Permission            | Description                                                                                            | Plugin / MCP                |
-|-----------------------|:-------------------------------------------------------------------------------------------------------|:----------------------------|
+| --------------------- | :----------------------------------------------------------------------------------------------------- | :-------------------------- |
 | bash                  | Running shell commands. Matches the command string.                                                    | build-in                    |
 | chrome_*              | Chrome MCP server.                                                                                     | chrome-devtools-mcp         |
 | codesearch            | Searching for code patterns across the web or large repositories.                                      | build-in                    |
@@ -121,6 +327,7 @@ Permissions control what an agent is allowed to do. They can be set to "allow", 
 | read                  | Reading file contents. Matches against the file path.                                                  | build-in                    |
 | skill                 | Loading specialized instructions/patterns. Matches the skill name.                                     | build-in                    |
 | skill_*               | Skill management and discovery (`use`, `find`, `resource`).                                            | @zenobius/opencode-skillful |
+| submit_plan           | Submit a plan for interactive user review with annotations. Plannotator UI opens for plan approval.     | plannotator                 |
 | task                  | Launching subagents. Matches the subagent name/type.                                                   | build-in                    |
 | todoread              | Reading the project's todo list.                                                                       | build-in                    |
 | todowrite             | Adding or updating items in the todo list.                                                             | build-in                    |
@@ -131,13 +338,6 @@ Permissions control what an agent is allowed to do. They can be set to "allow", 
 
 > [!WARNING]
 > The `tools` property is **deprecated**. Use the `permission` property instead. The system automatically migrates `tools` to `permission` at runtime, but defining them directly in `permission` is preferred.
-
-
-
-> [!WARNING]
-> The `tools` property is **deprecated**. Use the `permission` property instead. The system automatically migrates `tools` to `permission` at runtime, but defining them directly in `permission` is preferred.
-
-
 
 The visibility of tools in the LLM context depends on how they are restricted:
 
@@ -196,19 +396,6 @@ For example:
 
 The underscore (`_`) acts as the namespace separator between the server identifier and the specific function it provides.
 
-### Search Tools and Providers
-
-Opencode distinguishes between generic web fetching and systematic web searching. Search capabilities are typically provided by MCP servers or plugins.
-
-| Tool Category      | Prefix / Name   | Source                      | Description                                                                           |
-| :----------------- | :-------------- | :-------------------------- | :------------------------------------------------------------------------------------ |
-| **MCP Search**     | `websearch_*`   | `open-websearch` MCP        | Multi-engine search (Bing, DuckDuckGo, etc.) and specialized scrapers (GitHub, CSDN). |
-| **Plugin Search**  | `google_search` | `opencode-antigravity-auth` | High-quality web search using Google Search with citations.                           |
-| **Built-in Fetch** | `webfetch`      | Native Opencode             | Retrieves the content of a specific URL in markdown or text format.                   |
-
-> [!NOTE]
-> The `websearch` permission in an agent's configuration governs access to these external search capabilities. The `websearch` agent itself is a specialized subagent that orchestrates these tools to perform deep research.
-
 ### Namespace Consistency
 
 In OpenCode, standard native tools (like `read`, `write`, `edit`) don't have a prefix because they are built directly into the core agent logic. MCP tools, however, are external "plugins." To prevent name collisions (e.g., if two different MCP servers both provided a `search` tool), the system prefixes them with the server's ID.
@@ -258,209 +445,124 @@ To avoid ambiguity, OpenCode agents use the `"*"` key to set the baseline:
 
 When an agent do not have access to a tool, e.g. `some_tool: false`, then the agent's context is not cluttered with that tools description. The agent is unaware of the tool even when then MCP server is enabled.
 
-## Build-in OpenCode agents
+### Special Tools
 
-Here are the reverse engineered versions of the build-in OpenCode agents:
+#### Search Tools and Providers
 
-### build
+Opencode distinguishes between generic web fetching and systematic web searching. Search capabilities are typically provided by MCP servers or plugins.
 
-The default agent used for most user requests and tool execution.
+| Tool Category      | Prefix / Name   | Source                      | Description                                                                           |
+| :----------------- | :-------------- | :-------------------------- | :------------------------------------------------------------------------------------ |
+| **MCP Search**     | `websearch_*`   | `open-websearch` MCP        | Multi-engine search (Bing, DuckDuckGo, etc.) and specialized scrapers (GitHub, CSDN). |
+| **Plugin Search**  | `google_search` | `opencode-antigravity-auth` | High-quality web search using Google Search with citations.                           |
+| **Built-in Fetch** | `webfetch`      | Native Opencode             | Retrieves the content of a specific URL in markdown or text format.                   |
 
-```md
----
-mode: primary
-permission:
-question: allow
-plan_enter: allow
----
+> [!NOTE]
+> The `websearch` permission in an agent's configuration governs access to these external search capabilities. The `websearch` agent itself is a specialized subagent that orchestrates these tools to perform deep research.
+
+#### The `submit_plan` Tool (Plannotator)
+
+The `submit_plan` tool is provided by the **Plannotator plugin** and enables interactive plan review workflows. When an agent calls this tool, a web-based UI opens where users can:
+
+- **Review** the plan in a formatted markdown viewer
+- **Annotate** specific sections with feedback (deletions, insertions, replacements, comments)
+- **Approve** the plan to proceed with implementation
+- **Request changes** with detailed, annotated feedback
+- **Switch agents** automatically (e.g., from plan agent to build agent) upon approval
+
+##### How It Works
+
+**Automatic Injection:**
+The Plannotator plugin automatically injects `submit_plan` instructions into the system prompt of **all primary agents except "build"**. This means agents like `plan`, `strategic-planner`, or any custom planning agent will be instructed to call `submit_plan` when their plan is complete.
+
+```markdown
+When you have completed your plan, you MUST call the `submit_plan` tool to submit it for user review.
+The user will be able to:
+- Review your plan visually in a dedicated UI
+- Annotate specific sections with feedback
+- Approve the plan to proceed with implementation
+- Request changes with detailed feedback
+
+If your plan is rejected, you will receive the user's annotated feedback. Revise your plan
+based on their feedback and call submit_plan again.
+
+Do NOT proceed with implementation until your plan is approved.
 ```
 
-Yes, it is blank. It uses the default prompt of the LLM provider.
-
-### compaction
-
-Used to summarize long conversations when the context window is full.
-
-```md
----
-mode: subagent
-hidden: true
-permission:
-  "*": deny
----
-
-You are a helpful AI assistant tasked with summarizing conversations.
-
-Focus on information that would be helpful for continuing the conversation, including:
-
-- What was done
-- What is currently being worked on
-- Which files are being modified
-- What needs to be done next
-- Key user requests, constraints, or preferences that should persist
-- Important technical decisions and why they were made
-
-Your summary should be comprehensive enough to provide context but concise enough to be quickly understood.
+**Tool Signature:**
+```typescript
+submit_plan(
+  plan: string,           // The complete implementation plan in markdown format
+  summary: string         // A brief 1-2 sentence summary of what the plan accomplishes
+)
 ```
 
-### explorer
+##### Usage
 
-Used by the planning loop to find files and search code.
+1. **Automatic (Recommended):** Simply create a planning agent and let the plugin inject the instructions. The agent will naturally call `submit_plan` when done.
 
-```md
----
-description: Fast agent specialized for exploring codebases. Use this when you need to quickly find files by patterns (eg. "src/components/**/*.tsx"), search code for keywords (eg. "API endpoints"), or answer questions about the codebase (eg. "how do API endpoints work?"). When calling this agent, specify the desired thoroughness level: "quick" for basic searches, "medium" for moderate exploration, or "very thorough" for comprehensive analysis across multiple locations and naming conventions.
-mode: subagent
-permission:
-  "*": deny
-  grep: allow
-  glob: allow
-  list: allow
-  bash: allow
-  webfetch: allow
-  websearch: allow
-  codesearch: allow
-  read: allow
----
+2. **Explicit:** Reference the tool explicitly in your agent's custom prompt:
+   ```markdown
+   When your plan is complete, call the `submit_plan` tool with your full plan markdown.
+   ```
 
-You are a file search specialist. You excel at thoroughly navigating and exploring codebases.
+##### What Happens on Approval
 
-Your strengths:
+When the user approves the plan in the UI:
 
-- Rapidly finding files using glob patterns
-- Searching code and text with powerful regex patterns
-- Reading and analyzing file contents
+1. **User selects target agent** (e.g., "build", "implementation-specialist")
+2. **Feedback is returned** to the original planning agent with a success message
+3. **Agent switching occurs** automatically if the user selected a different agent
+4. **Next conversation turn** starts with the new agent ready to implement
 
-Guidelines:
+**Example approval response:**
+```
+Plan approved!
 
-- Use Glob for broad file pattern matching
-- Use Grep for searching file contents with regex
-- Use Read when you know the specific file path you need to read
-- Use Bash for file operations like copying, moving, or listing directory contents
-- Adapt your search approach based on the thoroughness level specified by the caller
-- Return file paths as absolute paths in your final response
-- For clear communication, avoid using emojis
-- Do not create any files, or run bash commands that modify the user's system state in any way
+Plan Summary: Create a REST API with authentication and database
+Saved to: ~/.local/share/opencode/plans/api-implementation-2024-02-09.md
 
-Complete the user's search request efficiently and report your findings clearly.
+Proceed with implementation, incorporating these notes where applicable.
 ```
 
-### general
+##### What Happens on Denial
 
-Used for complex, multi-step tasks that don't fit into a specific specialized agent.
+When the user rejects the plan with feedback:
 
-```md
----
-description: General-purpose agent for researching complex questions and executing multi-step tasks. Use this agent to execute multiple units of work in parallel.
-mode: subagent
-permission:
-  todoread: deny
-  todowrite: deny
----
+1. **Detailed feedback is returned** to the planning agent
+2. **User's annotations are processed** into structured feedback
+3. **Agent receives feedback** and can revise the plan
+4. **Agent calls `submit_plan` again** with the revised plan
+
+**Example denial response:**
+```
+Plan needs revision.
+Saved to: ~/.local/share/opencode/plans/api-implementation-2024-02-09-rejected.md
+
+The user has requested changes to your plan. Please review their feedback below and revise your plan accordingly.
+
+## User Feedback
+
+1. Remove: Database initialization in the plan steps. We'll handle that separately.
+2. Change: The authentication flow to use JWT tokens instead of session-based...
+3. Add: Documentation on error handling for edge cases...
+
+Please revise your plan based on this feedback and call `submit_plan` again when ready.
 ```
 
-### plan
+##### Limitations
 
-A restricted agent used during the planning phase to prevent accidental codebase modifications.
+1. **Primary agents only:** The tool is only available to primary agents (not subagents). Subagents cannot call `submit_plan` directly.
+2. **Async user feedback:** Plan review is **synchronous from the tool's perspective** but requires **human user interaction**. The tool blocks the agent until the user reviews and decides (approve/deny).
+3. **No agent callback:** If the user selects a different agent for implementation, the original planning agent does **not** receive notification. The new agent simply begins with "Proceed with implementation" instructions.
+4. **Build agent excluded:** The system prompt injection is skipped for the "build" agent to avoid confusion (build is for implementation, not planning).
+5. **Session requirement:** The user must have an active OpenCode session with the Plannotator plugin installed. Remote/headless environments require `PLANNOTATOR_REMOTE=1` environment variable.
+6. **Port conflicts:** In local mode, plannotator uses a random port. In remote mode (devcontainers, SSH), set `PLANNOTATOR_PORT` to avoid conflicts.
 
-```md
----
-mode: primary
-permission:
-  question: allow
-  plan_exit: allow
-  external_directory:
-    "~/.local/share/opencode/plans/*": allow
-  edit:
-    "*": deny
-    ".opencode/plans/*.md": allow
----
-```
+#### Todo Tools
 
-### summary
-
-Used to generate a summary of changes after a task is completed.
-
-```md
----
-mode: subagent
-hidden: true
-permission:
-  "*": deny
----
-
-Summarize what was done in this conversation. Write like a pull request description.
-
-Rules:
-
-- 2-3 sentences max
-- Describe the changes made, not the process
-- Do not mention running tests, builds, or other validation steps
-- Do not explain what the user asked for
-- Write in first person (I added..., I fixed...)
-- Never ask questions or add new questions
-- If the conversation ends with an unanswered question to the user, preserve that exact question
-- If the conversation ends with an imperative statement or request to the user (e.g. "Now please run the command and paste the console output"), always include that exact request in the summary
-```
-
-### title
-
-Used to generate a brief title for the conversation.
-
-```md
----
-mode: subagent
-hidden: true
-temperature: 0.5
-permission:
-  "*": deny
----
-
-You are a title generator. You output ONLY a thread title. Nothing else.
-
-<task>
-Generate a brief title that would help the user find this conversation later.
-
-Follow all rules in <rules>
-Use the <examples> so you know what a good title looks like.
-Your output must be:
-
-- A single line
-- ≤50 characters
-- No explanations
-</task>
-
-<rules>
-- you MUST use the same language as the user message you are summarizing
-- Title must be grammatically correct and read naturally - no word salad
-- Never include tool names in the title (e.g. "read tool", "bash tool", "edit tool")
-- Focus on the main topic or question the user needs to retrieve
-- Vary your phrasing - avoid repetitive patterns like always starting with "Analyzing"
-- When a file is mentioned, focus on WHAT the user wants to do WITH the file, not just that they shared it
-- Keep exact: technical terms, numbers, filenames, HTTP codes
-- Remove: the, this, my, a, an
-- Never assume tech stack
-- Never use tools
-- NEVER respond to questions, just generate a title for the conversation
-- The title should NEVER include "summarizing" or "generating" when generating a title
-- DO NOT SAY YOU CANNOT GENERATE A TITLE OR COMPLAIN ABOUT THE INPUT
-- Always output something meaningful, even if the input is minimal.
-- If the user message is short or conversational (e.g. "hello", "lol", "what's up", "hey"):
-  → create a title that reflects the user's tone or intent (such as Greeting, Quick check-in, Light chat, Intro message, etc.)
-</rules>
-
-<examples>
-"debug 500 errors in production" → Debugging production 500 errors
-"refactor user service" → Refactoring user service
-"why is app.js failing" → app.js failure investigation
-"implement rate limiting" → Rate limiting implementation
-"how do I connect postgres to my API" → Postgres API connection
-"best practices for React hooks" → React hooks best practices
-"@src/auth.ts can you add refresh token support" → Auth refresh token support
-"@utils/parser.ts this is broken" → Parser bug fix
-"look at @config.json" → Config review
-"@App.tsx add dark mode toggle" → Dark mode toggle in App
-```
+The `todowrite` tool is used to manage the session's task list (create, update, track tasks). It supports adding new tasks, updating status (`pending`, `in_progress`, `completed`, `cancelled`), and setting priority (`high`, `medium`, `low`).
+The `todoread` tool is strictly for viewing the current task list without modification.
 
 ## Commands
 

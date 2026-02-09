@@ -18,6 +18,7 @@ permission:
   lsp: allow
   read: allow
   skill: allow
+  todo*: allow
 ---
 
 # Code Writer

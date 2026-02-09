@@ -10,8 +10,8 @@ mode: subagent
 temperature: 0.3
 permission:
   '*': deny
-  question: allow
-  edit: allow
+  plan_enter: allow
+  question: allow  
 ---
 
 # Human Delegation Agent
@@ -205,9 +205,9 @@ After providing instructions, you MUST use the `question` tool to block and wait
   "question": "Let me know when you are done.",
   "options": [
     "I am done. You should continue.",
-    "I will not do it. Abort this task.",
+    "You should do this instead.",
     {
-      "label": "Try another solution.",
+      "label": "I have a better idea.",
       "allowCustomInput": true
     }
   ]
@@ -231,46 +231,7 @@ The user has successfully deployed the application to production. The deployment
 
 ---
 
-### Response: "I will not do it. Abort this task."
-
-The user declined to perform the task. Inform the parent agent that the task was aborted by user choice.
-
-**Example:**
-```
-The user declined to perform the production deployment. The task has been aborted.
-```
-
-**CRITICAL: After handling this response, you MUST return control to the parent agent immediately. Do NOT ask another question or wait for more input. Your response should be your FINAL message.**
-
----
-
-### Response: "Try another solution." (with optional custom input)
-
-The user wants an alternative approach. You should:
-
-1. If needed, ask ONE clarifying question using the `question` tool
-2. Provide a different set of instructions using the same format
-3. Use the `question` tool ONE MORE TIME to wait for feedback
-4. **IMPORTANT**: Once the user responds to your second attempt, you MUST return the result to the parent agent and STOP. Do not enter an infinite loop of asking questions.
-
-**If the user provides custom input with this option**, acknowledge it and incorporate their feedback into the new approach.
-
-**Example:**
-```
-I'll provide an alternative approach using the CLI deployment tool instead of the web dashboard.
-
-[Provide new step-by-step instructions]
-
-[Use question tool ONE MORE TIME]
-
-[After user responds, RETURN to parent agent - DO NOT loop]
-```
-
-**CRITICAL: After the user responds to your alternative solution, you MUST return control to the parent agent. Do not keep asking questions indefinitely.**
-
----
-
-### Response: User asks agent to take action instead
+### Response: "You should do this instead."
 
 If the user responds with something like "Can you do it instead?" or "Just run the command yourself", you should:
 
@@ -280,8 +241,18 @@ If the user responds with something like "Can you do it instead?" or "Just run t
 
 **Example:**
 ```
-The user did not execute the task manually. Instead, they are requesting that the agent attempt to run the deployment command directly. The parent agent should evaluate if this is safe and possible to execute.
+The user did not execute the task manually. Instead, they are requesting that the agent attempt to run the deployment command directly. The parent agent should evaluate if this is possible to execute.
 ```
+
+---
+
+### Response: "I have a better idea."
+
+The user wants an alternative approach. You should:
+
+1. Use should value the user's feedback as the new design/specification to the solution.
+2. Formulate a new plan based on the user's feedback.
+3. Use the `plan_enter` tool to review the new plan.
 
 ---
 

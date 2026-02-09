@@ -15,6 +15,7 @@ permission:
   grep: allow
   list: allow
   read: allow
+  todo*: allow
 ---
 
 # Markdown Document Writer

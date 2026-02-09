@@ -14,6 +14,7 @@ permission:
   list: allow
   pty_*: allow
   read: allow
+  todo*: allow
 ---
 
 # Operating System Operator

@@ -1,5 +1,6 @@
 ---
 color: '#DF8020'
+mode: subagent
 description: Git Guru - Manage Git repositories with staging, commits, and branching
 temperature: 0.1
 permission:

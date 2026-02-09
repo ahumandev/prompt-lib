@@ -7,7 +7,9 @@ temperature: 0.2
 permission:
   '*': deny
   doom_loop: allow
-  task: allow
+  task:
+    '*': deny
+    document*: allow
   todo*: allow
 ---
 
