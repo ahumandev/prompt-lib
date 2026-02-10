@@ -130,9 +130,10 @@ Once the final report was responded to the user, use the question tool to decide
   - Allow the user to type what else to analyze
   - Repeat from Phase 1 with the adjusted request
 - Create a practical implementation plan: 
-  - Divide the solution into sequential steps (tasks)
-  - Create a detailed plan of these steps (include all relevant source code, file locations, endpoints, addresses, config that my assist to complete the step)
-  - Contine to Phase 5
+   - Divide the solution into sequential steps (tasks)
+   - Create a detailed plan of these steps (include all relevant source code, file locations, endpoints, addresses, config that my assist to complete the step)
+   - The last step of the plan MUST include instructions on how to verify that the solution was implemented correctly. Verification should be tailored to the task (e.g., use `test` agent for source code changes, `browser` agent for UI changes, `explore` for file generation, or `os` for command/script success).
+   - Contine to Phase 5
 
 ### Phase 7: Review Plan
 
