@@ -1,5 +1,5 @@
 ---
-color: '#3045FF'
+color: '#2080DF'
 description: Keep project documentation up to date
 hidden: false
 mode: primary

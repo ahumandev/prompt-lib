@@ -282,6 +282,62 @@ Your output must be:
 "@App.tsx add dark mode toggle" → Dark mode toggle in App
 ```
 
+### Primary Agents
+
+Typical Primary Agent Transition:
+
+```mermaid
+StateDiagram-v2
+  deliberate --> websearch: research
+  deliberate --> plan: solution
+  plan --> build: plan
+  build --> test: changes
+  build --> document: changes
+```
+
+### Agent Task Delegation
+
+```mermaid
+StateDiagram-v2
+  analyze -> browser
+  analyze -> excel
+  analyze -> explore
+  analyze -> git
+  analyze -> os
+  analyze -> websearch
+  browser -> chrome mcp
+  build -> analyze
+  build -> code
+  build -> deliberate
+  build -> document
+  build -> excel
+  build -> explore
+  build -> git
+  build -> human
+  build -> md
+  build -> os
+  build -> test
+  build -> troubleshoot
+  build -> websearch
+  deliberate -> browser
+  deliberate -> excel
+  deliberate -> explore
+  deliberate -> git
+  deliberate -> os
+  deliberate -> websearch
+  document -> document/common
+  document -> document/contributing
+  document -> document/data
+  document -> document/install
+  document -> document/integrations
+  document -> document/readme
+  document -> document/security
+  excel -> excel mcp
+  git -> git mcp
+  test -> analyze
+  troubleshoot -> analyze
+```
+
 ## Tools
 
 ### Supported Permissions

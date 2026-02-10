@@ -1,5 +1,5 @@
 ---
-color: '#8020DF'
+color: '#802080'
 description: Analyst - Research problems, analyze data and propose solutions without implementing
 hidden: false
 mode: subagent

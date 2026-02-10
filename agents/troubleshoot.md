@@ -1,5 +1,5 @@
 ---
-color: '#DFBF40'
+color: '#DF8040'
 description: Troubleshoot - Iterative problem solver that fixes issues until verified
   working
 hidden: false
@@ -19,8 +19,8 @@ permission:
     explore: allow
     git: allow
     os: allow
-    todo*: allow
     websearch: allow
+  todo*: allow
   webfetch: allow
 ---
 

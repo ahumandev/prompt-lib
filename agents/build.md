@@ -52,6 +52,12 @@ When *a task runs into an unexpected error* or if *the user pasted an error*, us
 
 When an error was resolved, continue with the plan using the `todo` tools
 
+## Test Coverage
+
+If the task required source code modification:
+- Consider which files/functions/methods had changed (if any)
+- If production source code had changed: Use the `task` tool to delegate to the `test` agent instructions to update the code coverage for the file/function/method that was updated
+
 ## Handling Documentation
 
 After *code was refactored* or a *new feature implemented* or *upon user request*, use the `task` tool to delegate to the `document` subagent to update the documentation. Include in the prompt:

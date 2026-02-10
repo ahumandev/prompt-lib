@@ -1,5 +1,5 @@
 ---
-color: '#20DF9F'
+color: '#1040FF'
 description: MD Writer - Creates and updates documentation, articles, and technical
   content according to precise instructions; DO NOT used to edit source code or system
   config

@@ -6,11 +6,10 @@ description: Resolve Git merge conflicts.
 
 - Scan the project for merge conflicts using Git.
 - Git Conflict Markers: <<<<<<<, =======, >>>>>>>
-- Use todowrite tool to create a plan that would address every merge conflict found
+- Create a plan that would address every merge conflict found
 
 # STEP 2: RESOLVE CONFLICTS
 
-- Use todoread tool to thorough address every merge conflict.
 - Never skip planned steps.
 - Continue until the plan is complete and every step was attended.
 
@@ -27,18 +26,24 @@ For each merge conflict, strictly adhere to these rules:
 - Keep style consistent with surrounding context when provided.
 - Never include Git Conflict Markers in the output.
 
-Any other merge conflict should be noted with the questions tool:
+Any other merge conflict should be questioned by asking a question to the user:
 - Briefly in < 40 words explain the difference between each version including the benefit and consequence of each version.
 - In the question provide a short 1-4 word name for each version to make it clear which name is which version
-- Prompt user using the questions tool which version to keep
-- Add answer option to allow user to describe how the merge should be resolved if no version is acceptable
+- Question the user which version to keep
+- Add answer options should describe the effect the selection will have on the code and behaviour of the application
+- Add 1 answer options for each merge side - name the side and the effect it will have on the code and app behaviour
+- Add 1 answer option for keeping both - suggest how you will manage to keep both sides without breaking compilation
+- Add 1 answer option to enable the user to type an alternative approach
 
 Precisely follow the user's instructions.
 When done, update the plan that the step is complete and move on to the next step.
 
 # STEP 3: VERIFY
 
-When all steps are done, run the tests.
+When all steps are done:
+- Ensure that the imports are correct after the merge - clean up unnecessary imports in the files that had merge conflicts
+- Ensure that the code still compile after the merge
+- Ensure all unit tests pass
 
 For every test that fails:
   - Consider why the test failed: test faulty or previous git merged incorrect?
