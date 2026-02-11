@@ -1,0 +1,5 @@
+Before you modify any source code, you must first read the `AGENTS.md` in the project root.
+
+You have skills:
+- Before you decide any code name (vars, methods, classes, etc), read [this skill instruction](copilot-skills/naming/SKILL.md) first!
+- Before you make architectural (refactor) changes, read [all skill files](copilot-skills/) first!

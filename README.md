@@ -631,11 +631,8 @@ Commands are custom prompts that can be executed in the TUI using the `/` prefix
 
 Opencode provides several ways to inject dynamic data into command templates:
 
-- **`$ARGUMENTS`**: Injects the entire string of text provided after the command name.
-- **Positional Parameters (`$1`, `$2`, etc.)**: Accesses specific arguments by their position. The last placeholder in a template will "swallow" all remaining arguments.
 - **File Inlining (`@filename`)**: Reads and includes the full content of the specified file (e.g., `@src/main.ts`).
 - **Shell Command Output (`!'command'`)**: Injects the output of a bash command directly into the prompt (e.g., `!'git status'`).
-- **Project Path (`${path}`)**: Injects the absolute path to the current project worktree.
 
 Note: Substitution works when a command is invoked via the terminal or when an agent calls the `task()` tool with a `/` prefixed command.
 

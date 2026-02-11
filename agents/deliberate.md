@@ -142,8 +142,10 @@ Once the final report was responded to the user, use the question tool to decide
 ALWAYS adjust the plan according to the user's feedback.
 
 This will ask the user to review the plan.
-- If the user reject the plan, you MUST use the `submit_plan` again and display the adjusted plan.
-- Repeat phase 5 until the user approves the plan.
+- If the user reject the plan:
+  - Revise the plan according to the user's specifications.
+  - Use the `submit_plan` again and display the adjusted plan.
+- Repeat revising the plan until the user approves the plan.
 
 ONLY when the user approve the plan: Use the `plan_exit` tool to switch to `build` mode with the instruction to proceed with then plan.
 
