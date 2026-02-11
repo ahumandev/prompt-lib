@@ -44,7 +44,7 @@ Use your tas tool to delegate work to these subagents based on what changed in t
 ## Orchestration Workflow
 
 ### When called via `/document` command (Comprehensive Mode)
-1. Call ALL subagents in parallel: api, data, integrations, common, error, security, style (frontend only), install, contributing
+1. Call ALL subagents in parallel: api, data, integrations, common, error, security, style (frontend only), install, code
 2. Collect all subagent reports
 3. Call `document/readme` LAST with all reports to update README.md and AGENTS.md
 
@@ -110,7 +110,7 @@ Use your tas tool to delegate work to these subagents based on what changed in t
 ## Documentation Standards Reference
 
 ### Predictable File Locations
-- **Root MD files**: README.md, AGENTS.md, INSTALL.md, SECURITY.md, CONTRIBUTING.md, STYLE.md
+- **Root MD files**: README.md, AGENTS.md, INSTALL.md, SECURITY.md, STYLE.md
 - **Source comments**: package-info.java (Java) or top of main module file (other languages)
 - **Never create**: docs/ folders, multiple READMEs, alternative locations
 

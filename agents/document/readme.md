@@ -103,14 +103,12 @@ See [INSTALL.md](./INSTALL.md) for details.
 [From security report summary < 80 words]
 See [SECURITY.md](./SECURITY.md) for details.
 
-## Contributing
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
-
 ## Documentation
 - [AGENTS.md](./AGENTS.md) - Key sources and doc index for LLM agents
+- [ASSETS.md](./ASSETS.md) - Static assets
 - [INSTALL.md](./INSTALL.md) - Setup instructions
 - [SECURITY.md](./SECURITY.md) - Security architecture
-- [CONTRIBUTING.md](./CONTRIBUTING.md) - Development guidelines
+- [STYLE.md](./STYLE.md) - Styling guide
 ```
 
 ## AGENTS.md Structure
@@ -132,12 +130,13 @@ Keep AGENTS.md and all documentation files/comments updated.
 
 ## Required Reading Before Changes
 - [API Documentation](./path) - Before investigating/modifying APIs
+- [ASSETS.md](./ASSETS.md) - Before installing/using system
 - [INSTALL.md](./INSTALL.md) - Before installing/using system
 - [Data Documentation](./path) - Before modifying data structures
 - [Integration Documentation](./path) - Before modifying integrations
 - [Common Utilities](./path) - Before using/modifying shared utilities
 - [SECURITY.md](./SECURITY.md) - To understand security
-- [CONTRIBUTING.md](./CONTRIBUTING.md) - Before making code changes
+- [STYLE.md](./STYLE.md) - To understand security
 ```
 
 ## Content Rules
