@@ -94,20 +94,15 @@ Only document **non-obvious** information: the *why*, the *intent*, the *constra
 - **No obvious explanations**: Don't explain "npm install installs packages"
 - **Specific**: Include actual commands, file paths, port numbers
 - **Tested**: Only commands that actually work
-- **Total length**: < 300 lines
 
 ## Return Format
 Report back to orchestrator:
 ```
-INSTALL.md Updated
-
-Location: ./INSTALL.md
-Prerequisites: [list with versions if applicable]
 Commands:
 - Install: [command]
 - Run: [command]
 - Test: [command]
-Non-standard deps: [count]
+- [Also list any other useful project specific commands]
 ```
 
 ## Quality Checklist
@@ -115,7 +110,5 @@ Non-standard deps: [count]
 - [ ] File in project root: ./INSTALL.md
 - [ ] No obvious/redundant explanations
 - [ ] Prerequisites with versions if specified
-- [ ] < 300 lines total
+- [ ] Keep file under 400 lines.
 - [ ] Non-standard dependencies explained
-
-Keep file under 300 lines.

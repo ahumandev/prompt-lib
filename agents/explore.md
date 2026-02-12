@@ -16,6 +16,9 @@ permission:
   list: allow
   lsp: allow
   read: allow
+  skill:
+    "*": deny    
+    "explore*": allow
 ---
 
 # Explore Local Code/Config

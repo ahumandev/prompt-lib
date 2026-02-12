@@ -17,7 +17,9 @@ permission:
   list: allow
   lsp: allow
   read: allow
-  skill: allow
+  skill:
+    "*": deny    
+    "code*": allow
   todo*: allow
 ---
 

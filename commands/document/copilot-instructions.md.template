@@ -3,7 +3,4 @@
 ## Required Reading Before Changes
 - [Architecture](../AGENTS.md) - Read to understand project architecture
 - [Installation and Usage Documentation](../INSTALL.md) - Read before installing/using/testing project
-- [Naming](prompts/naming.md) - Read before naming identifiers (vars, methods, classes, modules)
 - [Security Documentation](../SECURITY.md) - Read to understand security
-- [Static Asset Documentation](../ASSETS.md) - Read before installing/using project services
-- [Styling Documentation](../STYLE.md) - Read to understand css styling guidelines

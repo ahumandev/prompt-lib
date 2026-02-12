@@ -29,21 +29,23 @@ Use your task tool to delegate work to these subagents based on what changed:
 
 | Subagent | Owns | Updates When |
 |----------|------|--------------|
-| `document/api` | API endpoint comments in sub AGENTS.md or package-info.java | API routes/endpoints added/changed |
-| `document/assets` | ASSETS.md file | Public/packaged static resources like translation files, graphics, templates, etc. |
-| `document/code` | `code` agent's skills | New non-standard practices was discovered |
-| `document/data` | Data entity comments in sub AGENTS.md or package-info.java | Database models/entities added/changed (applies only to backends) |
-| `document/error` | Important error-handling in root AGENTS.md | Error handling added/changed |
+| `document/api` | `.opencode/skills/explore/api/SKILL.md` | API routes/endpoints added/changed |
+| `document/assets` | `.opencode/skills/explore/assets/SKILL.md` | Public/packaged static resources like translation files, graphics, templates, etc. |
+| `document/common` | `.opencode/skills/code/common/SKILL.md` | Common AOP or utilites was added/changed |
+| `document/data` | `.opencode/skills/explore/data/SKILL.md` | Database models/entities added/changed (applies only to backends) |
+| `document/error` | `.opencode/skills/explore/error/SKILL.md` | Error handling added/changed |
 | `document/install` | INSTALL.md file | Dependencies/setup/build process changed |
-| `document/integrations` | Integration comments in sub AGENTS.md or package-info.java | External system integrations added/changed |
+| `document/integrations` | `.opencode/skills/explore/integrations/SKILL.md` | External system integrations added/changed |
+| `document/naming` | `.opencode/skills/code/naming/SKILL.md` | New naming convention was discovered |
 | `document/security` | SECURITY.md file | Auth/authorization/security features changed |
-| `document/style` | STYLE.md file | Frontend styling patterns/structure changed (Web-based frontend projects ONLY) |
-| `document/readme` | README.md + AGENTS.md files + cross-cutting concerns scan | Any documentation updated; also scans for cross-cutting concerns (always call last) |
+| `document/standards` | `.opencode/skills/code/standards/SKILL.md` | New non-obvious standards was discovered |
+| `document/style` | `.opencode/skills/explore/style/SKILL.md` | Frontend styling patterns/structure changed (Web-based frontend projects ONLY) |
+| `document/readme` | README.md + AGENTS.md files | Any documentation updated; also scans for cross-cutting concerns (always call last) |
 
 ## Orchestration Workflow
 
 ### When called via `/document` command (Comprehensive Mode)
-1. Call subagents in parallel with `task` tool for all projects: `document/api`, `document/assets`, `document/code`, `document/error`, `document/install`, `document/integrations`, `document/security`
+1. Call subagents in parallel with `task` tool for all projects: `document/api`, `document/assets`, `document/common`, `document/error`, `document/install`, `document/integrations`, `document/naming`, `document/security`, `document/standards`
 2. Additionally call `document/data` subagent with `task` tool for backend projects
 3. Additionally call `document/style` subagent with `task` tool web-based projects
 4. Collect all subagent reports
@@ -104,7 +106,7 @@ Use your task tool to delegate work to these subagents based on what changed:
 ## Documentation Standards Reference
 
 ### Predictable File Locations
-- **Root MD files**: README.md, AGENTS.md, INSTALL.md, SECURITY.md, STYLE.md
+- **Root MD files**: README.md, AGENTS.md, INSTALL.md, SECURITY.md
 - **Source comments**: package-info.java (Java) or top of main module file (other languages)
 - **Never create**: docs/ folders, multiple READMEs, alternative locations
 
