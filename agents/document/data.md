@@ -75,15 +75,6 @@ package com.example.data.entities;
 - **[UserCreatedEvent](path/to/file.ts)**: Emitted when user is successfully persisted
 ```
 
-**For Persistence Clients (`AGENTS.md`):**
-```markdown
-# Persistence Clients
-
-## Repositories
-- **[UserRepository](path/to/file.ts)**: Handles User entity persistence (PostgreSQL)
-- **[RedisCache](path/to/file.ts)**: Key-value store for session data (TTL: 1h)
-```
-
 ## Documentation Rules
 - Data layer purpose: < 30 words
 - Each item purpose: < 15 words
@@ -97,7 +88,7 @@ Report back to the primary `document` agent the location of updated `package-inf
 
 ## Quality Checklist
 - [ ] Single overview file created/updated in the target directory
-- [ ] File is `AGENTS.md` (non-Java) or `package-info.java` (Java)
+- [ ] File is a sub `AGENTS.md` (non-Java) or `package-info.java` (Java)
 - [ ] Lists 3–5 most important items
 - [ ] Each item description < 15 words
 - [ ] **Entities**: Includes relationship info

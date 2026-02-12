@@ -253,10 +253,15 @@ These standards apply ONLY when writing the requested code. Do NOT add unrequest
 - ✅ Match the exact specifications provided by the user
 
 **Commenting guidelines:**
+- Keep all `AGENTS.md`, `package-info.java` and source comment files are your memory - keep them relevant and updated
+  - Read it to remember past decisions
+  - Update it when you commit to a new decision - specifically document *WHY* a decision was made and include background info if it support the *WHY* explanation
+  - Clean up: useless, obvious, irrelavant comments
+  - Update: outdated or wrong comments with correct info or remove it if uncertain
 - Never add obvious comments readable from the source code itself
-- Only valid comments explain non-standard decisions or deviations from the usual approach
-- Keep comments concise (1-liners); use external links if consulted for technical decisions (no repeats)
-- When code changes make existing comments outdated, update or remove them
+- Only document valid comments explain non-standard decisions or deviations from the usual approach
+- Keep comments in source code concise (1-liners)
+- Include external links in comments if consulted for technical decisions (no repeats)
 
 **Code Formatting:**
 - Never reformat or auto-format any code

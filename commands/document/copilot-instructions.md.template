@@ -1,5 +1,7 @@
-Before you modify any source code, you must first read the `AGENTS.md` in the project root.
+# IMPORTANT COPILOT INSTRUCTIONS
 
-You have skills:
-- Before you decide any code name (vars, methods, classes, etc), read [this skill instruction](copilot-skills/naming/SKILL.md) first!
-- Before you make architectural (refactor) changes, read [all skill files](copilot-skills/) first!
+## Required Reading Before Changes
+- [Architecture](../AGENTS.md) - Read to understand project architecture
+- [INSTALL.md](./INSTALL.md) - Read before installing or using the project's services
+- [Naming](prompts/naming.md) - Read before naming identifiers (vars, methods, classes, modules)
+- [SECURITY.md](./SECURITY.md) - Read to understand security
