@@ -26,6 +26,14 @@ Find and report the relative paths for:
 2. The source file responsible for general error handling and logging (middleware, utility, etc.).
 3. The package or module that contains custom exceptions.
 
+## Documentation Quality Standard
+
+**It is better to document nothing than to document obvious information.**
+
+**Never assume or invent facts. Only document what is proven and verified from actual source code, configuration files, or explicit project artifacts. If you are unsure about something — what an acronym means, what a component does, how a system works — document nothing rather than risk documenting false information.**
+
+Only document **non-obvious** information: the *why*, the *intent*, the *constraints*, the *gotchas*, and the *relationships* that are not immediately apparent from reading the code.
+
 ## Your Process
 1. **Search** the codebase for:
    - Error code definitions (look for "ErrorCode", "ErrorType", enums, constants).

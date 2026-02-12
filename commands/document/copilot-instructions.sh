@@ -8,9 +8,10 @@ mkdir -p .opencode/skills
 rm -f .github/copilot-instructions.md
 
 # Copy template
-cp ~/.config/opencode/commands/copilot/copilot-instructions.md.template .github/copilot-instructions.md
+cp ~/.config/opencode/commands/document/copilot-instructions.md.template .github/copilot-instructions.md
 
 # Create hardlink for skills if it doesn't exist
 if [ ! -e ".github/prompts/naming.md" ]; then
-    ln .opencode/skills/naming/SKILL.md .github/prompts/naming.md
+    touch .opencode/skills/code/naming/SKILL.md
+    ln .opencode/skills/code/naming/SKILL.md .github/prompts/naming.md
 fi
