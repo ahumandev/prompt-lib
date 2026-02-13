@@ -100,7 +100,7 @@ Only document **non-obvious** naming conventions: the *why*, the *intent*, the *
 (Maximum 250 lines total)
 ```markdown
 ---
-name: naming
+name: code_naming
 description: Use this skill before deciding on any identifier's name like variable, method, class, style, component or property names. It contains the project's naming conventions that must be followed.
 ---
 

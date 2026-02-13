@@ -6,8 +6,6 @@ mode: primary
 permission:
   '*': deny
   doom_loop: allow
-  grep: allow
-  read: allow
   task:
     '*': deny
     browser: allow
@@ -17,7 +15,6 @@ permission:
     os: allow
     websearch: allow
   todo*: allow
-  webfetch: allow
 ---
 
 # Analyst
@@ -109,9 +106,9 @@ Report format:
 - [Bullet point list of sources consulted (filenames, websites, scripts, commands, DBs, spreadsheets, etc.)]
 
 ### Results
-- [Bullet point list of **FACTS** was found related to the question - **NO ASSUMPTIONS** < 20 words each]
+- [Bullet point list of relevant **FACTS** was found (if any) from the above sources consulted of the specific subagent - **NO ASSUMPTIONS** < 20 words each; Omit the "Results" section entirely if no useful facts was found from that specific agent's sources consulted]
 
-## [Research Step: Same format as above step until all steps are reported]
+[... create a new section in the same format for every step of the research]
 
 # Answer
 [Combined result of all gathered info structured to address the original user's question in the format the user requested. (default < 40 word answers, unless user asked for thorough answers or document/code/config/website extracts or complete examples or asked for specified a different length]

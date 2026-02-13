@@ -76,7 +76,7 @@ Write the skill file at `.opencode/skills/explore/integrations/SKILL.md` with th
 
 ```markdown
 ---
-name: integrations
+name: explore_integrations
 description: Use this skill to understand the integration architecture - use it before modifying integrations to external systems
 ---
 

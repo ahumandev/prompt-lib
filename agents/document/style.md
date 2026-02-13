@@ -62,7 +62,7 @@ Write the skill file at `.opencode/skills/code/style/SKILL.md` with this format:
 
 ```markdown
 ---
-name: style
+name: code_style
 description: Use this skill before you modify any html component or page to understand the project's css styling rules and patterns.
 ---
 

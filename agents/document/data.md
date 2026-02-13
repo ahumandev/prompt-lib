@@ -52,7 +52,7 @@ Write the skill file at `.opencode/skills/explore/data/SKILL.md` with this forma
 
 ```markdown
 ---
-name: data
+name: explore_data
 description: Use this skill to understand the data architecture in this project or use this skill before you modify DB entities, persisted data locations and methods
 ---
 

@@ -127,7 +127,7 @@ Some standards are only discoverable via project configuration files, not source
 (Maximum 250 lines total)
 ```markdown
 ---
-name: standards
+name: code_standards
 description: Use this skill before reading, writing, modifying, or refactoring any code. It contains the project's strict coding standards, architectural patterns, and style guidelines that must be followed to ensure consistency and quality.
 ---
 

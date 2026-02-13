@@ -47,7 +47,7 @@ Write the skill file at `.opencode/skills/explore/error/SKILL.md` with this form
 
 ```markdown
 ---
-name: error
+name: explore_error
 description: Use this skill to understand how errors are handled in this project or to find error codes or custom exceptions.
 ---
 

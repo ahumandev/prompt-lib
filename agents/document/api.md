@@ -76,7 +76,7 @@ Write the skill file at `.opencode/skills/explore/api/SKILL.md` with this format
 **Backend:**
 ```markdown
 ---
-name: api
+name: explore_api
 description: Use this skill to understand which API endpoints this project serve.
 ---
 

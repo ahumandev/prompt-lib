@@ -56,7 +56,7 @@ Write the skill file at `.opencode/skills/explore/assets/SKILL.md` with this for
 
 ```markdown
 ---
-name: assets
+name: explore_assets
 description: Use this skill to understand why static assets/resources exist in the project and how to use it. Also usable to understand translation, template and other static content.
 ---
 

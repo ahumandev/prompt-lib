@@ -84,7 +84,7 @@ Write the skill file at `.opencode/skills/code/common/SKILL.md` with this format
 
 ```markdown
 ---
-name: common
+name: code_common
 description: Use this skill to discover common utilities and helpers, or to understand cross-cutting concerns in this project.
 ---
 
