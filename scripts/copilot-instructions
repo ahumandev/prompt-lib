@@ -8,7 +8,7 @@ mkdir -p .opencode/skills
 rm -f .github/copilot-instructions.md
 
 # Copy template
-cp ~/.config/opencode/commands/document/copilot-instructions.md.template .github/copilot-instructions.md
+cp ~/.config/opencode/scripts/copilot-instructions.md.template .github/copilot-instructions.md
 
 link_skill() {
     local name="$1"
