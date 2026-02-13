@@ -106,6 +106,21 @@ Only document **non-obvious** information: the *why*, the *intent*, the *constra
    - The file must never exceed 250 lines total.
 3. **Report** back to orchestrator
 
+## Known Configuration-Driven Standards
+
+Some standards are only discoverable via project configuration files, not source code. Always check for these when analyzing a Java project:
+
+### Lombok: Favour Annotations Over Verbose Java
+- Check if Lombok is present (e.g., `lombok` dependency in `pom.xml`, `build.gradle`, or `lombok.jar` in classpath)
+- If detected, document the standard: **Lombok annotations must be used in preference to verbose standard Java implementations** (e.g., `@Getter`/`@Setter` over manual getters/setters, `@Builder` over manual builder pattern, `@RequiredArgsConstructor` over manual constructors, `@EqualsAndHashCode` over manual `equals`/`hashCode`)
+- **Why it's worth documenting:** Developers new to the project may write verbose Java boilerplate unaware that Lombok is available and mandated
+
+### Lombok: `@CustomLog` for Logging
+- Check if `lombok.config` exists in the project root
+- If it contains a `lombok.log.custom.declaration` entry, document the standard: **`@CustomLog` must be used for all logging** — not `@Slf4j`, `@Log4j2`, or any other log annotation, and not manual `Logger` field declarations
+- **Why it's worth documenting:** Developers default to `@Slf4j`; the custom log type is invisible unless `lombok.config` is read
+- **Evidence check:** Confirm the `lombok.log.custom.declaration` entry exists in `lombok.config` before documenting this standard
+
 ## SKILL.md Structure
 
 ### `.opencode/skills/code/standards/SKILL.md`
@@ -113,7 +128,7 @@ Only document **non-obvious** information: the *why*, the *intent*, the *constra
 ```markdown
 ---
 name: standards
-description: [Trigger phrase < 10 words: when should opencode load this skill?]
+description: Use this skill before reading, writing, modifying, or refactoring any code. It contains the project's strict coding standards, architectural patterns, and style guidelines that must be followed to ensure consistency and quality.
 ---
 
 # Code Standards
@@ -129,6 +144,8 @@ description: [Trigger phrase < 10 words: when should opencode load this skill?]
 
 ## [Next Standard Name]
 ...
+
+**IMPORTANT**: Update `.opencode/skills/code/standards/SKILL.md` whenever a new non-obvious standard was introduced that future developers should be aware of.
 ```
 
 ## Content Rules

@@ -53,7 +53,7 @@ Write the skill file at `.opencode/skills/explore/data/SKILL.md` with this forma
 ```markdown
 ---
 name: data
-description: exploring or querying data entities in this project
+description: Use this skill to understand the data architecture in this project or use this skill before you modify DB entities, persisted data locations and methods
 ---
 
 # Data Entities
@@ -65,6 +65,8 @@ description: exploring or querying data entities in this project
 
 ## DTOs / Events
 - **[DtoName]** (`path/to/file`): [description < 15 words, note if directly persisted to external storage]
+
+**IMPORTANT**: Update `.opencode/skills/explore/data/SKILL.md` whenever the DB or a persisted DTO was added or modified.
 ```
 
 ## Documentation Rules

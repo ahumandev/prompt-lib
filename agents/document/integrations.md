@@ -77,7 +77,7 @@ Write the skill file at `.opencode/skills/explore/integrations/SKILL.md` with th
 ```markdown
 ---
 name: integrations
-description: exploring or querying external integrations in this project
+description: Use this skill to understand the integration architecture - use it before modifying integrations to external systems
 ---
 
 # External Integrations
@@ -89,6 +89,8 @@ description: exploring or querying external integrations in this project
 
 ## Related Projects
 - **[SiblingProjectName]**: [how it connects < 20 words]
+
+**IMPORTANT**: Update `.opencode/skills/explore/integrations/SKILL.md` whenever an integration service was added or modified.
 ```
 
 (Omit the "Related Projects" section if no related sibling projects are found.)

@@ -73,7 +73,7 @@ Write the skill file at `.opencode/skills/code/common/SKILL.md` with this format
 ```markdown
 ---
 name: common
-description: using common utilities, helpers, or cross-cutting concerns in this project
+description: Use this skill to discover common utilities and helpers, or to understand cross-cutting concerns in this project.
 ---
 
 # Common Utilities & Cross-Cutting Concerns
@@ -93,6 +93,8 @@ description: using common utilities, helpers, or cross-cutting concerns in this 
 
 ## Custom Annotations
 - **[@AnnotationName]** (`path/to/file`): [what it does at runtime, non-obvious behaviour < 20 words]
+
+**IMPORTANT**: Update `.opencode/skills/explore/common/SKILL.md` whenever a common util was added or modified.
 ```
 
 (Omit "Custom Aspects & AOP" and/or "Custom Annotations" sections if none are found in the codebase.)

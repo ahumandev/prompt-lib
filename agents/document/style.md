@@ -63,7 +63,7 @@ Write the skill file at `.opencode/skills/explore/style/SKILL.md` with this form
 ```markdown
 ---
 name: style
-description: exploring or querying frontend styling in this project
+description: Use this skill before you modify any html component or page to understand the project's css styling rules and patterns.
 ---
 
 # Frontend Styling
@@ -77,6 +77,8 @@ description: exploring or querying frontend styling in this project
 ## Vendor vs. Custom
 - **External libraries**: [list major ones]
 - **Custom global styles**: [scope description]
+
+**IMPORTANT**: Update `.opencode/skills/explore/style/SKILL.md` whenever the project's css or styling files are refactored.
 ```
 
 ## Constraints

@@ -48,7 +48,7 @@ Write the skill file at `.opencode/skills/explore/error/SKILL.md` with this form
 ```markdown
 ---
 name: error
-description: exploring or querying error handling in this project
+description: Use this skill to understand how errors are handled in this project or to find error codes or custom exceptions.
 ---
 
 # Error Handling
@@ -66,6 +66,8 @@ description: exploring or querying error handling in this project
 
 ## Notes
 - [Any non-obvious constraints, gotchas, or relationships between error components]
+
+**IMPORTANT**: Update `.opencode/skills/explore/error/SKILL.md` whenever an error code was added or modified or the error handling logic changed.
 ```
 
 (Omit any section for which no matching components are found.)

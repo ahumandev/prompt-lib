@@ -101,7 +101,7 @@ Only document **non-obvious** naming conventions: the *why*, the *intent*, the *
 ```markdown
 ---
 name: naming
-description: [Trigger phrase < 10 words: when should opencode load this skill?]
+description: Use this skill before deciding on any identifier's name like variable, method, class, style, component or property names. It contains the project's naming conventions that must be followed.
 ---
 
 # Naming Conventions
@@ -117,6 +117,7 @@ description: [Trigger phrase < 10 words: when should opencode load this skill?]
 
 ## [Next Convention Name]
 ...
+
 ```
 
 ## Content Rules

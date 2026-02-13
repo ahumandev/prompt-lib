@@ -77,7 +77,7 @@ Write the skill file at `.opencode/skills/explore/api/SKILL.md` with this format
 ```markdown
 ---
 name: api
-description: exploring or querying API endpoints in this project
+description: Use this skill to understand which API endpoints this project serve.
 ---
 
 # API Endpoints
@@ -90,13 +90,15 @@ description: exploring or querying API endpoints in this project
 
 ## Notes
 - [Any non-obvious constraints, auth requirements, gotchas]
+
+**IMPORTANT**: Update `.opencode/skills/explore/api/SKILL.md` whenever an API endpoint was added or modified.
 ```
 
 **Frontend:**
 ```markdown
 ---
 name: api
-description: exploring or querying API endpoints in this project
+description: Use this skill to understand the API endpoints this project connect to.
 ---
 
 # API Endpoints
@@ -109,6 +111,8 @@ description: exploring or querying API endpoints in this project
 
 ## Notes
 - [Any non-obvious constraints, base URL config, gotchas]
+
+**IMPORTANT**: Update `.opencode/skills/explore/api/SKILL.md` whenever an API endpoint was added or modified.
 ```
 
 Endpoints should be sorted alphabetically.
