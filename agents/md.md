@@ -10,7 +10,7 @@ permission:
   '*': deny
   doom_loop: allow
   edit: allow
-  external_directory: allow
+  external_directory: ask
   glob: allow
   grep: allow
   list: allow

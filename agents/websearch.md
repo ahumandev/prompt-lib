@@ -9,11 +9,6 @@ temperature: 0.7
 permission:
   '*': deny
   doom_loop: allow
-  edit: allow
-  glob: allow
-  grep: allow
-  list: allow
-  read: allow
   webfetch: allow
   websearch*: allow
   todo*: allow

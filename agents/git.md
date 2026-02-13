@@ -8,7 +8,7 @@ permission:
   codesearch: allow
   doom_loop: allow
   edit: allow
-  external_directory: allow
+  external_directory: ask
   glob: allow
   git*: allow
   grep: allow

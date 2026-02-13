@@ -8,7 +8,7 @@ permission:
   bash: allow
   doom_loop: allow
   edit: allow
-  external_directory: allow
+  external_directory: ask
   filesystem*: allow
   glob: allow
   grep: allow

@@ -1,7 +1,6 @@
 ---
 color: '#208020'
-description: Code Writer - Updates the codebase with quality code or config according
-  to plain precise instructions; NEVER write md files with this agent
+description: Code Writer - Updates the codebase with quality code or config according to plain precise instructions; NEVER write md files with this agent
 hidden: false
 mode: subagent
 temperature: 0.2
@@ -11,7 +10,7 @@ permission:
   context7*: allow
   doom_loop: allow
   edit: allow
-  external_directory: allow
+  external_directory: ask
   glob: allow
   grep: allow
   list: allow
@@ -20,6 +19,7 @@ permission:
   skill:
     "*": deny    
     "code*": allow
+    "explore*": allow
   todo*: allow
 ---
 
