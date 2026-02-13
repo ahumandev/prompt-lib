@@ -3,7 +3,7 @@ color: '#dfdf20'
 description: Explore local code/config - finds, locates, retrieves, and reads code/config
   values, settings, and implementation details from codebases
 hidden: false
-mode: primary
+mode: subagent
 temperature: 0.3
 permission:
   '*': deny
