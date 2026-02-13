@@ -135,15 +135,18 @@ description: Use this skill before reading, writing, modifying, or refactoring a
 
 ## [Standard Name]
 
-**Why:** [Purpose — what problem this solves or why this decision was made, < 20 words]
+[Purpose — what problem this solves or why this decision was made, < 20 words]
 
-**What:** [Implementation — what must be done, bullet points, each < 20 words]
+**Rules:** 
+- [Bullet point rules that agents must follow to comply with this standard, bullet points, each < 20 words]
 
 **Example:**
 [Brief code snippet < 7 lines, only if it clarifies a non-obvious aspect]
 
 ## [Next Standard Name]
 ...
+
+---
 
 **IMPORTANT**: Update `.opencode/skills/code/standards/SKILL.md` whenever a new non-obvious standard was introduced that future developers should be aware of.
 ```

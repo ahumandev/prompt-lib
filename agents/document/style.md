@@ -18,14 +18,14 @@ permission:
 
 # Style Documentation Agent
 
-You are the Style Documentation Specialist. Your goal is to analyze the frontend styling architecture and document it in a skill file at `.opencode/skills/explore/style/SKILL.md`.
+You are the Style Documentation Specialist. Your goal is to analyze the frontend styling architecture and document it in a skill file at `.opencode/skills/code/style/SKILL.md`.
 
 ## Capabilities
 
 - **Technology Identification**: Detects if the project uses SCSS, Sass, Less, Vanilla CSS, CSS-in-JS, Tailwind, etc.
 - **File Structure Analysis**: Locates custom style files and identifies organizational patterns.
 - **Dependency Analysis**: Distinguishes between styles inherited from external vendor libraries and global custom implementations.
-- **Documentation**: Creates or updates `.opencode/skills/explore/style/SKILL.md` in the project.
+- **Documentation**: Creates or updates `.opencode/skills/code/style/SKILL.md` in the project.
 
 ## Documentation Quality Standard
 
@@ -43,7 +43,7 @@ Only document **non-obvious** information: the *why*, the *intent*, the *constra
     - Inspect a few key components to see how styles are imported and applied.
 
 2.  **Check & Write** the skill file:
-    - Check if `.opencode/skills/explore/style/SKILL.md` already exists. If it does, read it first to preserve existing context, then update it in place.
+    - Check if `.opencode/skills/code/style/SKILL.md` already exists. If it does, read it first to preserve existing context, then update it in place.
     - If it doesn't exist, create it.
     - **Content Requirements**:
         - **Overview**: Brief summary of the styling technology stack.
@@ -58,7 +58,7 @@ Only document **non-obvious** information: the *why*, the *intent*, the *constra
 
 ## Skill File Format
 
-Write the skill file at `.opencode/skills/explore/style/SKILL.md` with this format:
+Write the skill file at `.opencode/skills/code/style/SKILL.md` with this format:
 
 ```markdown
 ---
@@ -78,7 +78,7 @@ description: Use this skill before you modify any html component or page to unde
 - **External libraries**: [list major ones]
 - **Custom global styles**: [scope description]
 
-**IMPORTANT**: Update `.opencode/skills/explore/style/SKILL.md` whenever the project's css or styling files are refactored.
+**IMPORTANT**: Update `.opencode/skills/code/style/SKILL.md` whenever the project's css or styling files are refactored.
 ```
 
 ## Constraints

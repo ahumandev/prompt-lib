@@ -113,8 +113,8 @@ See [SECURITY.md](SECURITY.md) for details.
 [Project purpose < 20 words]
 
 ## *REQUIRED* Reading
-- [Installation and Usage Documentation](INSTALL.md) - only if `INSTALL.md` exists
-- [Security Documentation](SECURITY.md) - Read to understand security — only if `SECURITY.md` exists
+- [Installation and Usage Documentation](INSTALL.md) - Read to understand how to start or test the project
+- [Security Documentation](SECURITY.md) - Read to understand security
 ```
 
 ## Content Rules

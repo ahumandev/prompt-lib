@@ -16,4 +16,5 @@
 - Global Skills: skills/
 
 Unless specified, "agents" refers to the agents in this opencode project `~/.config/opencode/agents` - NOT Claude agents
+Unless specified, "commands" refers to the commands in this opencode project `~/.config/opencode/commands` - NOT Claude commands
 Unless specified, "skills" refers to the skill in this opencode project `~/.config/opencode/skills` - NOT Claude skills

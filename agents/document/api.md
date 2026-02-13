@@ -85,8 +85,8 @@ description: Use this skill to understand which API endpoints this project serve
 [REST API served by this application — purpose < 20 words]
 
 ## Endpoints
-- `METHOD /path`: [description < 10 words]
-- `METHOD /path`: [description < 10 words]
+- `/path METHOD`: [description < 10 words]
+- `/path METHOD`: [description < 10 words]
 
 ## Notes
 - [Any non-obvious constraints, auth requirements, gotchas]

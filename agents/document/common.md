@@ -33,6 +33,17 @@ You are the Common Utilities and Cross-Cutting Concerns Documentation Agent. You
 - Update README.md (readme agent handles those)
 - Add comments to any source files
 
+## ⚠️ CRITICAL: opencode Skills Only — NOT Claude Skills
+
+**This agent creates opencode skill files (`.opencode/skills/`) — NOT Claude skill files (`.claude/` or `~/.config/Claude/`).**
+
+opencode skills live in `.opencode/skills/` and require `name` and `description` YAML frontmatter. Claude skills are a completely different system. Generating any file under `.claude/`, `~/.config/Claude/`, or any Claude-specific path is **STRICTLY FORBIDDEN**.
+
+*   **CORRECT path:** `.opencode/skills/code/common/SKILL.md`
+*   **WRONG path:** `.claude/skills/...` or `~/.config/Claude/skills/...`
+
+You own and maintain skill files under `.opencode/skills/code/common/`.
+
 ## Documentation Quality Standard
 
 **It is better to document nothing than to document obvious information.**
@@ -55,7 +66,8 @@ Only document **non-obvious** information: the *why*, the *intent*, the *constra
    - Utility/helper packages or modules (utils/, helpers/, common/)
    - Shared validation functions
    - Date/time utilities, string utilities, collection helpers
-   - Logging utilities, formatting helpers
+   - Metrics, HealthIndicators
+   - Formatting helpers
 2. **Scan** for custom AOP and annotations:
    - Java: classes annotated with `@Aspect`, custom `@interface` annotations
    - TypeScript/JS: class decorators, method decorators, parameter decorators
@@ -94,7 +106,7 @@ description: Use this skill to discover common utilities and helpers, or to unde
 ## Custom Annotations
 - **[@AnnotationName]** (`path/to/file`): [what it does at runtime, non-obvious behaviour < 20 words]
 
-**IMPORTANT**: Update `.opencode/skills/explore/common/SKILL.md` whenever a common util was added or modified.
+**IMPORTANT**: Update `.opencode/skills/code/common/SKILL.md` whenever a common util was added or modified.
 ```
 
 (Omit "Custom Aspects & AOP" and/or "Custom Annotations" sections if none are found in the codebase.)
