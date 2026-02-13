@@ -10,6 +10,7 @@ permission:
   task:
     '*': deny
     document*: allow
+    os: allow
   todo*: allow
 ---
 

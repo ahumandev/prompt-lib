@@ -9,5 +9,4 @@ Perform a comprehensive documentation update for the entire project:
 2. Call ALL documentation subagents to analyze and update their respective areas.
 3. Generate/update AGENTS.md based on all subagent reports
 4. Use your task tool to call `document/readme` to finalize `README.md`
-
-!`bash ~/.config/opencode/commands/document/copilot-instructions.sh`
+5. Only once all documentation was generated execute the script `~/.config/opencode/commands/document/copilot-instructions.sh`

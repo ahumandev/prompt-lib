@@ -8,7 +8,9 @@ permission:
   bash: allow
   doom_loop: allow
   edit: allow
-  external_directory: ask
+  external_directory: 
+    '*': ask
+    ~/.config/opencode/commands/document/: allow
   filesystem*: allow
   glob: allow
   grep: allow
