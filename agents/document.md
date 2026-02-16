@@ -41,14 +41,92 @@ Use your task tool to delegate work to these subagents based on what changed:
 | `document/security` | SECURITY.md file | Auth/authorization/security features changed |
 | `document/standards` | `.opencode/skills/code/standards/SKILL.md` | New non-obvious standards was discovered |
 | `document/style` | `.opencode/skills/explore/style/SKILL.md` | Frontend styling patterns/structure changed (Web-based frontend projects ONLY) |
+| `document/navigation` | `.opencode/skills/explore/navigation/SKILL.md` | Frontend navigation menu/routes added/changed (Web-based frontend projects ONLY) |
 | `document/readme` | README.md + AGENTS.md files | Any documentation updated; also scans for cross-cutting concerns (always call last) |
+
+## Phase 0: Detect Project Structure
+
+Before calling any subagents, detect whether the working directory is a monorepo/multi-module project by checking for the following workspace config files in the project root:
+
+| Config File | Format | Subproject list location |
+|-------------|--------|--------------------------|
+| `pnpm-workspace.yaml` | YAML | `packages:` array (glob patterns) |
+| `lerna.json` | JSON | `packages:` array (glob patterns) |
+| `nx.json` | JSON | Presence alone signals Nx monorepo; read `workspace.json` or `project.json` files in subdirs |
+| `package.json` | JSON | `workspaces:` field (array of paths/globs) |
+| `pom.xml` | XML | `<modules>` element listing child module directories |
+| `settings.gradle` / `settings.gradle.kts` | Groovy/Kotlin | `include(...)` statements |
+| `go.work` | Go workspace | `use ./subdir` directives |
+| `Cargo.toml` | TOML | `[workspace] members = [...]` array |
+
+**Detection result:**
+- If ANY of the above are found with subproject entries → **Monorepo Mode** (see below)
+- Otherwise → proceed with the existing single-project orchestration workflow
+
+## Monorepo Mode Orchestration
+
+When sub-projects are detected, follow this workflow instead of the standard single-project orchestration workflow.
+
+### Step 1: Resolve subproject directories
+Expand any glob patterns from the workspace config to get the list of actual subproject root directories. Only include directories that exist on disk. Skip `node_modules`, `dist`, `build`, `.git` directories.
+
+### Step 2: For each subproject — run all relevant subagents
+For each subproject directory, call the relevant subagents **scoped to that subproject's root directory**. When prompting each subagent, explicitly instruct it to:
+- Scan and document ONLY the files within the subproject's root directory.
+- Refrain from scanning or referencing other modules or the workspace root.
+
+Run subagents for each subproject (sub-projects may be processed in parallel):
+
+| Subagent | When to call |
+|----------|-------------|
+| `document/api` | Always |
+| `document/assets` | Always |
+| `document/common` | Always |
+| `document/error` | Always |
+| `document/install` | Always — agent will assess applicability per subproject |
+| `document/integrations` | Always |
+| `document/naming` | Always |
+| `document/security` | Always — agent will assess applicability per subproject |
+| `document/standards` | Always |
+| `document/data` | Backend sub-projects only |
+| `document/style` | Web frontend sub-projects only |
+| `document/navigation` | Web frontend sub-projects only |
+
+#### Calling `document/install` and `document/security` in subproject mode
+
+When calling `document/install` or `document/security` for a subproject, always pass the following context explicitly in the prompt:
+
+- The subproject's root directory path (e.g., `./backend/`)
+- The subproject's name
+- Instruction: **"Write the file to `{module-dir}/INSTALL.md` (or `SECURITY.md`) — do NOT write to the workspace root `./INSTALL.md` (or `./SECURITY.md`). Assess applicability first: if this subproject does not warrant its own file, skip creation and report back."**
+
+These agents will self-assess whether the subproject needs the file (e.g., a shared library may not need INSTALL.md; a utility module may not need SECURITY.md). Collect their report regardless — it will indicate whether a file was created or skipped.
+
+Collect all subagent reports for this subproject.
+
+### Step 3: For each subproject — call `document/readme` in subproject mode
+After collecting all subagent reports for a subproject, call `document/readme` with:
+- All subagent reports for this subproject.
+- The subproject root directory path.
+- Mode: `subproject`.
+- The list of all other subproject names/paths (for cross-reference awareness — the readme agent will only link to confirmed dependencies).
+
+This generates/updates `{subproject-dir}/README.md` and `{subproject-dir}/AGENTS.md`.
+
+### Step 4: Call `document/readme` for the root in monorepo-root mode
+After ALL sub-projects have been processed, call `document/readme` with:
+- A summary of all sub-projects (names, paths, purposes as reported by each subproject's readme run).
+- The dependency/relationship information between sub-projects (inferred from integrations reports — confirmed relationships only).
+- Mode: `monorepo-root`.
+
+This generates/updates the root `./README.md` and root `./AGENTS.md`.
 
 ## Orchestration Workflow
 
 ### When called via `/document` command (Comprehensive Mode)
 1. Call subagents in parallel with `task` tool for all projects: `document/api`, `document/assets`, `document/common`, `document/error`, `document/install`, `document/integrations`, `document/naming`, `document/security`, `document/standards`
 2. Additionally call `document/data` subagent with `task` tool for backend projects
-3. Additionally call `document/style` subagent with `task` tool web-based projects
+3. Additionally call `document/style` and `document/navigation` subagents with `task` tool for web-based projects
 4. Collect all subagent reports
 5. Call `document/readme` LAST with all reports to update README.md and AGENTS.md
 
@@ -107,9 +185,11 @@ Use your task tool to delegate work to these subagents based on what changed:
 ## Documentation Standards Reference
 
 ### Predictable File Locations
-- **Root MD files**: README.md, AGENTS.md, INSTALL.md, SECURITY.md
+- **Root MD files (single project)**: README.md, AGENTS.md, INSTALL.md, SECURITY.md
+- **Root MD files (monorepo workspace root)**: README.md (module index), AGENTS.md (links-only)
+- **Subproject MD files**: `{module-dir}/README.md`, `{module-dir}/AGENTS.md`, `{module-dir}/INSTALL.md` (if applicable), `{module-dir}/SECURITY.md` (if applicable)
 - **Source comments**: package-info.java (Java) or top of main module file (other languages)
-- **Never create**: docs/ folders, multiple READMEs, alternative locations
+- **Never create**: docs/ folders, alternative locations, or root-level INSTALL.md/SECURITY.md when in subproject mode
 
 ### Content Quality Standards
 - **Brevity**: Enforce word limits strictly

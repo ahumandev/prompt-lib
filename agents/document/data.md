@@ -46,6 +46,46 @@ Only document **non-obvious** information: the *why*, the *intent*, the *constra
    - If it **does not exist**, create it fresh.
 4. **Report** the location of this file back to the primary `document` agent
 
+## Monorepo / Subproject Mode
+
+When the orchestrator calls this agent in `subproject` mode, it will pass the subproject's root directory path and name. In this case:
+
+### Skill file path
+Write the skill to a module-namespaced path instead of the default:
+- **Default (single project):** `.opencode/skills/explore/data/SKILL.md`
+- **Subproject:** `.opencode/skills/explore/data/{module-name}/SKILL.md`
+
+Where `{module-name}` is the subproject's directory name (e.g., `backend`, `data-service`).
+
+### Skill frontmatter (subproject)
+The `description` field must identify the module so the LLM loads the correct skill and skips irrelevant ones:
+
+```yaml
+---
+name: explore_data_{module-name}
+description: Use this skill for the `{module-name}` module to understand its data architecture and DB entities.
+---
+```
+
+### Skill content (subproject)
+Open the skill body with a module identifier line immediately after the title:
+
+```markdown
+# Data Entities — `{module-name}`
+
+> **Module:** `{module-name}` (`path/to/module-dir/`)
+```
+
+All documented entities must be scoped to this subproject only. Do not scan or reference other modules.
+
+### Quality checklist additions (subproject mode)
+- [ ] Skill written to `.opencode/skills/explore/data/{module-name}/SKILL.md`
+- [ ] `name` frontmatter is `explore_data_{module-name}`
+- [ ] `description` names the module and says "Do not load for other modules"
+- [ ] Skill body opens with `# Data Entities — \`{module-name}\``
+- [ ] Module identifier line present (`> **Module:** ...`)
+- [ ] Only entities from this subproject's source are documented
+
 ## Skill File Format
 
 Write the skill file at `.opencode/skills/explore/data/SKILL.md` with this format:

@@ -57,6 +57,45 @@ Only document **non-obvious** information: the *why*, the *intent*, the *constra
    - If it **does not exist**, create it fresh with the discovered information.
 6. **Report** back to orchestrator
 
+## Monorepo / Subproject Mode
+
+When the orchestrator calls this agent in `subproject` mode, it will pass the subproject's root directory path and name. In this case:
+
+### Applicability check — do this first
+Not every subproject warrants its own INSTALL.md. Before writing anything, assess:
+
+| Subproject type | INSTALL.md needed? |
+|-----------------|-------------------|
+| Runnable application (server, CLI, desktop app) | ✅ Yes |
+| Frontend app with its own dev server | ✅ Yes |
+| Library / shared module consumed by other modules | ⚠️ Only if it has non-obvious build steps beyond `npm install` / `mvn install` |
+| Auto-installed as a dependency of another module | ❌ No — document in the consuming module's INSTALL.md instead |
+| Module with no standalone run/test commands | ❌ No |
+
+If INSTALL.md is not needed for this subproject, report that back to the orchestrator and **do not create the file**.
+
+### File path (subproject)
+Write the file to the subproject's own root directory — **never to the workspace root**:
+- **Default (single project):** `./INSTALL.md`
+- **Subproject:** `./{module-dir}/INSTALL.md`
+
+Where `{module-dir}` is the subproject's directory (e.g., `backend/INSTALL.md`, `frontend/INSTALL.md`).
+
+**NEVER write to or overwrite the workspace root `./INSTALL.md` when operating in subproject mode.**
+
+### Scope (subproject)
+- Scan only the subproject's own directory for build files (`package.json`, `pom.xml`, `go.mod`, etc.)
+- Document only the commands needed to install, build, run, and test **this subproject in isolation**
+- If this subproject depends on a sibling module being running first, note that as a prerequisite with a relative link: e.g., `Requires [backend](../backend/INSTALL.md) to be running`
+- Do not scan or document other modules
+
+### Quality checklist additions (subproject mode)
+- [ ] Applicability assessed — INSTALL.md is warranted for this subproject
+- [ ] File written to `{module-dir}/INSTALL.md` (not workspace root)
+- [ ] Only this subproject's build files scanned
+- [ ] Sibling dependencies noted as prerequisites (with relative links) if applicable
+- [ ] Workspace root `./INSTALL.md` not touched
+
 ## INSTALL.md Structure
 ```markdown
 # Installation

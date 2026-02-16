@@ -14,7 +14,7 @@
 The YAML frontmatter of an agent's `.md` file (stored in `~/.config/opencode/agents/` or `.opencode/agents/`) supports the following properties:
 
 | Property      | Type    | Description                                                                                 |
-| :------------ | :------ | :------------------------------------------------------------------------------------------ |
+|:--------------|:--------|:--------------------------------------------------------------------------------------------|
 | `color`       | String  | Hex color code for the agent (e.g., `"#E01010"`).                                           |
 | `description` | String  | A brief description of the agent's purpose and usage.                                       |
 | `hidden`      | Boolean | If `true`, the agent is hidden from the UI and agent lists.                                 |
@@ -39,7 +39,7 @@ Ensure the rest of the file content is preserved.
 #### Operational Modes
 
 | Mode       | Description                                                                                                                                                                 |
-| :--------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|:-----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `primary`  | A standalone agent capable of initiating and managing a full conversation thread. Used for top-level tasks and build-in system agents.                                      |
 | `subagent` | A specialized agent intended to be called by another agent (e.g., via the `task` tool). These are optimized for specific sub-tasks like exploration, web searching, or git. |
 | `all`      | Can function as both (default for custom agents).                                                                                                                           |
@@ -287,55 +287,56 @@ Your output must be:
 Typical Primary Agent Transition:
 
 ```mermaid
-StateDiagram-v2
-  deliberate --> websearch: research
-  deliberate --> plan: solution
-  plan --> build: plan
-  build --> test: changes
-  build --> document: changes
+flowchart LR
+  plan -->|problem| analyze
+  analyze -->|search| websearch
+  websearch .->|search results| plan
+  plan -->|plan| build
+  build -->|changes| test
+  build -->|changes| document
 ```
 
 ### Agent Task Delegation
 
 ```mermaid
-StateDiagram-v2
-  analyze -> browser
-  analyze -> excel
-  analyze -> explore
-  analyze -> git
-  analyze -> os
-  analyze -> websearch
-  browser -> chrome mcp
-  build -> analyze
-  build -> code
-  build -> deliberate
-  build -> document
-  build -> excel
-  build -> explore
-  build -> git
-  build -> human
-  build -> md
-  build -> os
-  build -> test
-  build -> troubleshoot
-  build -> websearch
-  deliberate -> browser
-  deliberate -> excel
-  deliberate -> explore
-  deliberate -> git
-  deliberate -> os
-  deliberate -> websearch
-  document -> document/common
-  document -> document/contributing
-  document -> document/data
-  document -> document/install
-  document -> document/integrations
-  document -> document/readme
-  document -> document/security
-  excel -> excel mcp
-  git -> git mcp
-  test -> analyze
-  troubleshoot -> analyze
+flowchart LR
+  analyze --> browser
+  analyze --> excel
+  analyze --> explore
+  analyze --> git
+  analyze --> os
+  analyze --> websearch
+  browser --> chrome_mcp["chrome mcp"]
+  build --> analyze
+  build --> code
+  build --> document
+  build --> excel
+  build --> explore
+  build --> git
+  build --> human
+  build --> md
+  build --> os
+  build --> test
+  build --> troubleshoot
+  build --> websearch
+  document --> doc_common["document/common"]
+  document --> doc_contributing["document/contributing"]
+  document --> doc_data["document/data"]
+  document --> doc_install["document/install"]
+  document --> doc_integrations["document/integrations"]
+  document --> doc_readme["document/readme"]
+  document --> doc_security["document/security"]
+  excel --> excel_mcp["excel mcp"]
+  git --> git_mcp["git mcp"]
+  plan --> browser
+  plan --> excel
+  plan --> explore
+  plan --> git
+  plan --> os
+  plan --> websearch
+  plan .-> build
+  test --> analyze
+  troubleshoot --> analyze
 ```
 
 ## Tools
@@ -345,7 +346,7 @@ StateDiagram-v2
 Permissions control what an agent is allowed to do. They can be set to "allow", "ask", or "deny".
 
 | Permission            | Description                                                                                            | Plugin / MCP                |
-| --------------------- | :----------------------------------------------------------------------------------------------------- | :-------------------------- |
+|-----------------------|:-------------------------------------------------------------------------------------------------------|:----------------------------|
 | bash                  | Running shell commands. Matches the command string.                                                    | build-in                    |
 | chrome_*              | Chrome MCP server.                                                                                     | chrome-devtools-mcp         |
 | codesearch            | Searching for code patterns across the web or large repositories.                                      | build-in                    |
@@ -383,7 +384,7 @@ Permissions control what an agent is allowed to do. They can be set to "allow", 
 | read                  | Reading file contents. Matches against the file path.                                                  | build-in                    |
 | skill                 | Loading specialized instructions/patterns. Matches the skill name.                                     | build-in                    |
 | skill_*               | Skill management and discovery (`use`, `find`, `resource`).                                            | @zenobius/opencode-skillful |
-| submit_plan           | Submit a plan for interactive user review with annotations. Plannotator UI opens for plan approval.     | plannotator                 |
+| submit_plan           | Submit a plan for interactive user review with annotations. Plannotator UI opens for plan approval.    | plannotator                 |
 | task                  | Launching subagents. Matches the subagent name/type.                                                   | build-in                    |
 | todoread              | Reading the project's todo list.                                                                       | build-in                    |
 | todowrite             | Adding or updating items in the todo list.                                                             | build-in                    |
@@ -508,7 +509,7 @@ When an agent do not have access to a tool, e.g. `some_tool: false`, then the ag
 Opencode distinguishes between generic web fetching and systematic web searching. Search capabilities are typically provided by MCP servers or plugins.
 
 | Tool Category      | Prefix / Name   | Source                      | Description                                                                           |
-| :----------------- | :-------------- | :-------------------------- | :------------------------------------------------------------------------------------ |
+|:-------------------|:----------------|:----------------------------|:--------------------------------------------------------------------------------------|
 | **MCP Search**     | `websearch_*`   | `open-websearch` MCP        | Multi-engine search (Bing, DuckDuckGo, etc.) and specialized scrapers (GitHub, CSDN). |
 | **Plugin Search**  | `google_search` | `opencode-antigravity-auth` | High-quality web search using Google Search with citations.                           |
 | **Built-in Fetch** | `webfetch`      | Native Opencode             | Retrieves the content of a specific URL in markdown or text format.                   |

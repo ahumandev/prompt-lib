@@ -121,6 +121,46 @@ Some standards are only discoverable via project configuration files, not source
 - **Why it's worth documenting:** Developers default to `@Slf4j`; the custom log type is invisible unless `lombok.config` is read
 - **Evidence check:** Confirm the `lombok.log.custom.declaration` entry exists in `lombok.config` before documenting this standard
 
+## Monorepo / Subproject Mode
+
+When the orchestrator calls this agent in `subproject` mode, it will pass the subproject's root directory path and name. In this case:
+
+### Skill file path
+Write the skill to a module-namespaced path instead of the default:
+- **Default (single project):** `.opencode/skills/code/standards/SKILL.md`
+- **Subproject:** `.opencode/skills/code/standards/{module-name}/SKILL.md`
+
+Where `{module-name}` is the subproject's directory name (e.g., `backend`, `shared-lib`).
+
+### Skill frontmatter (subproject)
+The `description` field must identify the module so the LLM loads the correct skill and skips irrelevant ones:
+
+```yaml
+---
+name: code_standards_{module-name}
+description: Use this skill before reading or writing code in the `{module-name}` module.
+---
+```
+
+### Skill content (subproject)
+Open the skill body with a module identifier line immediately after the title:
+
+```markdown
+# Code Standards — `{module-name}`
+
+> **Module:** `{module-name}` (`path/to/module-dir/`)
+```
+
+All documented standards must be scoped to this subproject only. Do not scan or reference other modules.
+
+### Quality checklist additions (subproject mode)
+- [ ] Skill written to `.opencode/skills/code/standards/{module-name}/SKILL.md`
+- [ ] `name` frontmatter is `code_standards_{module-name}`
+- [ ] `description` names the module and says "Do not load for other modules"
+- [ ] Skill body opens with `# Code Standards — \`{module-name}\``
+- [ ] Module identifier line present (`> **Module:** ...`)
+- [ ] Only standards from this subproject's source are documented
+
 ## SKILL.md Structure
 
 ### `.opencode/skills/code/standards/SKILL.md`

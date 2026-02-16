@@ -41,6 +41,46 @@ Only document **non-obvious** information: the *why*, the *intent*, the *constra
    - Check if `.opencode/skills/explore/error/SKILL.md` already exists. If it does, read it first, then update it in place. If it doesn't exist, create it.
 4. **Report** back to orchestrator the location of the skill file.
 
+## Monorepo / Subproject Mode
+
+When the orchestrator calls this agent in `subproject` mode, it will pass the subproject's root directory path and name. In this case:
+
+### Skill file path
+Write the skill to a module-namespaced path instead of the default:
+- **Default (single project):** `.opencode/skills/explore/error/SKILL.md`
+- **Subproject:** `.opencode/skills/explore/error/{module-name}/SKILL.md`
+
+Where `{module-name}` is the subproject's directory name (e.g., `backend`, `api-service`).
+
+### Skill frontmatter (subproject)
+The `description` field must identify the module so the LLM loads the correct skill and skips irrelevant ones:
+
+```yaml
+---
+name: explore_error_{module-name}
+description: Use this skill for the `{module-name}` module to understand its error handling and error codes.
+---
+```
+
+### Skill content (subproject)
+Open the skill body with a module identifier line immediately after the title:
+
+```markdown
+# Error Handling — `{module-name}`
+
+> **Module:** `{module-name}` (`path/to/module-dir/`)
+```
+
+All documented error handling must be scoped to this subproject only. Do not scan or reference other modules.
+
+### Quality checklist additions (subproject mode)
+- [ ] Skill written to `.opencode/skills/explore/error/{module-name}/SKILL.md`
+- [ ] `name` frontmatter is `explore_error_{module-name}`
+- [ ] `description` names the module and says "Do not load for other modules"
+- [ ] Skill body opens with `# Error Handling — \`{module-name}\``
+- [ ] Module identifier line present (`> **Module:** ...`)
+- [ ] Only error handling from this subproject's source is documented
+
 ## Skill File Format
 
 Write the skill file at `.opencode/skills/explore/error/SKILL.md` with this format:

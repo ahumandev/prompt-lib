@@ -59,6 +59,46 @@ Only document **non-obvious** information: the *why*, the *intent*, the *constra
    - If it **does not exist**, create it fresh with the discovered patterns.
 6. **Report** back to orchestrator
 
+## Monorepo / Subproject Mode
+
+When the orchestrator calls this agent in `subproject` mode, it will pass the subproject's root directory path and name. In this case:
+
+### Applicability check — do this first
+Not every subproject warrants its own SECURITY.md. Before writing anything, assess:
+
+| Subproject type | SECURITY.md needed? |
+|-----------------|-------------------|
+| Application with authentication / authorisation logic | ✅ Yes |
+| Application that handles sensitive data or secrets | ✅ Yes |
+| API server with access control | ✅ Yes |
+| Shared library with no auth or secrets handling | ❌ No |
+| Pure utility / helper module | ❌ No |
+| Module whose security is entirely delegated to a sibling (e.g., a frontend that relies on a backend for all auth) | ⚠️ Only if there are client-side security concerns worth documenting (e.g., token storage, CSP) |
+
+If SECURITY.md is not needed for this subproject, report that back to the orchestrator and **do not create the file**.
+
+### File path (subproject)
+Write the file to the subproject's own root directory — **never to the workspace root**:
+- **Default (single project):** `./SECURITY.md`
+- **Subproject:** `./{module-dir}/SECURITY.md`
+
+Where `{module-dir}` is the subproject's directory (e.g., `backend/SECURITY.md`, `api-service/SECURITY.md`).
+
+**NEVER write to or overwrite the workspace root `./SECURITY.md` when operating in subproject mode.**
+
+### Scope (subproject)
+- Scan only the subproject's own directory for security code and configuration
+- Document only the security architecture of **this subproject**
+- If this subproject delegates auth to a sibling module, note that briefly with a relative link: e.g., `Authentication is handled by [backend](../backend/SECURITY.md)`
+- Do not scan or document other modules
+
+### Quality checklist additions (subproject mode)
+- [ ] Applicability assessed — SECURITY.md is warranted for this subproject
+- [ ] File written to `{module-dir}/SECURITY.md` (not workspace root)
+- [ ] Only this subproject's source scanned
+- [ ] Delegated auth to sibling noted with relative link if applicable
+- [ ] Workspace root `./SECURITY.md` not touched
+
 ## SECURITY.md Structure
 ```markdown
 # Security Architecture

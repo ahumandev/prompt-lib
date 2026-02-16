@@ -56,6 +56,46 @@ Only document **non-obvious** information: the *why*, the *intent*, the *constra
     - Explicitly inform the user that the skill file has been created or updated.
     - Provide the full path to the file.
 
+## Monorepo / Subproject Mode
+
+When the orchestrator calls this agent in `subproject` mode, it will pass the subproject's root directory path and name. In this case:
+
+### Skill file path
+Write the skill to a module-namespaced path instead of the default:
+- **Default (single project):** `.opencode/skills/code/style/SKILL.md`
+- **Subproject:** `.opencode/skills/code/style/{module-name}/SKILL.md`
+
+Where `{module-name}` is the subproject's directory name (e.g., `frontend`, `web-app`).
+
+### Skill frontmatter (subproject)
+The `description` field must identify the module so the LLM loads the correct skill and skips irrelevant ones:
+
+```yaml
+---
+name: code_style_{module-name}
+description: Use this skill before modifying HTML or components in the `{module-name}` module.
+---
+```
+
+### Skill content (subproject)
+Open the skill body with a module identifier line immediately after the title:
+
+```markdown
+# Frontend Styling — `{module-name}`
+
+> **Module:** `{module-name}` (`path/to/module-dir/`)
+```
+
+All documented styling patterns must be scoped to this subproject only. Do not scan or reference other modules.
+
+### Quality checklist additions (subproject mode)
+- [ ] Skill written to `.opencode/skills/code/style/{module-name}/SKILL.md`
+- [ ] `name` frontmatter is `code_style_{module-name}`
+- [ ] `description` names the module and says "Do not load for other modules"
+- [ ] Skill body opens with `# Frontend Styling — \`{module-name}\``
+- [ ] Module identifier line present (`> **Module:** ...`)
+- [ ] Only styling from this subproject's source is documented
+
 ## Skill File Format
 
 Write the skill file at `.opencode/skills/code/style/SKILL.md` with this format:
