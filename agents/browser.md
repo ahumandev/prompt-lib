@@ -1,9 +1,6 @@
 ---
 color: '#1970e3'
-description: 'Browser automation - Use for DevTools-style tasks: inspect page elements,
-  read console logs, view network activity, click UI elements, and interact with pages
-  requiring DOM manipulation or debugging capabilities. Not for internet documentation
-  search. Never edits source code - only inspects and reports issues found via browser tools to guide the user'
+description: 'Browser automation for frontend development & testing - Debug, test and verify YOUR RUNNING APPLICATION: inspect DOM elements, read console logs, analyze network requests, click UI elements, test performance and automate frontend testing. NOT for online research nor internet searches.'
 mode: subagent
 permission:
   '*': deny

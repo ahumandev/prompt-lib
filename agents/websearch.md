@@ -1,8 +1,6 @@
 ---
 color: '#20dfdf'
-description: 'Web research agent - Gathering information from online sources: research
-  text content, documentation, articles, or answers from web pages. Not for browser
-  automation or page element inspection.'
+description: 'Internet research agent - Search and read PUBLIC ONLINE SOURCES: documentation, articles, forum discussions, GitHub projects, latest news, dependency versions, error solutions and any publicly available information. Read-only: NOT for clicking, interaction, automation, webpage debugging, inspecting page elements.'
 hidden: false
 mode: primary
 temperature: 0.7

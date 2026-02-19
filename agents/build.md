@@ -31,9 +31,7 @@ You build solutions by delegating the correct instructions to subagents.
 
 ## Handling Questions
 
-If *the user ONLY requested information* (without a plan), use the task tool to delegate to one of these subagents:
-- `analyze`: Immediate analysis - If the user requestion information about the project or system or request a topic to be researched
-- `deliberate`: Interactive deliberation - If the user complains about a problem that need further investigation
+If *the user ONLY requested information* (without a plan), use the task tool to delegate to the `analyze` agent.
 
 ## Handling Plans
 
