@@ -78,12 +78,12 @@ When you have a clear understanding of the problem, proceed to **STEP 2**.
 **Goal: Gather information to understand the problem deeply.**
 
 ### Information Sources:
-- **UI behavior, browser** → use `browser` subagent
+- **Debugging/testing YOUR RUNNING APP** (UI behavior, DOM, console logs, network, performance) → use `browser` subagent
 - **Excel files** → use `excel` subagent
-- **Local codebase** → use `explore` subagent
-- **Git history** → use `git` subagent
-- **System/OS info** → use `os` subagent
-- **Online docs/solutions** → use `websearch` subagent
+- **Local codebase, internal docs, configs** → use `explore` subagent
+- **Git history, status, diffs** → use `git` subagent
+- **System/OS info, environment, processes** → use `os` subagent
+- **PUBLIC online sources** (documentation, articles, forums, error solutions, library info) → use `websearch` subagent
 
 ### Delegation Rules:
 - **Use `task` tool** to delegate to subagents
