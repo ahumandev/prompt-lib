@@ -14,7 +14,7 @@
 The YAML frontmatter of an agent's `.md` file (stored in `~/.config/opencode/agents/` or `.opencode/agents/`) supports the following properties:
 
 | Property      | Type    | Description                                                                                 |
-|:--------------|:--------|:--------------------------------------------------------------------------------------------|
+| :------------ | :------ | :------------------------------------------------------------------------------------------ |
 | `color`       | String  | Hex color code for the agent (e.g., `"#E01010"`).                                           |
 | `description` | String  | A brief description of the agent's purpose and usage.                                       |
 | `hidden`      | Boolean | If `true`, the agent is hidden from the UI and agent lists.                                 |
@@ -39,7 +39,7 @@ Ensure the rest of the file content is preserved.
 #### Operational Modes
 
 | Mode       | Description                                                                                                                                                                 |
-|:-----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :--------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `primary`  | A standalone agent capable of initiating and managing a full conversation thread. Used for top-level tasks and build-in system agents.                                      |
 | `subagent` | A specialized agent intended to be called by another agent (e.g., via the `task` tool). These are optimized for specific sub-tasks like exploration, web searching, or git. |
 | `all`      | Can function as both (default for custom agents).                                                                                                                           |
@@ -248,7 +248,7 @@ Your output must be:
 - A single line
 - ≤50 characters
 - No explanations
-</task>
+  </task>
 
 <rules>
 - you MUST use the same language as the user message you are summarizing
@@ -341,21 +341,190 @@ flowchart LR
 
 ## Tools
 
+## Doom loop permissions
+
+### What is doom_loop?
+
+Doom loop is a safety mechanism that detects when the same tool is called 3+ consecutive times with identical input within a single message. It uses JSON.stringify for deep comparison of tool inputs, ensuring exact matches are caught.
+
+The threshold is 3 identical consecutive calls. If exceeded, the permission system enforces the configured action for that message.
+
+---
+
+### Key concept: Config rules vs user responses
+
+Doom loop actions fall into two categories:
+
+**Config Rules** (static, live in `opencode.jsonc` or agent markdown, set once):
+
+- `allow` — Always permits the repeated calls
+- `ask` — Always prompts the user when triggered
+
+**User Responses** (dynamic, chosen by user when prompted):
+
+- `once` — Allows THIS request only, will ask again on next identical call
+- `always` — Allows this and all future identical calls for the rest of this session
+
+---
+
+### Scope and lifetime table
+
+| Action   | Type          | Scope/Lifetime                   | Re-triggers? | When?                                        |
+| :------- | :------------ | :------------------------------- | :----------- | :------------------------------------------- |
+| `allow`  | Config Rule   | Permanent (until config changes) | Never        | Never; repeats always auto-allow             |
+| `ask`    | Config Rule   | Permanent (until config changes) | Always       | On every identical repeated call             |
+| `once`   | User Response | Per-Request (1 hour TTL)         | Yes          | After 1 hour or next session                 |
+| `always` | User Response | Per-Session only                 | Never        | Never (session-local; resets on new session) |
+
+---
+
+### Permission actions explained
+
+| Action   | Type          | What it does                              | User sees?              |
+| :------- | :------------ | :---------------------------------------- | :---------------------- |
+| `allow`  | Config Rule   | Repeats execute immediately, no prompt    | Nothing                 |
+| `deny`   | Config Rule   | Repeats are blocked immediately           | Error message           |
+| `ask`    | Config Rule   | Prompts user each time limit is hit       | Permission dialog       |
+| `once`   | User Response | Allows this one execution, blocks repeats | Nothing (dialog closed) |
+| `always` | User Response | Allows all future identical calls today   | Nothing (dialog closed) |
+
+**Default behavior:** `ask` (prompts the user when doom_loop is triggered)
+
+---
+
+### Practical example scenarios
+
+**Scenario 1: Config says `ask`, user clicks "once"**
+
+```
+Agent tries to call the same tool 3+ times with identical input
+↓
+Permission is "ask" → user sees prompt dialog
+↓
+User clicks "once"
+↓
+This request executes successfully
+↓
+Next message with identical request → prompts user again
+↓
+User clicks "once" → executes again
+↓
+(Process repeats for each new request)
+```
+
+**Scenario 2: Config says `ask`, user clicks "always"**
+
+```
+Agent tries to call the same tool 3+ times with identical input
+↓
+Permission is "ask" → user sees prompt dialog
+↓
+User clicks "always"
+↓
+This request executes successfully
+↓
+Next identical request in same session → auto-allows, no prompt
+↓
+Next identical request in same session → auto-allows, no prompt
+↓
+(New session starts → reverts to asking)
+```
+
+**Scenario 3: Config says `allow`**
+
+```
+Agent tries to call the same tool 3+ times with identical input
+↓
+Permission is "allow" (static config rule)
+↓
+Repeats execute immediately, no prompt, no user choice
+↓
+(Same behavior forever, unless you change opencode.jsonc)
+```
+
+---
+
+### How to configure doom_loop permissions
+
+Configure doom_loop in an agent's YAML frontmatter or in `opencode.jsonc`:
+
+**Agent markdown file** (`.md`):
+
+```yaml
+---
+permission:
+  doom_loop: allow
+---
+```
+
+**In opencode.jsonc** for global config:
+
+```json
+{
+  "agents": {
+    "my_agent": {
+      "permission": {
+        "doom_loop": "deny"
+      }
+    }
+  }
+}
+```
+
+**Experimental flag for continued execution:**
+
+Set `experimental.continue_loop_on_deny` to allow execution to continue even when doom_loop is denied:
+
+```json
+{
+  "experimental": {
+    "continue_loop_on_deny": true
+  }
+}
+```
+
+---
+
+### User interaction when `ask` is configured
+
+When doom_loop triggers with action set to `ask`, the user sees a prompt with three options:
+
+**User response options:**
+
+- **Once**: Allows this request to execute, blocks repeats. Will ask again on the next identical request (includes 1 hour TTL tracking).
+- **Always**: Allows this and all future identical requests for the rest of the session. No more prompts until session ends.
+- **Block**: Prevents the calls and stops execution of that sequence. Agent receives an error message.
+
+---
+
+### Scope and limitations
+
+Doom loop checks are **per-message**, not per-session lifetime. Each conversation message is evaluated independently. Identical tool calls in separate messages do not trigger the protection.
+
+**What doom_loop does NOT catch:**
+
+- Different inputs: Calls with varying parameters pass through unchecked
+- Non-consecutive repeats: If a different tool is called between repeats, the counter resets
+- Across messages: Repeats spanning multiple conversation turns are not detected
+- Different tool names: Only exact tool name matches count
+
+---
+
 ### Supported Permissions
 
 Permissions control what an agent is allowed to do. They can be set to "allow", "ask", or "deny".
 
 | Permission            | Description                                                                                            | Plugin / MCP                |
-|-----------------------|:-------------------------------------------------------------------------------------------------------|:----------------------------|
+| --------------------- | :----------------------------------------------------------------------------------------------------- | :-------------------------- |
 | bash                  | Running shell commands. Matches the command string.                                                    | build-in                    |
-| chrome_*              | Chrome MCP server.                                                                                     | chrome-devtools-mcp         |
+| chrome\_\*            | Chrome MCP server.                                                                                     | chrome-devtools-mcp         |
 | codesearch            | Searching for code patterns across the web or large repositories.                                      | build-in                    |
-| context7_*            | Context7 MCP server.                                                                                   | context7-mcp                |
+| context7\_\*          | Context7 MCP server.                                                                                   | context7-mcp                |
 | doom_loop             | Safety guard triggered when the same tool call repeats 3+ times with identical input.                  | build-in                    |
 | edit                  | All file modifications. Covers edit, write, patch, and multiedit tools. Matches against the file path. | build-in                    |
-| excel_*               | Excel MCP server.                                                                                      | excel-mcp-server            |
+| excel\_\*             | Excel MCP server.                                                                                      | excel-mcp-server            |
 | external_directory    | Safety guard triggered when a tool accesses paths outside the project root.                            | build-in                    |
-| filesystem_*          | Filesystem MCP server.                                                                                 | mcp-filesystem              |
+| filesystem\_\*        | Filesystem MCP server.                                                                                 | mcp-filesystem              |
 | git_git_add           | Stages files for commit.                                                                               | mcp-server-git              |
 | git_git_branch        | Lists branches (local/remote/all).                                                                     | mcp-server-git              |
 | git_git_checkout      | Switches branches.                                                                                     | mcp-server-git              |
@@ -383,7 +552,6 @@ Permissions control what an agent is allowed to do. They can be set to "allow", 
 | question              | Asking the user for clarification or input via the UI.                                                 | build-in                    |
 | read                  | Reading file contents. Matches against the file path.                                                  | build-in                    |
 | skill                 | Loading specialized instructions/patterns. Matches the skill name.                                     | build-in                    |
-| skill_*               | Skill management and discovery (`use`, `find`, `resource`).                                            | @zenobius/opencode-skillful |
 | submit_plan           | Submit a plan for interactive user review with annotations. Plannotator UI opens for plan approval.    | plannotator                 |
 | task                  | Launching subagents. Matches the subagent name/type.                                                   | build-in                    |
 | todoread              | Reading the project's todo list.                                                                       | build-in                    |
@@ -509,7 +677,7 @@ When an agent do not have access to a tool, e.g. `some_tool: false`, then the ag
 Opencode distinguishes between generic web fetching and systematic web searching. Search capabilities are typically provided by MCP servers or plugins.
 
 | Tool Category      | Prefix / Name   | Source                      | Description                                                                           |
-|:-------------------|:----------------|:----------------------------|:--------------------------------------------------------------------------------------|
+| :----------------- | :-------------- | :-------------------------- | :------------------------------------------------------------------------------------ |
 | **MCP Search**     | `websearch_*`   | `open-websearch` MCP        | Multi-engine search (Bing, DuckDuckGo, etc.) and specialized scrapers (GitHub, CSDN). |
 | **Plugin Search**  | `google_search` | `opencode-antigravity-auth` | High-quality web search using Google Search with citations.                           |
 | **Built-in Fetch** | `webfetch`      | Native Opencode             | Retrieves the content of a specific URL in markdown or text format.                   |
@@ -535,6 +703,7 @@ The Plannotator plugin automatically injects `submit_plan` instructions into the
 ```markdown
 When you have completed your plan, you MUST call the `submit_plan` tool to submit it for user review.
 The user will be able to:
+
 - Review your plan visually in a dedicated UI
 - Annotate specific sections with feedback
 - Approve the plan to proceed with implementation
@@ -547,6 +716,7 @@ Do NOT proceed with implementation until your plan is approved.
 ```
 
 **Tool Signature:**
+
 ```typescript
 submit_plan(
   plan: string,           // The complete implementation plan in markdown format
@@ -573,6 +743,7 @@ When the user approves the plan in the UI:
 4. **Next conversation turn** starts with the new agent ready to implement
 
 **Example approval response:**
+
 ```
 Plan approved!
 
@@ -592,6 +763,7 @@ When the user rejects the plan with feedback:
 4. **Agent calls `submit_plan` again** with the revised plan
 
 **Example denial response:**
+
 ```
 Plan needs revision.
 Saved to: ~/.local/share/opencode/plans/api-implementation-2024-02-09-rejected.md
