@@ -233,11 +233,13 @@ See [SECURITY.md](SECURITY.md) for details.
 - [Security Documentation](SECURITY.md) - Read to understand security
 ```
 
+Keep the `AGENTS.md` very lean.
+
 ## Content Rules
 - **README.md**: Tutorial style, human-readable, < 700 lines
 - **AGENTS.md**: Concise, LLM-optimized index, < 100 lines
 - **Mermaid diagrams**: Required for architecture and integrations
-- **Links**: Relative markdown links to existing docs and source files
+- **Links**: Relative markdown links to existing md docs
 - **Cleanup**: Remove markdown links to md files and source files that no longer exist
 - **No duplication**: Link to other docs instead of repeating
 - **No skills**: Never mention, list, or link to skill files in README.md or AGENTS.md — skills are auto-loaded into LLM context memory

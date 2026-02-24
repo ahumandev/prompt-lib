@@ -341,181 +341,12 @@ flowchart LR
 
 ## Tools
 
-## Doom loop permissions
-
-### What is doom_loop?
-
-Doom loop is a safety mechanism that detects when the same tool is called 3+ consecutive times with identical input within a single message. It uses JSON.stringify for deep comparison of tool inputs, ensuring exact matches are caught.
-
-The threshold is 3 identical consecutive calls. If exceeded, the permission system enforces the configured action for that message.
-
----
-
-### Key concept: Config rules vs user responses
-
-Doom loop actions fall into two categories:
-
-**Config Rules** (static, live in `opencode.jsonc` or agent markdown, set once):
-
-- `allow` — Always permits the repeated calls
-- `ask` — Always prompts the user when triggered
-
-**User Responses** (dynamic, chosen by user when prompted):
-
-- `once` — Allows THIS request only, will ask again on next identical call
-- `always` — Allows this and all future identical calls for the rest of this session
-
----
-
-### Scope and lifetime table
-
-| Action   | Type          | Scope/Lifetime                   | Re-triggers? | When?                                        |
-| :------- | :------------ | :------------------------------- | :----------- | :------------------------------------------- |
-| `allow`  | Config Rule   | Permanent (until config changes) | Never        | Never; repeats always auto-allow             |
-| `ask`    | Config Rule   | Permanent (until config changes) | Always       | On every identical repeated call             |
-| `once`   | User Response | Per-Request (1 hour TTL)         | Yes          | After 1 hour or next session                 |
-| `always` | User Response | Per-Session only                 | Never        | Never (session-local; resets on new session) |
-
----
-
-### Permission actions explained
-
-| Action   | Type          | What it does                              | User sees?              |
-| :------- | :------------ | :---------------------------------------- | :---------------------- |
-| `allow`  | Config Rule   | Repeats execute immediately, no prompt    | Nothing                 |
-| `deny`   | Config Rule   | Repeats are blocked immediately           | Error message           |
-| `ask`    | Config Rule   | Prompts user each time limit is hit       | Permission dialog       |
-| `once`   | User Response | Allows this one execution, blocks repeats | Nothing (dialog closed) |
-| `always` | User Response | Allows all future identical calls today   | Nothing (dialog closed) |
-
-**Default behavior:** `ask` (prompts the user when doom_loop is triggered)
-
----
-
-### Practical example scenarios
-
-**Scenario 1: Config says `ask`, user clicks "once"**
-
-```
-Agent tries to call the same tool 3+ times with identical input
-↓
-Permission is "ask" → user sees prompt dialog
-↓
-User clicks "once"
-↓
-This request executes successfully
-↓
-Next message with identical request → prompts user again
-↓
-User clicks "once" → executes again
-↓
-(Process repeats for each new request)
-```
-
-**Scenario 2: Config says `ask`, user clicks "always"**
-
-```
-Agent tries to call the same tool 3+ times with identical input
-↓
-Permission is "ask" → user sees prompt dialog
-↓
-User clicks "always"
-↓
-This request executes successfully
-↓
-Next identical request in same session → auto-allows, no prompt
-↓
-Next identical request in same session → auto-allows, no prompt
-↓
-(New session starts → reverts to asking)
-```
-
-**Scenario 3: Config says `allow`**
-
-```
-Agent tries to call the same tool 3+ times with identical input
-↓
-Permission is "allow" (static config rule)
-↓
-Repeats execute immediately, no prompt, no user choice
-↓
-(Same behavior forever, unless you change opencode.jsonc)
-```
-
----
-
-### How to configure doom_loop permissions
-
-Configure doom_loop in an agent's YAML frontmatter or in `opencode.jsonc`:
-
-**Agent markdown file** (`.md`):
-
-```yaml
----
-permission:
-  doom_loop: allow
----
-```
-
-**In opencode.jsonc** for global config:
-
-```json
-{
-  "agents": {
-    "my_agent": {
-      "permission": {
-        "doom_loop": "deny"
-      }
-    }
-  }
-}
-```
-
-**Experimental flag for continued execution:**
-
-Set `experimental.continue_loop_on_deny` to allow execution to continue even when doom_loop is denied:
-
-```json
-{
-  "experimental": {
-    "continue_loop_on_deny": true
-  }
-}
-```
-
----
-
-### User interaction when `ask` is configured
-
-When doom_loop triggers with action set to `ask`, the user sees a prompt with three options:
-
-**User response options:**
-
-- **Once**: Allows this request to execute, blocks repeats. Will ask again on the next identical request (includes 1 hour TTL tracking).
-- **Always**: Allows this and all future identical requests for the rest of the session. No more prompts until session ends.
-- **Block**: Prevents the calls and stops execution of that sequence. Agent receives an error message.
-
----
-
-### Scope and limitations
-
-Doom loop checks are **per-message**, not per-session lifetime. Each conversation message is evaluated independently. Identical tool calls in separate messages do not trigger the protection.
-
-**What doom_loop does NOT catch:**
-
-- Different inputs: Calls with varying parameters pass through unchecked
-- Non-consecutive repeats: If a different tool is called between repeats, the counter resets
-- Across messages: Repeats spanning multiple conversation turns are not detected
-- Different tool names: Only exact tool name matches count
-
----
-
 ### Supported Permissions
 
 Permissions control what an agent is allowed to do. They can be set to "allow", "ask", or "deny".
 
 | Permission            | Description                                                                                            | Plugin / MCP                |
-| --------------------- | :----------------------------------------------------------------------------------------------------- | :-------------------------- |
+|-----------------------|:-------------------------------------------------------------------------------------------------------|:----------------------------|
 | bash                  | Running shell commands. Matches the command string.                                                    | build-in                    |
 | chrome\_\*            | Chrome MCP server.                                                                                     | chrome-devtools-mcp         |
 | codesearch            | Searching for code patterns across the web or large repositories.                                      | build-in                    |
@@ -671,6 +502,35 @@ To avoid ambiguity, OpenCode agents use the `"*"` key to set the baseline:
 When an agent do not have access to a tool, e.g. `some_tool: false`, then the agent's context is not cluttered with that tools description. The agent is unaware of the tool even when then MCP server is enabled.
 
 ### Special Tools
+
+### Doom loop permissions
+
+#### What is doom_loop?
+
+Doom loop is a safety mechanism that detects when the same tool is called 3+ consecutive times with identical input within a single message. It uses `JSON.stringify` for deep comparison of tool inputs.
+
+The threshold is 3 identical consecutive calls. When exceeded, the configured permission action is applied.
+
+#### Permission config values
+
+There are exactly three valid values for the `doom_loop` permission in `opencode.jsonc` or agent frontmatter:
+
+| Value   | Effect                                                              | Default? |
+|:--------|:--------------------------------------------------------------------|:---------|
+| `allow` | Silently permits the repeated calls, no prompt, execution continues |          |
+| `deny`  | Immediately blocks execution and returns an error to the agent      |          |
+| `ask`   | Pauses execution and prompts the user to decide                     | ✅ Yes    |
+
+#### Scope and limitations
+
+Doom loop checks are **per-message**, not per-session. Each message is evaluated independently — identical tool calls across separate messages do not trigger the protection.
+
+**What doom_loop does NOT catch:**
+
+- Calls with different inputs (even slightly different)
+- Non-consecutive repeats (counter resets if a different tool is called between repeats)
+- Repeats spanning multiple conversation turns
+- Different tool names calling the same underlying logic
 
 #### Search Tools and Providers
 
