@@ -7,16 +7,12 @@
     },
     "code": {
     },
-    "deliberate": {
-    },
     "document": {
     },
     "general": {
       "disable": true // Too general
     },
     "human": {
-    },
-    "os": {
     },
     "plan": {
     },
@@ -25,52 +21,231 @@
     },
     "troubleshoot": {
     },
-   
+
+    //     "browser": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "document/api": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "document/assets": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "document/naming": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "document/standards": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "document/data": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "document/error": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "document/install": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "document/integrations": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "document/readme": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "document/security": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "document/style": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "excel": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "explore": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "git": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "md": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "os": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     },
+    //     "websearch": {
+    //       "model": "google/gemini-3-flash-preview"
+    //     }
+
     "browser": {
-      "model": "litellm/gpt-5-mini"
+      "model": "google/antigravity-gemini-3-flash"
     },
     "document/api": {
-      "model": "litellm/gpt-5-mini"
+      "model": "google/antigravity-gemini-3-flash"
     },
-    "document/contributing": {
-      "model": "litellm/gpt-5-mini"
+    "document/assets": {
+      "model": "google/antigravity-gemini-3-flash"
+    },
+    "document/naming": {
+      "model": "google/antigravity-gemini-3-flash"
+    },
+    "document/standards": {
+      "model": "google/antigravity-gemini-3-flash"
     },
     "document/data": {
-      "model": "litellm/gpt-5-mini"
+      "model": "google/antigravity-gemini-3-flash"
+    },
+    "document/error": {
+      "model": "google/antigravity-gemini-3-flash"
     },
     "document/install": {
-      "model": "litellm/gpt-5-mini"
+      "model": "google/antigravity-gemini-3-flash"
     },
     "document/integrations": {
-      "model": "litellm/gpt-5-mini"
+      "model": "google/antigravity-gemini-3-flash"
     },
     "document/readme": {
-      "model": "litellm/gpt-5-mini"
+      "model": "google/antigravity-gemini-3-flash"
     },
     "document/security": {
-      "model": "litellm/gpt-5-mini"
+      "model": "google/antigravity-gemini-3-flash"
+    },
+    "document/style": {
+      "model": "google/antigravity-gemini-3-flash"
     },
     "excel": {
-      "model": "litellm/gpt-5-mini"
+      "model": "google/antigravity-gemini-3-flash"
     },
     "explore": {
-      "model": "litellm/gpt-5-mini"
+      "model": "google/antigravity-gemini-3-flash"
     },
     "git": {
-      "model": "litellm/gpt-5-mini"
+      "model": "google/antigravity-gemini-3-flash"
     },
     "md": {
-      "model": "litellm/gpt-5-mini"
+      "model": "google/antigravity-gemini-3-flash"
+    },
+    "os": {
+      "model": "google/antigravity-gemini-3-flash"
     },
     "websearch": {
-      "model": "litellm/gpt-5-mini"
-    },
+      "model": "google/antigravity-gemini-3-flash"
+    }
+
+    //      "browser": {
+    //       "model": "anthropic/claude-haiku-4-5"
+    //      },
+    //      "document/api": {
+    //        "model": "litellm/gpt-5-mini" // Anthropic models tend to write to the wrong skill files
+    //      },
+    //      "document/assets": {
+    //        "model": "litellm/gpt-5-mini" // Anthropic models tend to write to the wrong skill files
+    //      },
+    //      "document/naming": {
+    //       "model": "anthropic/claude-haiku-4-5"
+    //      },
+    //      "document/standards": {
+    //        "model": "litellm/gpt-5-mini" // Anthropic models tend to write to the wrong skill files
+    //      },
+    //      "document/data": {
+    //        "model": "litellm/gpt-5-mini" // Anthropic models tend to write to the wrong skill files
+    //      },
+    //      "document/install": {
+    //       "model": "anthropic/claude-haiku-4-5"
+    //      },
+    //      "document/integrations": {
+    //        "model": "litellm/gpt-5-mini" // Anthropic models tend to write to the wrong skill files
+    //      },
+    //      "document/readme": {
+    //       "model": "anthropic/claude-haiku-4-5"
+    //      },
+    //      "document/security": {
+    //       "model": "anthropic/claude-haiku-4-5"
+    //      },
+    //      "document/style": {
+    //        "model": "litellm/gpt-5-mini" // Anthropic models tend to write to the wrong skill files
+    //      },
+    //      "excel": {
+    //       "model": "anthropic/claude-haiku-4-5"
+    //      },
+    //      "explore": {
+    //       "model": "anthropic/claude-haiku-4-5"
+    //      },
+    //      "git": {
+    //       "model": "anthropic/claude-haiku-4-5"
+    //      },
+    //      "md": {
+    //       "model": "anthropic/claude-haiku-4-5"
+    //      },
+    //      "os": {
+    //       "model": "anthropic/claude-haiku-4-5"
+    //      },
+    //      "websearch": {
+    //       "model": "anthropic/claude-haiku-4-5"
+    //      }
+
+    //    "browser": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "document/api": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "document/assets": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "document/naming": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "document/standards": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "document/data": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "document/install": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "document/integrations": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "document/readme": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "document/security": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "document/style": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "excel": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "explore": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "git": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "md": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    },
+    //    "os": {
+    //      "model": "litellm/claude-sonnet-4.5" // haiku gets stuck with os prompts
+    //    },
+    //    "websearch": {
+    //      "model": "litellm/claude-haiku-4.5"
+    //    }
   },
-  "enabled_providers": ["anthropic", "litellm", "google", "ollama"],
-  "instructions": ["AGENTS.md", "CLAUDE.md"],
-  "keybinds": {
-    "app_exit": "ctrl+d,<<leader>>q"
-  },
+  "enabled_providers": ["anthropic", "litellm", "google","ollama"],
+  // "experimental": {
+  //   "quotaToast": {
+  //     "enabledProviders": ["google-antigravity"]
+  //   }
+  // },
+  "instructions": [
+    "AGENTS.md",
+    "CLAUDE.md"
+  ],
   "mcp": {
     "chrome": {
       "type": "local",
@@ -85,7 +260,7 @@
         "npx",
         "-y",
         "chrome-devtools-mcp@latest",
-        "--viewport=800x600"
+        "--viewport=1024x768"
       ]
     },
     "context7": {
@@ -127,7 +302,11 @@
       ]
     }
   },
-  "model": "google/antigravity-gemini-3-pro",
+
+  "model": "antigravity-gemini-3.1-pro",
+  // "model": "google/gemini-3-pro-preview",
+  //  "model": "anthropic/claude-sonnet-4-6",
+  //  "model":"github_copilot/claude-sonnet-4.5",
   "small_model": "litellm/gpt-5-mini",
   "permission": {
     // Only deny non-standard tools
@@ -140,10 +319,10 @@
     "websearch_*": "deny"
   },
   "plugin": [
-    "opencode-pty",
     "@plannotator/opencode",
-//    "@zenobius/opencode-skillful",
-    "opencode-antigravity-auth@beta"
+    "opencode-antigravity-auth@latest",
+    //    "opencode-antigravity-quota@latest",
+    "opencode-pty"
   ],
   "provider": {
     "litellm": {
@@ -240,13 +419,37 @@
         },
         "gemini-3-flash-preview": {
           "name": "Gemini 3 Flash Preview (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65536 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "gemini-3-pro-preview": {
           "name": "Gemini 3 Pro Preview (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65535 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         }
       }
     },
@@ -254,71 +457,232 @@
       "models": {
         "antigravity-gemini-3-pro": {
           "name": "Gemini 3 Pro (Antigravity)",
-          "limit": { "context": 1048576, "output": 65535 },
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          },
           "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
           },
           "variants": {
-            "low": { "thinkingLevel": "low" },
-            "high": { "thinkingLevel": "high" }
+            "low": {
+              "thinkingLevel": "low"
+            },
+            "high": {
+              "thinkingLevel": "high"
+            }
+          }
+        },
+        "antigravity-gemini-3.1-pro": {
+          "name": "Gemini 3.1 Pro (Antigravity)",
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": {
+            "low": {
+              "thinkingLevel": "low"
+            },
+            "high": {
+              "thinkingLevel": "high"
+            }
           }
         },
         "antigravity-gemini-3-flash": {
           "name": "Gemini 3 Flash (Antigravity)",
-          "limit": { "context": 1048576, "output": 65536 },
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
           "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
           },
           "variants": {
-            "minimal": { "thinkingLevel": "minimal" },
-            "low": { "thinkingLevel": "low" },
-            "medium": { "thinkingLevel": "medium" },
-            "high": { "thinkingLevel": "high" }
+            "minimal": {
+              "thinkingLevel": "minimal"
+            },
+            "low": {
+              "thinkingLevel": "low"
+            },
+            "medium": {
+              "thinkingLevel": "medium"
+            },
+            "high": {
+              "thinkingLevel": "high"
+            }
           }
         },
-        "antigravity-claude-sonnet-4.5": {
-          "name": "Claude Sonnet 4.5 (Antigravity)",
-          "limit": { "context": 200000, "output": 64000 },
+        "antigravity-claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (Antigravity)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          },
           "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
           }
         },
-        "antigravity-claude-sonnet-4.5-thinking": {
-          "name": "Claude Sonnet 4.5 Thinking (Antigravity)",
-          "limit": { "context": 200000, "output": 64000 },
+        "antigravity-claude-opus-4-6-thinking": {
+          "name": "Claude Opus 4.6 Thinking (Antigravity)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          },
           "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
           },
           "variants": {
-            "low": { "thinkingConfig": { "thinkingBudget": 8192 } },
-            "max": { "thinkingConfig": { "thinkingBudget": 32768 } }
+            "low": {
+              "thinkingConfig": {
+                "thinkingBudget": 8192
+              }
+            },
+            "max": {
+              "thinkingConfig": {
+                "thinkingBudget": 32768
+              }
+            }
           }
         },
-        "antigravity-claude-opus-4.5-thinking": {
-          "name": "Claude Opus 4.5 Thinking (Antigravity)",
-          "limit": { "context": 200000, "output": 64000 },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
+        "gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash (Gemini CLI)",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
           },
-          "variants": {
-            "low": { "thinkingConfig": { "thinkingBudget": 8192 } },
-            "max": { "thinkingConfig": { "thinkingBudget": 32768 } }
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "gemini-2.5-pro": {
+          "name": "Gemini 2.5 Pro (Gemini CLI)",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
           }
         },
         "gemini-3-flash-preview": {
           "name": "Gemini 3 Flash Preview (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65536 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "gemini-3-pro-preview": {
           "name": "Gemini 3 Pro Preview (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65535 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "gemini-3.1-pro-preview": {
+          "name": "Gemini 3.1 Pro Preview (Gemini CLI)",
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "gemini-3.1-pro-preview-customtools": {
+          "name": "Gemini 3.1 Pro Preview Custom Tools (Gemini CLI)",
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         }
       }
     },
@@ -368,5 +732,5 @@
       }
     }
   },
-  "share": "disabled",
+  "share": "disabled"
 }
