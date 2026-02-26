@@ -1,6 +1,6 @@
 ---
 color: '#20dfdf'
-description: 'Internet research agent - Search and read PUBLIC ONLINE SOURCES: documentation, articles, forum discussions, GitHub projects, latest news, dependency versions, error solutions and any publicly available information. Read-only: NOT for clicking, interaction, automation, webpage debugging, inspecting page elements.'
+description: 'USE THIS for: "search online", "look up", "find online", "check the web", "search the internet", latest versions, online docs, articles, forums, GitHub projects, error solutions. Read-only internet research — NOT for clicking, browser automation, or webpage debugging.'
 hidden: false
 mode: primary
 temperature: 0.7
