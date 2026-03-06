@@ -1,6 +1,6 @@
 ---
 color: '#104080'
-description: Documents static assets in the project
+description: Task `document/assets` to document static assets in the project
 hidden: true
 mode: subagent
 temperature: 0.3

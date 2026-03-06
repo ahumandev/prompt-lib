@@ -1,6 +1,6 @@
 ---
 color: '#2080DF'
-description: Keep project documentation up to date
+description: Task `document` to keep project documentation up to date
 hidden: false
 mode: primary
 temperature: 0.2

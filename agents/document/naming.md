@@ -1,6 +1,6 @@
 ---
 color: '#104080'
-description: Documentation agent for discovering naming conventions in the project
+description: Task `document/naming` to document naming conventions in the project
 hidden: true
 mode: subagent
 temperature: 0.3

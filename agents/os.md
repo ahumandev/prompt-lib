@@ -1,6 +1,6 @@
 ---
 color: '#ff0000'
-description: OS Operator - Execute operating system commands and administration tasks; Not intended for local codebase explorarion, not intended for browser automation
+description: Task `os` to execute scripts, bash commands commands, or administrate operating system; Not intended for read/write local codebase, not intended for browser automation, not intended for any online tasks
 mode: subagent
 temperature: 0.1
 permission:

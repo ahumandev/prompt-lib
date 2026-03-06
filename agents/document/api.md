@@ -1,6 +1,6 @@
 ---
 color: '#104080'
-description: Documentation agent for API endpoints
+description: Task `document/api` to document API endpoints
 hidden: true
 mode: subagent
 temperature: 0.3

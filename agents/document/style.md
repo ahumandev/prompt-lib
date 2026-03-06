@@ -1,6 +1,6 @@
 ---
 color: '#104080'
-description: Document frontend styling patterns and architecture
+description: Task `document/style` to document frontend styling patterns and architecture
 hidden: true
 mode: subagent
 temperature: 0.3

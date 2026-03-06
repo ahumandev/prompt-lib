@@ -1,6 +1,6 @@
 ---
 color: '#104080'
-description: Documentation agent for data entities
+description: Task `document/data` to document data entities or persistence
 hidden: true
 mode: subagent
 temperature: 0.3

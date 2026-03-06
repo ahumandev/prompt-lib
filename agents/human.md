@@ -1,6 +1,6 @@
 ---
 color: '#ff3fdf'
-description: 'Human Delegate - For tasks requiring MANUAL USER ACTION ONLY: entering
+description: 'Task `human` to delegate tasks requiring MANUAL HUMAN ACTION ONLY: entering
   passwords/keys into UIs, accessing SSO/VPN portals, dangerous production operations
   better handled by a responsible human, or expensive operations. NOT for tool permissions
   (use built-in prompts), NOT for safe local operations (reading files, running builds),

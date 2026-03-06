@@ -1,6 +1,6 @@
 ---
 color: "#72d560"
-description: Excel Expert - Handle Excel workbook manipulations or data retrievals
+description: Task `excel` to handle Excel workbook manipulations or data retrievals
 mode: subagent
 permission:
   '*': deny

@@ -1,6 +1,6 @@
 ---
 color: '#DFDFDF'
-description: Builder - Build planned solutions
+description: Use this agent to build planned solutions
   working
 hidden: false
 mode: primary
@@ -15,8 +15,6 @@ permission:
     general: deny
     plan: deny
 ---
-
-<instructions>
 
 # Build Agent
 

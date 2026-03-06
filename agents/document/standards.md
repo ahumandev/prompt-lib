@@ -1,6 +1,6 @@
 ---
 color: '#104080'
-description: Documentation agent for discovering uncommon standards in the project
+description: Task `document/standards` to document uncommon standards in the project
 hidden: true
 mode: subagent
 temperature: 0.3
@@ -164,7 +164,7 @@ All documented standards must be scoped to this subproject only. Do not scan or 
 ## SKILL.md Structure
 
 ### `.opencode/skills/code/standards/SKILL.md`
-(Maximum 250 lines total)
+(Maximum 400 lines total)
 ```markdown
 ---
 name: code_standards
@@ -209,4 +209,5 @@ Files:
 
 ## Quality Checklist
 - [ ] Analyzed actual source files (provide examples)
-- [ ] Files written to `.opencode/skills/code/`
+- [ ] Files written to `.opencode/skills/code/standards/SKILL.md`
+- [ ] Final `.opencode/skills/code/standards/SKILL.md` < 400 lines

@@ -1,6 +1,6 @@
 ---
 color: '#104080'
-description: Documentation agent for external integrations
+description: Task `document/integrations` to document external integrations
 hidden: true
 mode: subagent
 temperature: 0.3

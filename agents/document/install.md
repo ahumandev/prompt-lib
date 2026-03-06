@@ -51,11 +51,24 @@ Only document **non-obvious** information: the *why*, the *intent*, the *constra
 2. **Extract** install/build/test/run commands from build files
 3. **Identify** prerequisites, versions, non-standard dependencies
 4. **Discover** default ports/URLs from config files or code
-5. **Check & Write** `./INSTALL.md`:
+5. **Applicability check — do this first**
+   Not every project warrants its own INSTALL.md. Before writing anything, assess:
+
+   | Project type | INSTALL.md needed? |
+   |-----------------|-------------------|
+   | Runnable application (server, CLI, desktop app) | ✅ Yes |
+   | Frontend app with its own dev server | ✅ Yes |
+   | Library / shared module with non-obvious build steps | ✅ Yes |
+   | Pure library with standard `npm install` / `mvn install` | ❌ No |
+   | Module with no standalone run/test commands | ❌ No |
+
+   If INSTALL.md is not needed for this project, report that back to the orchestrator and **do not create the file**.
+
+6. **Check & Write** `./INSTALL.md`:
    - Check if `./INSTALL.md` already exists in the project root.
    - If it **does exist**, read it first to preserve any manually-written notes or non-obvious context, then update only the outdated sections and remove any deprecated content. Do not overwrite the file from scratch.
    - If it **does not exist**, create it fresh with the discovered information.
-6. **Report** back to orchestrator
+7. **Report** back to orchestrator
 
 ## Monorepo / Subproject Mode
 
@@ -151,3 +164,5 @@ Commands:
 - [ ] Prerequisites with versions if specified
 - [ ] Keep file under 400 lines.
 - [ ] Non-standard dependencies explained
+
+Only allowed md files are AGENTS.md, INSTALL.md, README.md or other md files that pre-exited. The agent should NOT create more md files than that.

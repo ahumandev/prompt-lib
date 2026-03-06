@@ -1,6 +1,6 @@
 ---
 color: '#DF20DF'
-description: Interactive Planning - Interview user, research problem, and create implementation plans
+description: Task `plan` to interview user, research problem, and create implementation plans
 hidden: false
 mode: primary
 permission:

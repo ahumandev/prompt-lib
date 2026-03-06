@@ -1,7 +1,6 @@
 ---
 color: '#DF8040'
-description: Troubleshoot - Iterative problem solver that fixes issues until verified
-  working
+description: Task `troubleshoot` to troubleshoot problems or to fix issues.
 hidden: false
 mode: subagent
 temperature: 0.3

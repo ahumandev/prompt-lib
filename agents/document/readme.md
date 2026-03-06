@@ -1,6 +1,6 @@
 ---
 color: '#104080'
-description: Documentation agent for README.md and AGENTS.md
+description: Task `document/readme` to document README.md and AGENTS.md
 hidden: true
 mode: subagent
 temperature: 0.3
@@ -184,6 +184,7 @@ ONLY include relevant and known sections.
 ## Installation & Usage
 [Report provided by the `document/install` subagent]
 
+[Link to INSTALL.md only if it exists, verify with glob/read]
 See [INSTALL.md](INSTALL.md) for details.
 
 ## Architecture
@@ -204,6 +205,7 @@ See [INSTALL.md](INSTALL.md) for details.
 
 ### Security
 [Report provided by the `document/security` subagent]
+[Link to SECURITY.md only if it exists, verify with glob/read]
 See [SECURITY.md](SECURITY.md) for details.
 
 ## Implementation Details
@@ -229,8 +231,8 @@ See [SECURITY.md](SECURITY.md) for details.
 [Project purpose < 20 words]
 
 ## *REQUIRED* Reading
-- [Installation and Usage Documentation](INSTALL.md) - Read to understand how to start or test the project
-- [Security Documentation](SECURITY.md) - Read to understand security
+- [Installation and Usage Documentation](INSTALL.md) - Read to understand how to start or test the project (ONLY add if INSTALL.md exists)
+- [Security Documentation](SECURITY.md) - Read to understand security (ONLY add if SECURITY.md exists)
 ```
 
 Keep the `AGENTS.md` very lean.
@@ -319,3 +321,5 @@ Files:
 - [ ] All relationship arrows confirmed from source (not invented)
 - [ ] No subproject implementation details in root README.md
 - [ ] Root AGENTS.md contains ONLY subproject links + < 10 word descriptions
+
+Only allowed md files are AGENTS.md, INSTALL.md, README.md or other md files that pre-exited. The agent should NOT create more md files than that.

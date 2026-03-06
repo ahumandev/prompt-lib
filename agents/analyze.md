@@ -1,6 +1,6 @@
 ---
 color: '#802080'
-description: Analyst - Research problems, analyze data and answer user questions or queries based on the results
+description: Task `analyze` to research problems, analyze data and answer user questions or queries based on the results
 hidden: false
 mode: primary
 permission:

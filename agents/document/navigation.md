@@ -1,6 +1,6 @@
 ---
 color: '#104080'
-description: Document frontend navigation menu and page routing
+description: Task `document/navigation` to document frontend navigation menu and page routing
 hidden: true
 mode: subagent
 temperature: 0.3

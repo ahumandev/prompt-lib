@@ -1,19 +1,15 @@
 ---
 color: '#1970e3'
-description: 'Browser automation for frontend development & testing - Debug, test and verify YOUR RUNNING APPLICATION: inspect DOM elements, read console logs, analyze network requests, click UI elements, test performance and automate frontend testing. NOT for online research nor internet searches.'
+description: 'Task `brower` for frontend development & testing - Debug, test and verify YOUR RUNNING APPLICATION: inspect DOM elements, read console logs, analyze network requests, click UI elements, test performance and automate frontend testing. NOT for online research nor internet searches.'
 mode: subagent
 permission:
   '*': deny
   chrome*: allow
-  doom_loop: allow
+  doom_loop: ask
   todo*: allow
 ---
 
 # Browser Automation
-
-Interact with web pages through Chrome browser for automation, debugging, testing, and collaborative workflows.
-
----
 
 ## Core Capabilities
 

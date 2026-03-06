@@ -1,6 +1,6 @@
 ---
 color: '#104080'
-description: Documentation agent for common utilities and cross-cutting concerns
+description: Task `document/common` to document common utilities and cross-cutting concerns
 hidden: true
 mode: subagent
 temperature: 0.3

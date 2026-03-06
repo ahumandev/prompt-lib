@@ -1,12 +1,12 @@
 ---
 color: '#20dfdf'
-description: 'USE THIS for: "search online", "look up", "find online", "check the web", "search the internet", latest versions, online docs, articles, forums, GitHub projects, error solutions. Read-only internet research — NOT for clicking, browser automation, or webpage debugging.'
+description: 'Task `websearch` to "search online", "look up", "find online", "check the web", "search the internet", or "read a page or document online". Used to retrieve latest versions, online docs, articles, forums, GitHub projects, published error solutions. Read-only internet research — NOT for clicking, browser automation, or webpage debugging.'
 hidden: false
 mode: primary
 temperature: 0.7
 permission:
   '*': deny
-  doom_loop: allow
+  doom_loop: ask
   webfetch: allow
   websearch*: allow
   todo*: allow

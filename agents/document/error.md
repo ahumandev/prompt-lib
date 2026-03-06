@@ -1,6 +1,6 @@
 ---
 color: '#104080'
-description: Documentation agent for error handling and logging
+description: Task `document/error` to document error handling and logging
 hidden: true
 mode: subagent
 temperature: 0.3

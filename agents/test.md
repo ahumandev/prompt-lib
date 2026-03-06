@@ -1,6 +1,6 @@
 ---
 color: '#20BF20'
-description: Test Writer - Unit test generator to improve code coverage
+description: `Task test` to write unit tests or to improve code coverage
 hidden: false
 mode: primary
 temperature: 0.3
