@@ -390,6 +390,67 @@ Permissions control what an agent is allowed to do. They can be set to "allow", 
 | webfetch              | Fetching content from a URL. Matches the URL.                                                          | build-in                  |
 | websearch             | Performing web searches (e.g., via DuckDuckGo or Exa).                                                 | open-websearch            |
 
+### Tool Descriptions & Context
+
+Tool descriptions are a critical part of the LLM's decision-making process. Understanding how they work helps you write better agents and tools.
+
+#### How Tool Descriptions Are Injected
+
+Tool descriptions are **automatically injected into the agent's context** as part of the complete JSON schema for each tool. This schema includes:
+
+- The tool's **name**
+- The **main description** (what the tool does)
+- The **parameter schemas** (what inputs it accepts and what they mean)
+
+You do **not** need to manually list the purpose of every tool in the agent's system prompt. The LLM receives the full tool definitions directly and uses them to decide when and how to call tools.
+
+#### Writing Effective Tool Descriptions
+
+Proper tool descriptions should be **highly instructive and explicit** rather than just briefly stating what the tool does. The description is your opportunity to guide the model's behavior.
+
+**Best practices:**
+
+1. **Start with action-oriented phrases**: Begin descriptions with phrases like:
+   - "Use this tool to..."
+   - "Useful for when you need to..."
+   - "Call this tool to..."
+
+   This helps the model understand exactly _when_ and _why_ to use the tool.
+
+2. **Be specific about use cases**: Instead of "Search for files", write "Use this tool to find files matching glob patterns (e.g., 'src/components/\*_/_.tsx') when you need to locate specific files in a codebase."
+
+3. **Include constraints directly in the description**: Constraints guide the model's behavior without requiring explicit instructions in the system prompt. Examples:
+   - "Always use absolute paths when specifying file locations."
+   - "This tool only works with files under 10MB. For larger files, use the streaming API."
+   - "Regex patterns must be valid PCRE syntax. Test patterns before using them in production."
+
+4. **Clarify when NOT to use the tool**: If a tool is commonly confused with another, clarify the distinction:
+   - "Use this tool for reading file contents. For listing directory contents, use the `list` tool instead."
+
+5. **Provide context about tool behavior**: Explain what the tool returns and how to interpret results:
+   - "Returns file paths as absolute paths sorted by modification time. Use these paths directly in subsequent tool calls."
+
+#### Example: Well-Written Tool Description
+
+**Poor description:**
+
+```
+"Search for files"
+```
+
+**Good description:**
+
+```
+"Use this tool to find files by glob patterns. Useful when you need to locate specific files in a codebase (e.g., 'src/components/**/*.tsx'). Always use absolute paths in your results. Returns matching file paths sorted by modification time."
+```
+
+#### Why This Matters
+
+- **Clarity**: The model knows exactly when to use the tool
+- **Efficiency**: Fewer incorrect tool calls means faster task completion
+- **Consistency**: Clear descriptions reduce hallucination and unexpected behavior
+- **Maintainability**: Future developers understand the tool's intended use
+
 ### Visibility and Filtering
 
 > [!WARNING]
@@ -503,34 +564,52 @@ When an agent do not have access to a tool, e.g. `some_tool: false`, then the ag
 
 ### Special Tools
 
-### Doom loop permissions
+## Doom Loop Permission
 
-#### What is doom_loop?
+The `doom_loop` permission setting is a safety mechanism designed to detect and prevent infinite tool call loops. It is triggered when an agent calls the exact same tool with identical input **3 consecutive times**.
 
-Doom loop is a safety mechanism that detects when the same tool is called 3+ consecutive times with identical input within a single message. It uses `JSON.stringify` for deep comparison of tool inputs.
+### Available Settings
 
-The threshold is 3 identical consecutive calls. When exceeded, the configured permission action is applied.
+There are three available permission settings for `doom_loop`:
 
-#### Permission config values
+1. **`"ask"` (Default)**
+   - **Behavior**: Execution is paused, and the user is prompted to manually approve or reject the tool call.
+   - **User Options**: When prompted, the user can choose to allow it just this once (`once`), allow it for all future occurrences for that specific tool (`always`), or reject the tool call (`reject`).
 
-There are exactly three valid values for the `doom_loop` permission in `opencode.jsonc` or agent frontmatter:
+2. **`"allow"`**
+   - **Behavior**: Automatically permits the tool call to continue without interruption.
+   - **Effect**: The agent will keep running the same tool with the exact same input. Useful for trusted automation or specific scenarios where identical repeated calls are expected and intended.
 
-| Value   | Effect                                                              | Default? |
-|:--------|:--------------------------------------------------------------------|:---------|
-| `allow` | Silently permits the repeated calls, no prompt, execution continues |          |
-| `deny`  | Immediately blocks execution and returns an error to the agent      |          |
-| `ask`   | Pauses execution and prompts the user to decide                     | ✅ Yes    |
+3. **`"deny"`**
+   - **Behavior**: Automatically rejects the tool call and halts the agent's execution.
+   - **Effect**: A `DeniedError` is thrown, completely stopping the agent from continuing the loop. Useful for strict safety policies.
 
-#### Scope and limitations
+### Example Configuration
 
-Doom loop checks are **per-message**, not per-session. Each message is evaluated independently — identical tool calls across separate messages do not trigger the protection.
+You can configure this in your `opencode.json` file.
 
-**What doom_loop does NOT catch:**
+**Global setting:**
 
-- Calls with different inputs (even slightly different)
-- Non-consecutive repeats (counter resets if a different tool is called between repeats)
-- Repeats spanning multiple conversation turns
-- Different tool names calling the same underlying logic
+```json
+{
+  "permission": {
+    "doom_loop": "ask"
+  }
+}
+```
+
+**Per-tool setting:**
+
+```json
+{
+  "permission": {
+    "doom_loop": {
+      "*": "ask",
+      "specific_tool_name": "allow"
+    }
+  }
+}
+```
 
 #### Search Tools and Providers
 
