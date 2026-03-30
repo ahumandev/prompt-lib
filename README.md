@@ -345,50 +345,70 @@ flowchart LR
 
 Permissions control what an agent is allowed to do. They can be set to "allow", "ask", or "deny".
 
-| Permission            | Description                                                                                            | Plugin / MCP              |
-|-----------------------|:-------------------------------------------------------------------------------------------------------|:--------------------------|
-| bash                  | Running shell commands. Matches the command string.                                                    | build-in                  |
-| chrome\_\*            | Chrome MCP server.                                                                                     | chrome-devtools-mcp       |
-| codesearch            | Searching for code patterns across the web or large repositories.                                      | build-in                  |
-| context7\_\*          | Context7 MCP server.                                                                                   | context7-mcp              |
-| doom_loop             | Safety guard triggered when the same tool call repeats 3+ times with identical input.                  | build-in                  |
-| edit                  | All file modifications. Covers edit, write, patch, and multiedit tools. Matches against the file path. | build-in                  |
-| excel\_\*             | Excel MCP server.                                                                                      | excel-mcp-server          |
-| external_directory    | Safety guard triggered when a tool accesses paths outside the project root.                            | build-in                  |
-| filesystem\_\*        | Filesystem MCP server.                                                                                 | mcp-filesystem            |
-| git_git_add           | Stages files for commit.                                                                               | mcp-server-git            |
-| git_git_branch        | Lists branches (local/remote/all).                                                                     | mcp-server-git            |
-| git_git_checkout      | Switches branches.                                                                                     | mcp-server-git            |
-| git_git_commit        | Creates a new commit with a message.                                                                   | mcp-server-git            |
-| git_git_create_branch | Creates a new branch.                                                                                  | mcp-server-git            |
-| git_git_diff          | Compares branches or commits.                                                                          | mcp-server-git            |
-| git_git_diff_staged   | Shows staged changes.                                                                                  | mcp-server-git            |
-| git_git_diff_unstaged | Shows unstaged changes.                                                                                | mcp-server-git            |
-| git_git_log           | Shows commit history/logs.                                                                             | mcp-server-git            |
-| git_git_reset         | Unstages all changes.                                                                                  | mcp-server-git            |
-| git_git_show          | Shows contents of a specific revision.                                                                 | mcp-server-git            |
-| git_git_status        | Shows the working tree status.                                                                         | mcp-server-git            |
-| glob                  | Finding files using glob patterns. Matches the pattern.                                                | build-in                  |
-| google_search         | Performing web searches using Google Search (via opencode-antigravity-auth).                           | opencode-antigravity-auth |
-| grep                  | Searching file contents with regex. Matches the regex pattern.                                         | build-in                  |
-| list                  | Listing directory contents. Matches the directory path.                                                | build-in                  |
-| lsp                   | Running Language Server Protocol queries.                                                              | build-in                  |
-| plan_enter            | Entering the structured planning mode.                                                                 | build-in                  |
-| plan_exit             | Exiting the planning mode and submitting a plan.                                                       | build-in                  |
-| pty_spawn             | Start a new interactive terminal process.                                                              | opencode-pty              |
-| pty_read              | Read output from a running terminal.                                                                   | opencode-pty              |
-| pty_write             | Send input/commands to a running terminal.                                                             | opencode-pty              |
-| pty_list              | List active PTY sessions.                                                                              | opencode-pty              |
-| pty_kill              | Terminate a PTY session.                                                                               | opencode-pty              |
-| question              | Asking the user for clarification or input via the UI.                                                 | build-in                  |
-| read                  | Reading file contents. Matches against the file path.                                                  | build-in                  |
-| skill                 | Loading specialized instructions/patterns. Matches the skill name.                                     | build-in                  |
-| submit_plan           | Submit a plan for interactive user review with annotations. Plannotator UI opens for plan approval.    | plannotator               |
-| task                  | Launching subagents. Matches the subagent name/type.                                                   | build-in                  |
-| todoread              | Reading the project's todo list.                                                                       | build-in                  |
-| todowrite             | Adding or updating items in the todo list.                                                             | build-in                  |
-| webfetch              | Fetching content from a URL. Matches the URL.                                                          | build-in                  |
-| websearch             | Performing web searches (e.g., via DuckDuckGo or Exa).                                                 | open-websearch            |
+| Permission                          | Description                                                                                            | Plugin / MCP              |
+|-------------------------------------|:-------------------------------------------------------------------------------------------------------|:--------------------------|
+| bash                                | Running shell commands. Matches the command string.                                                    | build-in                  |
+| chrome\_\*                          | Chrome MCP server.                                                                                     | chrome-devtools-mcp       |
+| codesearch                          | Searching for code patterns across the web or large repositories.                                      | build-in                  |
+| context7\_\*                        | Context7 MCP server.                                                                                   | context7-mcp              |
+| doom_loop                           | Safety guard triggered when the same tool call repeats 3+ times with identical input.                  | build-in                  |
+| edit                                | All file modifications. Covers edit, write, patch, and multiedit tools. Matches against the file path. | build-in                  |
+| excel\_\*                           | Excel MCP server.                                                                                      | excel-mcp-server          |
+| external_directory                  | Safety guard triggered when a tool accesses paths outside the project root.                            | build-in                  |
+| filesystem_calculate_directory_size | Calculate total disk usage of a directory.                                                             | mcp-filesystem            |
+| filesystem_compare_files            | Compare two files to identify differences.                                                             | mcp-filesystem            |
+| filesystem_create_directory         | Create a new directory.                                                                                | mcp-filesystem            |
+| filesystem_directory_tree           | Generate a visual tree structure of a directory.                                                       | mcp-filesystem            |
+| filesystem_edit_file                | Perform surgical edits on a file using search/replace patterns.                                        | mcp-filesystem            |
+| filesystem_edit_file_at_line        | Edit or insert content at a specific line number.                                                      | mcp-filesystem            |
+| filesystem_find_duplicate_files     | Identify identical files based on content hash.                                                        | mcp-filesystem            |
+| filesystem_find_empty_directories   | Locate directories containing no files.                                                                | mcp-filesystem            |
+| filesystem_find_large_files         | Locate files exceeding a certain size.                                                                 | mcp-filesystem            |
+| filesystem_get_file_info            | Get metadata about a file (size, permissions, etc.).                                                   | mcp-filesystem            |
+| filesystem_grep_files               | Search for text patterns (regex) within files.                                                         | mcp-filesystem            |
+| filesystem_head_file                | Read the first few lines of a file.                                                                    | mcp-filesystem            |
+| filesystem_list_allowed_directories | List directories the server is permitted to access.                                                    | mcp-filesystem            |
+| filesystem_list_directory           | List the contents of a directory.                                                                      | mcp-filesystem            |
+| filesystem_move_file                | Move or rename a file or directory.                                                                    | mcp-filesystem            |
+| filesystem_read_file                | Read the contents of a file.                                                                           | mcp-filesystem            |
+| filesystem_read_file_lines          | Read specific line ranges from a file.                                                                 | mcp-filesystem            |
+| filesystem_read_multiple_files      | Read the contents of multiple files at once.                                                           | mcp-filesystem            |
+| filesystem_search_files             | Search for files by name patterns.                                                                     | mcp-filesystem            |
+| filesystem_tail_file                | Read the last few lines of a file.                                                                     | mcp-filesystem            |
+| filesystem_write_file               | Create or overwrite a file with specific content.                                                      | mcp-filesystem            |
+| git_git_add                         | Stages files for commit.                                                                               | mcp-server-git            |
+| git_git_branch                      | Lists branches (local/remote/all).                                                                     | mcp-server-git            |
+| git_git_checkout                    | Switches branches.                                                                                     | mcp-server-git            |
+| git_git_commit                      | Creates a new commit with a message.                                                                   | mcp-server-git            |
+| git_git_create_branch               | Creates a new branch.                                                                                  | mcp-server-git            |
+| git_git_diff                        | Compares branches or commits.                                                                          | mcp-server-git            |
+| git_git_diff_staged                 | Shows staged changes.                                                                                  | mcp-server-git            |
+| git_git_diff_unstaged               | Shows unstaged changes.                                                                                | mcp-server-git            |
+| git_git_log                         | Shows commit history/logs.                                                                             | mcp-server-git            |
+| git_git_reset                       | Unstages all changes.                                                                                  | mcp-server-git            |
+| git_git_show                        | Shows contents of a specific revision.                                                                 | mcp-server-git            |
+| git_git_status                      | Shows the working tree status.                                                                         | mcp-server-git            |
+| glob                                | Finding files using glob patterns. Matches the pattern.                                                | build-in                  |
+| google_search                       | Performing web searches using Google Search (via opencode-antigravity-auth).                           | opencode-antigravity-auth |
+| grep                                | Searching file contents with regex. Matches the regex pattern.                                         | build-in                  |
+| list                                | Listing directory contents. Matches the directory path.                                                | build-in                  |
+| lsp                                 | Running Language Server Protocol queries.                                                              | build-in                  |
+| plan_enter                          | Entering the structured planning mode.                                                                 | build-in                  |
+| plan_exit                           | Exiting the planning mode and submitting a plan.                                                       | build-in                  |
+| pty_spawn                           | Start a new interactive terminal process.                                                              | opencode-pty              |
+| pty_read                            | Read output from a running terminal.                                                                   | opencode-pty              |
+| pty_write                           | Send input/commands to a running terminal.                                                             | opencode-pty              |
+| pty_list                            | List active PTY sessions.                                                                              | opencode-pty              |
+| pty_kill                            | Terminate a PTY session.                                                                               | opencode-pty              |
+| question                            | Asking the user for clarification or input via the UI.                                                 | build-in                  |
+| read                                | Reading file contents. Matches against the file path.                                                  | build-in                  |
+| skill                               | Loading specialized instructions/patterns. Matches the skill name.                                     | build-in                  |
+| submit_plan                         | Submit a plan for interactive user review with annotations. Plannotator UI opens for plan approval.    | plannotator               |
+| task                                | Launching subagents. Matches the subagent name/type.                                                   | build-in                  |
+| todoread                            | Reading the project's todo list.                                                                       | build-in                  |
+| todowrite                           | Adding or updating items in the todo list.                                                             | build-in                  |
+| webfetch                            | Fetching content from a URL. Matches the URL.                                                          | build-in                  |
+| websearch                           | Performing web searches (e.g., via DuckDuckGo or Exa).                                                 | open-websearch            |
 
 ### Tool Descriptions & Context
 
@@ -564,11 +584,11 @@ When an agent do not have access to a tool, e.g. `some_tool: false`, then the ag
 
 ### Special Tools
 
-## Doom Loop Permission
+#### Doom Loop Permission
 
 The `doom_loop` permission setting is a safety mechanism designed to detect and prevent infinite tool call loops. It is triggered when an agent calls the exact same tool with identical input **3 consecutive times**.
 
-### Available Settings
+##### Available Settings
 
 There are three available permission settings for `doom_loop`:
 
