@@ -768,6 +768,37 @@ Opencode provides several ways to inject dynamic data into command templates:
 
 Note: Substitution works when a command is invoked via the terminal or when an agent calls the `task()` tool with a `/` prefixed command.
 
+### How Command Templates & Agent System Prompts Work
+
+When a command with an `agent` and `template` is invoked, the `template` field is **not** injected into the system prompt. It becomes the **first user message**. The agent's `prompt` field **replaces** (not appends to) the provider's default system prompt entirely.
+
+#### Full LLM Message Structure
+
+```
+SYSTEM: [agent.prompt  OR  provider default (e.g., anthropic.txt, gemini.txt)]
+      + [environment block: model, cwd, platform, date]
+      + [skills list, if enabled]
+      + [AGENTS.md / CLAUDE.md content]
+
+USER:   [processed command.template content]
+```
+
+#### System Prompt Resolution
+
+| Condition                       | Result                                                             |
+|:--------------------------------|:-------------------------------------------------------------------|
+| `agent.prompt` is set           | Replaces the provider default system prompt entirely               |
+| `agent.prompt` is not set       | Uses provider default (e.g., `anthropic.txt`, `gemini.txt`)        |
+| After agent prompt (or default) | Environment info, skills, and AGENTS.md/CLAUDE.md are **appended** |
+| Command `template`              | Always the **user turn** — never the system turn                   |
+
+#### Source References
+
+- [`src/session/prompt.ts` L1782–1924](https://github.com/anomalyco/opencode) — `SessionPrompt.command()`: resolves agent, processes template as user message parts
+- [`src/session/prompt.ts` L655–661](https://github.com/anomalyco/opencode) — `loop()`: builds system array from environment + skills + AGENTS.md
+- [`src/session/llm.ts` L70–82](https://github.com/anomalyco/opencode) — `LLM.stream()`: assembles final system prompt; `agent.prompt` replaces provider default
+- [`src/agent/agent.ts` L153–222](https://github.com/anomalyco/opencode) — agent definitions; `build` and `plan` agents have no custom `prompt`, so they use the provider default
+
 ### Communication Flow
 
 Communication between agents is strictly **synchronous and hierarchical**:
