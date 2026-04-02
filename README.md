@@ -59,13 +59,13 @@ Opencode automatically discovers agents defined in the standard locations:
 
 #### Automatic Mapping
 
-If an agent is used (e.g., via a subagent call) and is not explicitly configured in `opencode.jsonc`, Opencode will look for a markdown file with the same name in the `agents/` directory.
+If an agent is used (e.g., via a subagent call) and is not explicitly configured in `opencode.jsonc`, Opencode will look for a Markdown file with the same name in the `agents/` directory.
 
 #### When to use `prompt` in `opencode.jsonc`
 
 The `prompt` property in `opencode.jsonc` is **optional** if the file follows the `{name}.md` convention in the `agents/` folder. It is required only if:
 
-1. The markdown file name does not match the agent name.
+1. The Markdown file name does not match the agent name.
 2. The file is located outside the standard `agents/` directory.
 3. You are explicitly configuring a built-in agent to use a custom prompt file.
 
@@ -73,10 +73,10 @@ The `prompt` property in `opencode.jsonc` is **optional** if the file follows th
 
 In Opencode, agent properties can be defined in both the agent's `.md` file (YAML frontmatter) and the `opencode.jsonc` configuration file. The precedence rules are:
 
-1.  **`opencode.jsonc` overrides `.md` files**: Properties defined in `opencode.jsonc` under the `agent` key take precedence over properties defined in the agent's markdown frontmatter.
+1.  **`opencode.jsonc` overrides `.md` files**: Properties defined in `opencode.jsonc` under the `agent` key take precedence over properties defined in the agent's Markdown frontmatter.
 2.  **Merging**: If a property is an object (like `tools` or `permission`), the keys from `opencode.jsonc` are merged with the keys from the `.md` file, with `opencode.jsonc` keys taking priority in case of conflicts.
 
-This allows you to define base agent behavior in the markdown file while overriding specific settings (like the model or tool access) globally or per-environment.
+This allows you to define base agent behavior in the Markdown file while overriding specific settings (like the model or tool access) globally or per-environment.
 
 ### Build-in OpenCode agents
 
@@ -129,7 +129,7 @@ Used by the planning loop to find files and search code.
 
 ```md
 ---
-description: Fast agent specialized for exploring codebases. Use this when you need to quickly find files by patterns (eg. "src/components/**/*.tsx"), search code for keywords (eg. "API endpoints"), or answer questions about the codebase (eg. "how do API endpoints work?"). When calling this agent, specify the desired thoroughness level: "quick" for basic searches, "medium" for moderate exploration, or "very thorough" for comprehensive analysis across multiple locations and naming conventions.
+description: Fast agent specialized for exploring codebases. Use this when you need to quickly find files by patterns (e.g. "src/components/**/*.tsx"), search code for keywords (e.g. "API endpoints"), or answer questions about the codebase (e.g. "how do API endpoints work?"). When calling this agent, specify the desired thoroughness level: "quick" for basic searches, "medium" for moderate exploration, or "very thorough" for comprehensive analysis across multiple locations and naming conventions.
 mode: subagent
 permission:
   "*": deny
@@ -167,11 +167,11 @@ Complete the user's search request efficiently and report your findings clearly.
 
 #### general
 
-Used for complex, multi-step tasks that don't fit into a specific specialized agent.
+Used for complex, multistep tasks that don't fit into a specific specialized agent.
 
 ```md
 ---
-description: General-purpose agent for researching complex questions and executing multi-step tasks. Use this agent to execute multiple units of work in parallel.
+description: General-purpose agent for researching complex questions and executing multistep tasks. Use this agent to execute multiple units of work in parallel.
 mode: subagent
 permission:
   todoread: deny
@@ -648,7 +648,7 @@ Opencode distinguishes between generic web fetching and systematic web searching
 
 The `submit_plan` tool is provided by the **Plannotator plugin** and enables interactive plan review workflows. When an agent calls this tool, a web-based UI opens where users can:
 
-- **Review** the plan in a formatted markdown viewer
+- **Review** the plan in a formatted Markdown viewer
 - **Annotate** specific sections with feedback (deletions, insertions, replacements, comments)
 - **Approve** the plan to proceed with implementation
 - **Request changes** with detailed, annotated feedback
@@ -689,7 +689,7 @@ submit_plan(
 
 2. **Explicit:** Reference the tool explicitly in your agent's custom prompt:
    ```markdown
-   When your plan is complete, call the `submit_plan` tool with your full plan markdown.
+   When your plan is complete, call the `submit_plan` tool with your full plan Markdown.
    ```
 
 ##### What Happens on Approval
@@ -745,7 +745,7 @@ Please revise your plan based on this feedback and call `submit_plan` again when
 3. **No agent callback:** If the user selects a different agent for implementation, the original planning agent does **not** receive notification. The new agent simply begins with "Proceed with implementation" instructions.
 4. **Build agent excluded:** The system prompt injection is skipped for the "build" agent to avoid confusion (build is for implementation, not planning).
 5. **Session requirement:** The user must have an active OpenCode session with the Plannotator plugin installed. Remote/headless environments require `PLANNOTATOR_REMOTE=1` environment variable.
-6. **Port conflicts:** In local mode, plannotator uses a random port. In remote mode (devcontainers, SSH), set `PLANNOTATOR_PORT` to avoid conflicts.
+6. **Port conflicts:** In local mode, Plannotator uses a random port. In remote mode (devcontainers, SSH), set `PLANNOTATOR_PORT` to avoid conflicts.
 
 #### Todo Tools
 

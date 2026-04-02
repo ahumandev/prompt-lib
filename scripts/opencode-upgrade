@@ -1,0 +1,3 @@
+#!/bin/bash
+
+rm -rf ~/.cache/opencode/node_modules ~/.cache/opencode/bun.lock
