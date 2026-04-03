@@ -14,7 +14,7 @@
 The YAML front-matter of an agent's `.md` file (stored in `~/.config/opencode/agents/` or `.opencode/agents/`) supports the following properties:
 
 | Property      | Type    | Description                                                                                 |
-|:--------------|:--------|:--------------------------------------------------------------------------------------------|
+| :------------ | :------ | :------------------------------------------------------------------------------------------ |
 | `color`       | String  | Hex color code for the agent (e.g., `"#E01010"`).                                           |
 | `description` | String  | A brief description of the agent's purpose and usage.                                       |
 | `hidden`      | Boolean | If `true`, the agent is hidden from the UI and agent lists.                                 |
@@ -39,7 +39,7 @@ Ensure the rest of the file content is preserved.
 #### Operational Modes
 
 | Mode       | Description                                                                                                                                                                 |
-|:-----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :--------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `primary`  | A standalone agent capable of initiating and managing a full conversation thread. Used for top-level tasks and build-in system agents.                                      |
 | `subagent` | A specialized agent intended to be called by another agent (e.g., via the `task` tool). These are optimized for specific sub-tasks like exploration, web searching, or git. |
 | `all`      | Can function as both (default for custom agents).                                                                                                                           |
@@ -346,7 +346,7 @@ flowchart LR
 Permissions control what an agent is allowed to do. They can be set to "allow", "ask", or "deny".
 
 | Permission                          | Description                                                                                            | Plugin / MCP              |
-|-------------------------------------|:-------------------------------------------------------------------------------------------------------|:--------------------------|
+| ----------------------------------- | :----------------------------------------------------------------------------------------------------- | :------------------------ |
 | bash                                | Running shell commands. Matches the command string.                                                    | build-in                  |
 | chrome\_\*                          | Chrome MCP server.                                                                                     | chrome-devtools-mcp       |
 | codesearch                          | Searching for code patterns across the web or large repositories.                                      | build-in                  |
@@ -584,6 +584,27 @@ When an agent do not have access to a tool, e.g. `some_tool: false`, then the ag
 
 ### Special Tools
 
+#### Task Tool
+
+The `task` tool launches a subagent for complex, multistep work.
+
+**Input parameters**
+
+- `description` (`string`, required): Short task summary.
+- `prompt` (`string`, required): Task instructions for the subagent.
+- `subagent_type` (`string`, required): Agent type to use.
+- `task_id` (`string`, optional): Resume an existing task session.
+- `command` (`string`, optional): Command that triggered the task.
+
+**Output**
+
+- `title`: The `description` value.
+- `metadata.sessionId`: The task session id, used as `task_id`.
+- `metadata.model`: The model information used for the task.
+- `output`: A formatted string containing `task_id: ...` and `<task_result>...</task_result>`.
+
+The tool wrapper may truncate output and add truncation metadata such as `truncated` and `outputPath`.
+
 #### Doom Loop Permission
 
 The `doom_loop` permission setting is a safety mechanism designed to detect and prevent infinite tool call loops. It is triggered when an agent calls the exact same tool with identical input **3 consecutive times**.
@@ -636,7 +657,7 @@ You can configure this in your `opencode.json` file.
 Opencode distinguishes between generic web fetching and systematic web searching. Search capabilities are typically provided by MCP servers or plugins.
 
 | Tool Category      | Prefix / Name   | Source                      | Description                                                                           |
-|:-------------------|:----------------|:----------------------------|:--------------------------------------------------------------------------------------|
+| :----------------- | :-------------- | :-------------------------- | :------------------------------------------------------------------------------------ |
 | **MCP Search**     | `websearch_*`   | `open-websearch` MCP        | Multi-engine search (Bing, DuckDuckGo, etc.) and specialized scrapers (GitHub, CSDN). |
 | **Plugin Search**  | `google_search` | `opencode-antigravity-auth` | High-quality web search using Google Search with citations.                           |
 | **Built-in Fetch** | `webfetch`      | Native Opencode             | Retrieves the content of a specific URL in markdown or text format.                   |
@@ -786,7 +807,7 @@ USER:   [processed command.template content]
 #### System Prompt Resolution
 
 | Condition                       | Result                                                             |
-|:--------------------------------|:-------------------------------------------------------------------|
+| :------------------------------ | :----------------------------------------------------------------- |
 | `agent.prompt` is set           | Replaces the provider default system prompt entirely               |
 | `agent.prompt` is not set       | Uses provider default (e.g., `anthropic.txt`, `gemini.txt`)        |
 | After agent prompt (or default) | Environment info, skills, and AGENTS.md/CLAUDE.md are **appended** |
@@ -807,3 +828,89 @@ Communication between agents is strictly **synchronous and hierarchical**:
 - **Blocking**: While a subagent is working, the parent agent is paused and cannot respond to queries from the subagent.
 - **No Callbacks**: Subagents cannot "ask the parent" for clarification mid-task. They can, however, use the `question` tool to ask the **human user** for information before continuing.
 - **Clarification Loop**: If a subagent cannot complete its task due to ambiguous instructions, it should return that feedback in its final output. The parent agent can then refine the instruction and call the subagent again (using the same `session_id` to maintain context).
+
+## Plugin Hooks
+
+OpenCode plugins can hook into the server runtime and the TUI runtime.
+
+### Server Hooks
+
+| Hook                                   | Purpose                                      | Signature                       |
+|:---------------------------------------|:---------------------------------------------|:--------------------------------|
+| `chat.headers`                         | Adjusts LLM request headers.                 | `async (input, output) => void` |
+| `chat.message`                         | Runs when a new message is received.         | `async (input, output) => void` |
+| `chat.params`                          | Adjusts LLM request parameters.              | `async (input, output) => void` |
+| `command.execute.before`               | Runs before command execution.               | `async (input, output) => void` |
+| `config`                               | Adjusts loaded config.                       | `async (cfg) => void`           |
+| `event`                                | Receives opencode internal bus events.       | `async ({ event }) => void`     |
+| `experimental.chat.messages.transform` | Rewrites chat messages before use.           | `async (input, output) => void` |
+| `experimental.chat.system.transform`   | Rewrites system prompt parts.                | `async (input, output) => void` |
+| `experimental.session.compacting`      | Customises compaction prompts.               | `async (input, output) => void` |
+| `experimental.text.complete`           | Adjusts completed text output.               | `async (input, output) => void` |
+| `permission.ask`                       | Overrides permission prompts.                | `async (input, output) => void` |
+| `shell.env`                            | Adjusts shell environment variables.         | `async (input, output) => void` |
+| `tool.definition`                      | Modifies tool definitions sent to the model. | `async (input, output) => void` |
+| `tool.execute.after`                   | Runs after a tool call.                      | `async (input, output) => void` |
+| `tool.execute.before`                  | Runs before a tool call.                     | `async (input, output) => void` |
+
+Event objects use `type` and `properties`.
+
+Built-in events available to the `event` hook are:
+
+| Event                           | Received when                                         |
+|:--------------------------------|:------------------------------------------------------|
+| `command.executed`              | A command runs in a session.                          |
+| `file.edited`                   | OpenCode edits or writes a file.                      |
+| `file.watcher.updated`          | A watched file is added, changed, or removed.         |
+| `global.disposed`               | Global server state is shutting down.                 |
+| `installation.update-available` | A newer OpenCode version is detected.                 |
+| `installation.updated`          | The installed OpenCode version changes.               |
+| `lsp.client.diagnostics`        | A language server publishes diagnostics for a file.   |
+| `lsp.updated`                   | LSP state refreshes.                                  |
+| `mcp.browser.open.failed`       | Opening an MCP browser URL fails.                     |
+| `mcp.tools.changed`             | An MCP server's available tools change.               |
+| `message.part.delta`            | A streamed delta is appended to a message part field. |
+| `message.part.removed`          | A message part is deleted.                            |
+| `message.part.updated`          | A message part is created or updated.                 |
+| `message.removed`               | A message is deleted.                                 |
+| `message.updated`               | A message is created or updated.                      |
+| `permission.asked`              | An agent requests approval for a gated action.        |
+| `permission.replied`            | The user answers a permission request.                |
+| `project.updated`               | Project metadata changes.                             |
+| `pty.created`                   | A PTY session is created.                             |
+| `pty.deleted`                   | A PTY session is removed.                             |
+| `pty.exited`                    | A PTY process exits.                                  |
+| `pty.updated`                   | PTY metadata changes.                                 |
+| `question.asked`                | An agent asks the user a question.                    |
+| `question.rejected`             | The user dismisses a question request.                |
+| `question.replied`              | The user answers a question request.                  |
+| `server.connected`              | A client connects to the server event stream.         |
+| `server.instance.disposed`      | A project server instance shuts down for a directory. |
+| `session.compacted`             | A conversation is compacted to save context.          |
+| `session.created`               | A session is created.                                 |
+| `session.deleted`               | A session is deleted.                                 |
+| `session.diff`                  | A session publishes file diffs.                       |
+| `session.error`                 | A session emits an error.                             |
+| `session.idle`                  | A session becomes idle. Deprecated.                   |
+| `session.status`                | A session status changes.                             |
+| `session.updated`               | Session metadata changes.                             |
+| `todo.updated`                  | A session todo list changes.                          |
+| `tui.command.execute`           | The TUI executes a command.                           |
+| `tui.prompt.append`             | Text is appended to the TUI prompt.                   |
+| `tui.session.select`            | The TUI navigates to a session.                       |
+| `tui.toast.show`                | The TUI shows a toast notification.                   |
+| `vcs.branch.updated`            | The detected VCS branch changes.                      |
+| `workspace.failed`              | Workspace provisioning fails.                         |
+| `workspace.ready`               | A workspace finishes provisioning.                    |
+| `worktree.failed`               | Worktree creation fails.                              |
+| `worktree.ready`                | A worktree finishes creating.                         |
+
+### TUI Plugin API Hooks
+
+| Hook                  | Purpose                   | Signature                         |
+|:----------------------|:--------------------------|:----------------------------------|
+| `command.register`    | Registers command rows.   | `cb: () => TuiCommand[]`          |
+| `event.on`            | Subscribes to TUI events. | `handler: (event) => void`        |
+| `lifecycle.onDispose` | Runs cleanup on unload.   | `fn: () => void \| Promise<void>` |
+| `route.register`      | Registers plugin routes.  | `routes: TuiRouteDefinition[]`    |
+| `slots.register`      | Registers a plugin slot.  | `plugin: TuiSlotPlugin`           |
