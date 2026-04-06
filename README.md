@@ -346,10 +346,10 @@ flowchart LR
 Permissions control what an agent is allowed to do. They can be set to "allow", "ask", or "deny".
 
 | Permission                          | Description                                                                                            | Plugin / MCP              |
-| ----------------------------------- | :----------------------------------------------------------------------------------------------------- | :------------------------ |
+|-------------------------------------|:-------------------------------------------------------------------------------------------------------|:--------------------------|
 | bash                                | Running shell commands. Matches the command string.                                                    | build-in                  |
 | chrome\_\*                          | Chrome MCP server.                                                                                     | chrome-devtools-mcp       |
-| codesearch                          | Searching for code patterns across the web or large repositories.                                      | build-in                  |
+| codesearch                          | Queries Exa’s code search API focode snippets, docs, and API references based on your query.           | build-in                  |
 | context7\_\*                        | Context7 MCP server.                                                                                   | context7-mcp              |
 | doom_loop                           | Safety guard triggered when the same tool call repeats 3+ times with identical input.                  | build-in                  |
 | edit                                | All file modifications. Covers edit, write, patch, and multiedit tools. Matches against the file path. | build-in                  |
