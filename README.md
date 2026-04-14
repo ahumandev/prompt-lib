@@ -780,6 +780,17 @@ Commands are custom prompts that can be executed in the TUI using the `/` prefix
 - `~/.config/opencode/commands/*.md`
 - `{project root}/.opencode/commands/*.md`
 
+### Command Configuration
+
+The `subtask` field in command configuration is an optional boolean.
+
+- Accepted values: `true`, `false`, or omitted.
+- If omitted, commands targeting subagents default to subtask behavior.
+- `true` forces task/subagent execution.
+- `false` disables that automatic subtask behavior.
+
+In subtask mode, the command runs as a spawned task instead of being injected inline as prompt text.
+
 ### Variable Substitution
 
 Opencode provides several ways to inject dynamic data into command templates:
@@ -807,7 +818,7 @@ USER:   [processed command.template content]
 #### System Prompt Resolution
 
 | Condition                       | Result                                                             |
-| :------------------------------ | :----------------------------------------------------------------- |
+|:--------------------------------|:-------------------------------------------------------------------|
 | `agent.prompt` is set           | Replaces the provider default system prompt entirely               |
 | `agent.prompt` is not set       | Uses provider default (e.g., `anthropic.txt`, `gemini.txt`)        |
 | After agent prompt (or default) | Environment info, skills, and AGENTS.md/CLAUDE.md are **appended** |

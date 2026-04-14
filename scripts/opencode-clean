@@ -1,0 +1,10 @@
+#!/bin/bash
+
+rm -rf ~/.cache/opencode/node_modules/
+rm -rf ~/.local/share/opencode/log/
+rm -rf ~/.local/share/opencode/snapshot/
+rm -rf ~/.local/share/opencode/storage/
+rm -rf ~/.local/share/tool-output/
+rm ~/.cache/opencode/bun.lock
+rm ~/.local/share/opencode/*.log
+rm ~/.local/share/opencode/opencode.db*

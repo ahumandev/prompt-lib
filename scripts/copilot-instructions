@@ -19,5 +19,5 @@ link_skill() {
     fi
 }
 
-link_skill "code"
-link_skill "explore"
+link_skill "design"
+link_skill "plan"
