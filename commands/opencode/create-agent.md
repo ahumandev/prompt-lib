@@ -53,7 +53,7 @@ When you're in a project directory that has `.opencode/opencode.jsonc`, project-
 - **NEW:** Which LLM model(s) will this agent target? (Claude, GPT, Gemini, etc.)
 
 **Examples:**
-- `websearch`: Conducts systematic web searches with query decomposition
+- `websearch`: Conducts systematic web searches through open-webSearch
 - `git`: Manages Git repositories with staging, commits, and branching
 - `excel`: Manipulates Excel workbooks with data operations
 - `explore`: Fast exploration of codebases with pattern matching
@@ -307,12 +307,12 @@ hidden: false                        # true to hide from agent list
 mode: subagent                       # "subagent" if called by main agent
 model: google/gemini-3-flash        # Which model to use (affects prompt format)
 temperature: 0.7                    # 0.0-1.0 (creativity level)
-tools:
-    "*": false                       # Default: deny all tools
-    doom_loop: true                  # Always enable doom_loop
-    edit: true                       # List specific tools
-    glob: true
-    grep: true
+permission:
+    "*": deny                        # Default: deny all tools
+    doom_loop: ask                   # Always configure doom_loop
+    edit: allow                      # List specific tools
+    glob: allow
+    grep: allow
     # Add other tools as needed...
 ---
 
@@ -434,13 +434,13 @@ mkdir -p {project-dir}/.opencode
       "model": "google/gemini-3-flash", // Optional: override default model
       "prompt": "agents/my-agent.md", // Path to instructions file
       "temperature": 0.7,            // Optional: override default temperature
-      "tools": {
-        "*": false,                  // Default: deny all tools
-        "doom_loop": true,           // Required: allows safe retry loops
-        "edit": true,                // Specific tools this agent needs
-        "glob": true,
-        "grep": true,
-        "my_tool_*": true            // Wildcard patterns supported
+      "permission": {
+        "*": "deny",                 // Default: deny all tools
+        "doom_loop": "ask",          // Required: controls retry loops
+        "edit": "allow",             // Specific tools this agent needs
+        "glob": "allow",
+        "grep": "allow",
+        "my_tool_*": "allow"         // Wildcard patterns supported
       }
     }
   }
@@ -458,9 +458,9 @@ This means **project-level agents override global agents with the same name**.
 
 **CRITICAL: Tool Access Rules**
 
-- 🛡️ **`"*": false`** - ALWAYS start with a deny-all policy.
-- 🔄 **`"doom_loop": true`** - **MANDATORY**. Without this, agents cannot retry failed steps or recover from errors.
-- 🎯 **`"tool_prefix_*": true`** - Use wildcards for tool groups (e.g., `websearch_*`) to keep config clean.
+- 🛡️ **`"*": "deny"`** - ALWAYS start with a deny-all policy.
+- 🔄 **`"doom_loop": "ask"`** - **MANDATORY**. Controls repeated identical tool calls.
+- 🎯 **`"tool_prefix_*": "allow"`** - Use wildcards for tool groups (e.g., `websearch_*`) to keep config clean.
 
 **Key Configuration Options:**
 
@@ -470,13 +470,13 @@ This means **project-level agents override global agents with the same name**.
 | `model` | string | No | LLM model to use (affects instruction format; see Step 2) |
 | `temperature` | number | No | Creativity (0.0-1.0), defaults to global setting |
 | `hidden` | boolean | No | Hide from agent list (default: false) |
-| `tools` | object | Yes | Tool access policy |
+| `permission` | object | Yes | Tool access policy |
 
 **Tool Access:**
-- `"*": false` - Deny all tools by default (recommended for security)
-- `"*": true` - Allow all tools (not recommended)
-- `"tool_name": true` - Allow specific tool
-- `"tool_prefix_*": true` - Allow all tools matching pattern
+- `"*": "deny"` - Deny all tools by default (recommended for security)
+- `"*": "allow"` - Allow all tools (not recommended)
+- `"tool_name": "allow"` - Allow specific tool
+- `"tool_prefix_*": "allow"` - Allow all tools matching pattern
 
 **Model Selection Guidance:**
 
@@ -699,18 +699,45 @@ description: "Conducts systematic web research with query decomposition, source 
 mode: subagent
 model: anthropic/claude-3-sonnet  # Recommended for complex reasoning
 temperature: 0.7
-tools:
-  "*": false
-  doom_loop: true
-  webfetch: true
-  websearch_*: true
-  glob: true
-  grep: true
-  read: true
+permission:
+  "*": deny
+  doom_loop: ask
+  webfetch: allow
+  websearch_search: allow
+  websearch_fetchGithubReadme: allow
+  websearch_fetchWebContent:
+    "*": ask
+  websearch_fetchLinuxDoArticle: allow
+  websearch_fetchCsdnArticle: allow
+  websearch_fetchJuejinArticle: allow
+  glob: allow
+  grep: allow
+  read: allow
 ---
 ```
 
 **Use case:** Web research, codebase analysis, documentation review
+
+**open-webSearch MCP configuration:**
+
+```jsonc
+{
+  "mcp": {
+    "websearch": {
+      "type": "local",
+      "command": [
+        "env",
+        "MODE=stdio",
+        "DEFAULT_SEARCH_ENGINE=duckduckgo",
+        "ALLOWED_SEARCH_ENGINES=duckduckgo,bing,exa",
+        "npx",
+        "-y",
+        "open-websearch@latest"
+      ]
+    }
+  }
+}
+```
 
 **Instruction Template:**
 
@@ -759,15 +786,15 @@ description: "Invoke for Git operations including staging, commits, branching, a
 mode: subagent
 model: anthropic/claude-3-sonnet  # Superior code reasoning
 temperature: 0.3  # Lower = more deterministic
-tools:
-  "*": false
-  doom_loop: true
-  edit: true
-  glob: true
-  grep: true
-  read: true
-  git_*: true
-  bash: true
+permission:
+  "*": deny
+  doom_loop: ask
+  edit: allow
+  glob: allow
+  grep: allow
+  read: allow
+  git_*: allow
+  bash: allow
 ---
 ```
 
@@ -821,14 +848,14 @@ description: "Excel workbook manipulation exclusively - data transformation, for
 mode: subagent
 model: google/gemini-3-flash  # Good for data tasks
 temperature: 0.5
-tools:
-  "*": false
-  doom_loop: true
-  excel_*: true
-  glob: true
-  grep: true
-  read: true
-  write: true
+permission:
+  "*": deny
+  doom_loop: ask
+  excel_*: allow
+  glob: allow
+  grep: allow
+  read: allow
+  write: allow
 ---
 ```
 
@@ -883,15 +910,15 @@ Always return data as structured tables:
 ## Tool Access Policy Best Practices
 
 ✅ **DO:**
-- Start with `"*": false` (deny-all-by-default)
+- Start with `"*": "deny"` (deny-all-by-default)
 - Explicitly list required tools
 - Use wildcards sparingly and purposefully
 - Document why each tool is needed
 
 ❌ **DON'T:**
-- Use `"*": true` for security/safety
+- Use `"*": "allow"` for security/safety
 - Grant tools the agent doesn't need
-- Forget `"doom_loop": true` (agents need this to function)
+- Forget `"doom_loop": "ask"` (agents need this to function)
 - Use overly broad wildcards without justification
 
 ---
@@ -903,11 +930,11 @@ Before deploying your agent, verify:
 ### Agent Structure
 - [ ] Choose scope: Global (`~/.config/opencode/`) or Project (`.opencode/`)
 - [ ] Markdown file created at `agents/{name}.md` in chosen scope
-- [ ] YAML frontmatter contains all required fields (color, description, mode, model, tools)
+- [ ] YAML frontmatter contains all required fields (color, description, mode, model, permission)
 - [ ] Agent registered in `opencode.jsonc` under `agent` section (same scope)
 - [ ] Configuration uses relative path `agents/{name}.md` (works in both scopes)
 - [ ] Tool access policy follows deny-by-default pattern
-- [ ] `doom_loop: true` is set in tools
+- [ ] `doom_loop: ask` is set in `permission`
 - [ ] JSON syntax of opencode.jsonc is valid (with comments allowed)
 - [ ] Model choice is documented (affects XML tag usage in Step 2)
 
@@ -1075,12 +1102,12 @@ Edit: `~/.config/opencode/opencode.jsonc`
       "model": "google/gemini-3-flash",     // Optional override
       "prompt": "agents/agent-name.md",     // Path to instructions
       "temperature": 0.7,                   // Optional override
-      "tools": {
-        "*": false,                         // Deny all by default
-        "doom_loop": true,                  // Required!
-        "required_tool_1": true,            // List each tool
-        "required_tool_2": true,
-        "tool_prefix_*": true               // Or use wildcards
+      "permission": {
+        "*": "deny",                        // Deny all by default
+        "doom_loop": "ask",                 // Required!
+        "required_tool_1": "allow",         // List each tool
+        "required_tool_2": "allow",
+        "tool_prefix_*": "allow"            // Or use wildcards
       }
     }
   }
@@ -1095,10 +1122,10 @@ Edit: `{project-dir}/.opencode/opencode.jsonc`
     "project-agent": {                       // Agent ID (matches agent-name.md)
       "hidden": false,                       // Show in list
       "prompt": "agents/project-agent.md",  // Relative path works in project
-      "tools": {
-        "*": false,
-        "doom_loop": true,
-        "project_specific_tool": true
+      "permission": {
+        "*": "deny",
+        "doom_loop": "ask",
+        "project_specific_tool": "allow"
       }
     }
   }
@@ -1132,10 +1159,10 @@ Project agent:
 | Problem | Solution |
 |---------|----------|
 | Agent not appearing in list | Check `hidden: false` in frontmatter |
-| "Tool not available" error | Verify tool in `tools` section of config |
+| "Tool not available" error | Verify tool in `permission` section of config |
 | Agent not executing | Check `prompt` file path exists and is readable |
 | Unexpected behavior | Review instructions for ambiguous steps |
-| Agent loops infinitely | Check `doom_loop: true` in tools, review task scope |
+| Agent loops infinitely | Check `doom_loop` in `permission`, review task scope |
 
 ---
 

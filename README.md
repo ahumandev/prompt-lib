@@ -138,7 +138,7 @@ permission:
   list: allow
   bash: allow
   webfetch: allow
-  websearch: allow
+  websearch_search: allow
   codesearch: allow
   read: allow
 ---
@@ -346,7 +346,7 @@ flowchart LR
 Permissions control what an agent is allowed to do. They can be set to "allow", "ask", or "deny".
 
 | Permission                          | Description                                                                                            | Plugin / MCP              |
-|-------------------------------------|:-------------------------------------------------------------------------------------------------------|:--------------------------|
+| ----------------------------------- | :----------------------------------------------------------------------------------------------------- | :------------------------ |
 | bash                                | Running shell commands. Matches the command string.                                                    | build-in                  |
 | chrome\_\*                          | Chrome MCP server.                                                                                     | chrome-devtools-mcp       |
 | codesearch                          | Queries Exa’s code search API focode snippets, docs, and API references based on your query.           | build-in                  |
@@ -408,7 +408,12 @@ Permissions control what an agent is allowed to do. They can be set to "allow", 
 | todoread                            | Reading the project's todo list.                                                                       | build-in                  |
 | todowrite                           | Adding or updating items in the todo list.                                                             | build-in                  |
 | webfetch                            | Fetching content from a URL. Matches the URL.                                                          | build-in                  |
-| websearch                           | Performing web searches (e.g., via DuckDuckGo or Exa).                                                 | open-websearch            |
+| websearch_search                    | Search the web with the configured engines.                                                            | open-webSearch            |
+| websearch_fetchWebContent           | Fetch arbitrary web page content.                                                                      | open-webSearch            |
+| websearch_fetchGithubReadme         | Fetch GitHub repository README content.                                                                | open-webSearch            |
+| websearch_fetchLinuxDoArticle       | Fetch LinuxDo article content.                                                                         | open-webSearch            |
+| websearch_fetchCsdnArticle          | Fetch CSDN article content.                                                                            | open-webSearch            |
+| websearch_fetchJuejinArticle        | Fetch Juejin article content.                                                                          | open-webSearch            |
 
 ### Tool Descriptions & Context
 
@@ -510,13 +515,54 @@ permission:
   filesystem_list*: allow
 ```
 
-Using `"*": false` followed by an explicit "allow list" (Principle of Least Privilege) is highly recommended for specialized agents. It ensures:
+Using `"*": deny` followed by an explicit "allow list" (Principle of Least Privilege) is highly recommended for specialized agents. It ensures:
 
 - **Security**: The agent cannot perform unauthorized actions (like searching the web or modifying cloud resources if those tools were available).
 - **Focus**: The agent is less likely to "hallucinate" using a tool that isn't relevant to its task.
 - **Efficiency**: It reduces the tool definitions the agent has to keep in context.
 
 In this specific example, restricting `mcp-filesystem` to `read*` and `list*` while allowing the native `edit` tool (line 14) is a sound approach: it can see the conflicts and modify them using the native editor integration, but it can't use MCP to move or delete files.
+
+#### open-webSearch Agent Example
+
+```yaml
+color: "#0E7490"
+description: Conduct safe web research using open-webSearch.
+hidden: false
+mode: subagent
+permission:
+  "*": deny
+  doom_loop: ask
+  question: allow
+  websearch_search: allow
+  websearch_fetchGithubReadme: allow
+  websearch_fetchWebContent:
+    "*": ask
+  websearch_fetchLinuxDoArticle: allow
+  websearch_fetchCsdnArticle: allow
+  websearch_fetchJuejinArticle: allow
+```
+
+Example `opencode.jsonc` MCP configuration using the `websearch` server id:
+
+```jsonc
+{
+  "mcp": {
+    "websearch": {
+      "type": "local",
+      "command": [
+        "env",
+        "MODE=stdio",
+        "DEFAULT_SEARCH_ENGINE=duckduckgo",
+        "ALLOWED_SEARCH_ENGINES=duckduckgo,bing,exa",
+        "npx",
+        "-y",
+        "open-websearch@latest"
+      ]
+    }
+  }
+}
+```
 
 ### The syntax `{mcp server name}_{tool name of mcp server}`
 
@@ -537,20 +583,20 @@ The underscore (`_`) acts as the namespace separator between the server identifi
 
 In OpenCode, standard native tools (like `read`, `write`, `edit`) don't have a prefix because they are built directly into the core agent logic. MCP tools, however, are external "plugins." To prevent name collisions (e.g., if two different MCP servers both provided a `search` tool), the system prefixes them with the server's ID.
 
-### If the `tools` section is omitted entirely:
+### If the `permission` section is omitted entirely:
 
 The agent defaults to **"All Tools"**.
 It inherits the full toolset of the parent assistant, including all native tools (read, write, edit, etc.) and all connected MCP servers.
 
-### If the `tools` section exists but is empty:
+### If the `permission` section exists but is empty:
 
 If you define the key but provide no values:
 
 ```yaml
-tools:
+permission:
 ```
 
-This typically defaults to **"No Tools"** (or a very minimal set of system tools like `question`). The system interprets the presence of the `tools` key as an intent to define a specific whitelist.
+This typically defaults to **"No Tools"** (or a very minimal set of system tools like `question`). The system interprets the presence of the `permission` key as an intent to define a specific allow list.
 
 ### Using the `"*"` wildcard (The Safe Way):
 
@@ -559,9 +605,9 @@ To avoid ambiguity, OpenCode agents use the `"*"` key to set the baseline:
 - **Restrictive (Recommended)**:
 
   ```yaml
-  tools:
-    "*": false
-    read: true
+  permission:
+    "*": deny
+    read: allow
   ```
 
   _Result: Only `read` is available._
@@ -569,18 +615,18 @@ To avoid ambiguity, OpenCode agents use the `"*"` key to set the baseline:
 - **Permissive (Default if omitted)**:
 
   ```yaml
-  tools:
-    "*": true
-    mcp-filesystem*: false
+  permission:
+    "*": allow
+    mcp-filesystem*: deny
   ```
 
   _Result: All tools are available EXCEPT those from `mcp-filesystem`._
 
-- **No `tools` section** = All tools.
+- **No `permission` section** = All tools.
 
 ### Context management
 
-When an agent do not have access to a tool, e.g. `some_tool: false`, then the agent's context is not cluttered with that tools description. The agent is unaware of the tool even when then MCP server is enabled.
+When an agent does not have access to a tool, e.g. `some_tool: deny`, then the agent's context is not cluttered with that tool description. The agent is unaware of the tool even when the MCP server is enabled.
 
 ### Special Tools
 
@@ -656,14 +702,14 @@ You can configure this in your `opencode.json` file.
 
 Opencode distinguishes between generic web fetching and systematic web searching. Search capabilities are typically provided by MCP servers or plugins.
 
-| Tool Category      | Prefix / Name   | Source                      | Description                                                                           |
-| :----------------- | :-------------- | :-------------------------- | :------------------------------------------------------------------------------------ |
-| **MCP Search**     | `websearch_*`   | `open-websearch` MCP        | Multi-engine search (Bing, DuckDuckGo, etc.) and specialized scrapers (GitHub, CSDN). |
-| **Plugin Search**  | `google_search` | `opencode-antigravity-auth` | High-quality web search using Google Search with citations.                           |
-| **Built-in Fetch** | `webfetch`      | Native Opencode             | Retrieves the content of a specific URL in markdown or text format.                   |
+| Tool Category      | Prefix / Name   | Source                      | Description                                                                          |
+| :----------------- | :-------------- | :-------------------------- | :----------------------------------------------------------------------------------- |
+| **MCP Search**     | `websearch_*`   | `open-webSearch` MCP        | Multi-engine search (DuckDuckGo, Bing, Exa) and specialized scrapers (GitHub, CSDN). |
+| **Plugin Search**  | `google_search` | `opencode-antigravity-auth` | High-quality web search using Google Search with citations.                          |
+| **Built-in Fetch** | `webfetch`      | Native Opencode             | Retrieves the content of a specific URL in markdown or text format.                  |
 
 > [!NOTE]
-> The `websearch` permission in an agent's configuration governs access to these external search capabilities. The `websearch` agent itself is a specialized subagent that orchestrates these tools to perform deep research.
+> Use `websearch_*` or individual permissions such as `websearch_search` to govern open-webSearch access. The `websearch` agent itself is a specialized subagent that orchestrates these tools to perform deep research.
 
 #### The `submit_plan` Tool (Plannotator)
 
@@ -818,7 +864,7 @@ USER:   [processed command.template content]
 #### System Prompt Resolution
 
 | Condition                       | Result                                                             |
-|:--------------------------------|:-------------------------------------------------------------------|
+| :------------------------------ | :----------------------------------------------------------------- |
 | `agent.prompt` is set           | Replaces the provider default system prompt entirely               |
 | `agent.prompt` is not set       | Uses provider default (e.g., `anthropic.txt`, `gemini.txt`)        |
 | After agent prompt (or default) | Environment info, skills, and AGENTS.md/CLAUDE.md are **appended** |
@@ -847,7 +893,7 @@ OpenCode plugins can hook into the server runtime and the TUI runtime.
 ### Server Hooks
 
 | Hook                                   | Purpose                                      | Signature                       |
-|:---------------------------------------|:---------------------------------------------|:--------------------------------|
+| :------------------------------------- | :------------------------------------------- | :------------------------------ |
 | `chat.headers`                         | Adjusts LLM request headers.                 | `async (input, output) => void` |
 | `chat.message`                         | Runs when a new message is received.         | `async (input, output) => void` |
 | `chat.params`                          | Adjusts LLM request parameters.              | `async (input, output) => void` |
@@ -869,7 +915,7 @@ Event objects use `type` and `properties`.
 Built-in events available to the `event` hook are:
 
 | Event                           | Received when                                         |
-|:--------------------------------|:------------------------------------------------------|
+| :------------------------------ | :---------------------------------------------------- |
 | `command.executed`              | A command runs in a session.                          |
 | `file.edited`                   | OpenCode edits or writes a file.                      |
 | `file.watcher.updated`          | A watched file is added, changed, or removed.         |
@@ -919,7 +965,7 @@ Built-in events available to the `event` hook are:
 ### TUI Plugin API Hooks
 
 | Hook                  | Purpose                   | Signature                         |
-|:----------------------|:--------------------------|:----------------------------------|
+| :-------------------- | :------------------------ | :-------------------------------- |
 | `command.register`    | Registers command rows.   | `cb: () => TuiCommand[]`          |
 | `event.on`            | Subscribes to TUI events. | `handler: (event) => void`        |
 | `lifecycle.onDispose` | Runs cleanup on unload.   | `fn: () => void \| Promise<void>` |
