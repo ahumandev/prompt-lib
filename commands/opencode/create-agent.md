@@ -720,6 +720,8 @@ permission:
 
 **open-webSearch MCP configuration:**
 
+> open-webSearch requires Node >=20.18.1; when using `npx`, configure `PATH` so a Node-20+ binary directory comes first.
+
 ```jsonc
 {
   "mcp": {
@@ -730,7 +732,8 @@ permission:
         "MODE=stdio",
         "DEFAULT_SEARCH_ENGINE=duckduckgo",
         "ALLOWED_SEARCH_ENGINES=duckduckgo,bing,exa",
-        "npx",
+        "PATH=/home/gizbar/.nvm/versions/node/v24.12.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "/home/gizbar/.nvm/versions/node/v24.12.0/bin/npx",
         "-y",
         "open-websearch@latest"
       ]

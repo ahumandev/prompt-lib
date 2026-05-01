@@ -545,6 +545,8 @@ permission:
 
 Example `opencode.jsonc` MCP configuration using the `websearch` server id:
 
+> open-webSearch requires Node >=20.18.1; when using `npx`, configure `PATH` so a Node-20+ binary directory comes first.
+
 ```jsonc
 {
   "mcp": {
