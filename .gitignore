@@ -31,3 +31,5 @@ antigravity-accounts.json.*.tmp
 
 /command/antigravity-quota.md
 /command/plannotator-*
+/skills/autocode/
+autocode.jsonc
